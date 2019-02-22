@@ -10,7 +10,7 @@ namespace TestingSystem.Data
         protected override void Seed(TestingSystemEntities context)
         {
             //GetQuestionCategories().ForEach(c => context.QuestionCategories.Add(c));
-            //context.Commit();
+            //context.Commit
             //GetQuestions().ForEach(c => context.Questions.Add(c));
             //context.Commit();
             //GetAnswers().ForEach(c => context.Answers.Add(c));

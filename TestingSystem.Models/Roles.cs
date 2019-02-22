@@ -15,8 +15,8 @@ namespace TestingSystem.Models
 
         public string Description { get; set; }
 
-
         public virtual ICollection<User> User { get; set; }
+
         public virtual ICollection<RoleAction> RoleActions { get; set; }
 
     }
