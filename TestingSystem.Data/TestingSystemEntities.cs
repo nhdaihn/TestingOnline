@@ -24,8 +24,6 @@ namespace TestingSystem.Data
         public DbSet<Roles> Roles { get; set; }
         public DbSet<Action> Actions { get; set; }
 
-
-
         public DbSet<Exam> Exams { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<Candidate> Candidates { get; set; }
