@@ -17,8 +17,6 @@ namespace TestingSystem.Data
         public DbSet<ExamPaper> ExamPapers { get; set; }
         public DbSet<ExamPaperQuesion> ExamPaperQuesions { get; set; }
 
-
-
         public DbSet<User> Users { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<Group> Groups { get; set; }
