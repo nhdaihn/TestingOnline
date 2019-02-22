@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using TestingSystem.Models;
+﻿using System.Data.Entity;
 
 namespace TestingSystem.Data
 {
