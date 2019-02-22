@@ -1,0 +1,16 @@
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Common\bin\Debug\TestingSystem.Common.dll
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Common\bin\Debug\TestingSystem.Common.pdb
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Common\obj\Debug\TestingSystem.Common.csproj.CoreCompileInputs.cache
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Common\obj\Debug\TestingSystem.Common.dll
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Common\obj\Debug\TestingSystem.Common.pdb
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Common\bin\Debug\TestingSystem.Common.dll
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Common\bin\Debug\TestingSystem.Common.pdb
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Common\obj\Debug\TestingSystem.Common.csprojResolveAssemblyReference.cache
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Common\obj\Debug\TestingSystem.Common.dll
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Common\obj\Debug\TestingSystem.Common.pdb
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Common\bin\Debug\TestingSystem.Common.dll
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Common\bin\Debug\TestingSystem.Common.pdb
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Common\obj\Debug\TestingSystem.Common.csprojAssemblyReference.cache
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Common\obj\Debug\TestingSystem.Common.csproj.CoreCompileInputs.cache
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Common\obj\Debug\TestingSystem.Common.dll
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Common\obj\Debug\TestingSystem.Common.pdb

@@ -1,0 +1,46 @@
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.csproj.CoreCompileInputs.cache
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\bin\Debug\TestingSystem.Data.dll.config
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\bin\Debug\TestingSystem.Data.dll
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\bin\Debug\TestingSystem.Data.pdb
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\bin\Debug\EntityFramework.dll
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\bin\Debug\EntityFramework.SqlServer.dll
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\bin\Debug\TestingSystem.Models.dll
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\bin\Debug\TestingSystem.Models.pdb
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\bin\Debug\EntityFramework.xml
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\bin\Debug\EntityFramework.SqlServer.xml
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.csprojAssemblyReference.cache
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.csproj.CopyComplete
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.dll
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.pdb
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.Migrations.CreateTable2101.resources
+D:\TheAnh\Mock 1- Project\Project\TestingOnlineSystem\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.csproj.GenerateResource.cache
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\bin\Debug\TestingSystem.Data.dll.config
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\bin\Debug\TestingSystem.Data.dll
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\bin\Debug\TestingSystem.Data.pdb
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\bin\Debug\EntityFramework.dll
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\bin\Debug\EntityFramework.SqlServer.dll
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\bin\Debug\TestingSystem.Models.dll
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\bin\Debug\TestingSystem.Models.pdb
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\bin\Debug\EntityFramework.xml
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\bin\Debug\EntityFramework.SqlServer.xml
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.csprojResolveAssemblyReference.cache
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.dll
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.pdb
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.Migrations.CodeFirst.resources
+D:\OneDrive\Workspace\Git\1-Live\CMC-GDP\Mock1-Project\TestingOnlineSystem\TestingSystem.Data\obj\Debug\TestingSystem.Data.csproj.GenerateResource.Cache
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\bin\Debug\TestingSystem.Data.dll.config
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\bin\Debug\TestingSystem.Data.dll
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\bin\Debug\TestingSystem.Data.pdb
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\bin\Debug\EntityFramework.dll
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\bin\Debug\EntityFramework.SqlServer.dll
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\bin\Debug\TestingSystem.Models.dll
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\bin\Debug\TestingSystem.Models.pdb
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\bin\Debug\EntityFramework.xml
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\bin\Debug\EntityFramework.SqlServer.xml
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\obj\Debug\TestingSystem.Data.csprojAssemblyReference.cache
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\obj\Debug\TestingSystem.Data.Migrations.CodeFirst.resources
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\obj\Debug\TestingSystem.Data.csproj.GenerateResource.cache
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\obj\Debug\TestingSystem.Data.csproj.CoreCompileInputs.cache
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\obj\Debug\TestingSystem.Data.csproj.CopyComplete
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\obj\Debug\TestingSystem.Data.dll
+D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Data\obj\Debug\TestingSystem.Data.pdb

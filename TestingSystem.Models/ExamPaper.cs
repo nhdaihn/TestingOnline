@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TestingSystem.Models
+{
+    public class ExamPaper
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ExamPaperID { get; set; }
+        [Required]
+        public string Title { get; set; }
+        [Required]
+        public int Time { get; set; }
+        [Required]
+        public bool Status { get; set; }
+        [Required]
+        public int NumberOfQuestion { get; set; }
+        [Required]
+        public bool IsActive { get; set; }
+
+        [Required]
+        public int CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+
+        [Required]
+        public int ModifiedBy { get; set; }
+        public DateTime? ModifiebDate { get; set; }
+
+        
+
+
+
+        public virtual User CreatedBys { get; set; }
+        public virtual User ModifiedBys { get; set; }
+
+        public ICollection<ExamPaperQuesion> ExamPaperQuesions { get; set; }
+    }
+}
