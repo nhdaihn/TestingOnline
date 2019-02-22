@@ -29,10 +29,6 @@ namespace TestingSystem.Models
         public int ModifiedBy { get; set; }
         public DateTime? ModifiebDate { get; set; }
 
-        
-
-
-
         public virtual User CreatedBys { get; set; }
         public virtual User ModifiedBys { get; set; }
 
