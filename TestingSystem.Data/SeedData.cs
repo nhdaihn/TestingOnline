@@ -24,7 +24,7 @@ namespace TestingSystem.Data
         //{
         //    var list = new List<QuestionCategory>
         //    {
-        //        //new QuestionCategory{Name = "C#",IsActive = true,CreatedBy = "NHDai",CreatedDate = new DateTime(2018,05,20),ModifiedBy = "NHViet",ModifiebDate = DateTime.Now},
+        //      //new QuestionCategory{Name = "C#",IsActive = true,CreatedBy = "NHDai",CreatedDate = new DateTime(2018,05,20),ModifiedBy = "NHViet",ModifiebDate = DateTime.Now},
         //        //new QuestionCategory{Name = "Java",IsActive = true,CreatedBy = "NHDai",CreatedDate = new DateTime(2018,05,20),ModifiedBy = "NHViet",ModifiebDate = DateTime.Now},
         //        //new QuestionCategory{Name = "Python",IsActive = true,CreatedBy = "NHDai",CreatedDate = new DateTime(2018,05,20),ModifiedBy = "NHViet",ModifiebDate = DateTime.Now},
         //        //new QuestionCategory{Name = "HTML",IsActive = true,CreatedBy = "NHDai",CreatedDate = new DateTime(2018,05,20),ModifiedBy = "NHViet",ModifiebDate = DateTime.Now},
