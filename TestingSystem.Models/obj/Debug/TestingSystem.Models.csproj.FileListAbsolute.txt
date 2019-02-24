@@ -13,3 +13,9 @@ D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Models\obj\Debug\TestingSy
 D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Models\obj\Debug\TestingSystem.Models.csproj.CoreCompileInputs.cache
 D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Models\obj\Debug\TestingSystem.Models.dll
 D:\TheAnh\Git\Mock-Project\Team2-theanh\TestingSystem.Models\obj\Debug\TestingSystem.Models.pdb
+D:\CMC\Fresher\Visual\Mock1\TestingOnline\TestingSystem.Models\bin\Debug\TestingSystem.Models.dll
+D:\CMC\Fresher\Visual\Mock1\TestingOnline\TestingSystem.Models\bin\Debug\TestingSystem.Models.pdb
+D:\CMC\Fresher\Visual\Mock1\TestingOnline\TestingSystem.Models\obj\Debug\TestingSystem.Models.csprojAssemblyReference.cache
+D:\CMC\Fresher\Visual\Mock1\TestingOnline\TestingSystem.Models\obj\Debug\TestingSystem.Models.csproj.CoreCompileInputs.cache
+D:\CMC\Fresher\Visual\Mock1\TestingOnline\TestingSystem.Models\obj\Debug\TestingSystem.Models.dll
+D:\CMC\Fresher\Visual\Mock1\TestingOnline\TestingSystem.Models\obj\Debug\TestingSystem.Models.pdb
