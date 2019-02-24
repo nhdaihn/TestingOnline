@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using TestingSystem.Data.Infrastructure;
+using TestingSystem.Data.Repositories;
 using TestingSystem.Mappings;
 using TestingSystem.Models;
 using TestingSystem.Sevice;
@@ -30,17 +31,16 @@ namespace TestingSystem.App_Start
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
 
             // Repositories
-            builder.RegisterAssemblyTypes(typeof(QuestionCategory).Assembly)
+            builder.RegisterAssemblyTypes(typeof(QuestionCategory).Assembly);
+            builder.RegisterAssemblyTypes(typeof(AnswerRepository).Assembly)
                 .Where(t => t.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces().InstancePerRequest();
+
             // Services
-            builder.RegisterAssemblyTypes(typeof(QuestionService).Assembly)
+            builder.RegisterAssemblyTypes(typeof(QuestionService).Assembly);
+            builder.RegisterAssemblyTypes(typeof(AnswerService).Assembly)
                .Where(t => t.Name.EndsWith("Service"))
                .AsImplementedInterfaces().InstancePerRequest();
-
-
-
-
 
 
             IContainer container = builder.Build();

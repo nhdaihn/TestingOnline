@@ -24,8 +24,5 @@ namespace TestingSystem.Sevice
             this.unitOfWork = unitOfWork;
         }
 
-
-
-
     }
 }
