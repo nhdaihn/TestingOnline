@@ -1,6 +1,7 @@
 using System;
 using TestingSystem.Data.Infrastructure;
 using TestingSystem.Data.Repositories;
+using TestingSystem.Sevice;
 using Unity;
 
 namespace TestingSystem
@@ -42,11 +43,12 @@ namespace TestingSystem
             // container.LoadConfiguration();
 
             // TODO: Register your type's mappings here.
-            container.RegisterType<IUnitOfWork, UnitOfWork>();
-            container.RegisterType<IDbFactory, DbFactory>();
 
-            container.RegisterType<IQuestionRepository, QuestionRepository>();
-            container.RegisterType<IAnswerRepository, AnswerRepository>();
+            container.RegisterType<IDbFactory, DbFactory>();
+            container.RegisterType<IUnitOfWork, UnitOfWork>();
+
+            container.RegisterType<IExamPaperRepository, ExamPaperRepository>();
+            container.RegisterType<IExamPaperService, ExamPaperService>();
         }
     }
 }

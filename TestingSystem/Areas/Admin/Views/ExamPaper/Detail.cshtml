@@ -1,0 +1,91 @@
+﻿@model TestingSystem.Models.ExamPaper
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Detail</h2>
+
+<div>
+    <h4>ExamPaper</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBys.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBys.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedBys.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedBys.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberOfQuestion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumberOfQuestion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiebDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiebDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ExamPaperID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

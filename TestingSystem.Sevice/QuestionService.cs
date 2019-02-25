@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestingSystem.Data.Infrastructure;
+﻿using TestingSystem.Data.Infrastructure;
 using TestingSystem.Data.Repositories;
 
 namespace TestingSystem.Sevice
