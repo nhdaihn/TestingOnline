@@ -23,28 +23,28 @@ namespace TestingSystem.App_Start
             AutoMapperConfiguration.Configure();
         }
 
-        private static void SetAutofacContainer()
-        {
-            var builder = new ContainerBuilder();
-            builder.RegisterControllers(Assembly.GetExecutingAssembly());
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
-            builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
+        //private static void SetAutofacContainer()
+        //{
+        //    var builder = new ContainerBuilder();
+        //    builder.RegisterControllers(Assembly.GetExecutingAssembly());
+        //    builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
+        //    builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
 
-            // Repositories
-            builder.RegisterAssemblyTypes(typeof(QuestionRepository).Assembly);
-            builder.RegisterAssemblyTypes(typeof(AnswerRepository).Assembly)
-                .Where(t => t.Name.EndsWith("Repository"))
-                .AsImplementedInterfaces().InstancePerRequest();
+        //    // Repositories
+        //    builder.RegisterAssemblyTypes(typeof(QuestionRepository).Assembly);
+        //    builder.RegisterAssemblyTypes(typeof(AnswerRepository).Assembly)
+        //        .Where(t => t.Name.EndsWith("Repository"))
+        //        .AsImplementedInterfaces().InstancePerRequest();
 
-            // Services
-            builder.RegisterAssemblyTypes(typeof(QuestionService).Assembly);
-            builder.RegisterAssemblyTypes(typeof(AnswerService).Assembly)
-               .Where(t => t.Name.EndsWith("Service"))
-               .AsImplementedInterfaces().InstancePerRequest();
+        //    // Services
+        //    builder.RegisterAssemblyTypes(typeof(QuestionService).Assembly);
+        //    builder.RegisterAssemblyTypes(typeof(AnswerService).Assembly)
+        //       .Where(t => t.Name.EndsWith("Service"))
+        //       .AsImplementedInterfaces().InstancePerRequest();
 
 
-            IContainer container = builder.Build();
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
-        }
+        //    IContainer container = builder.Build();
+        //    DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+        //}
     }
 }
