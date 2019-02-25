@@ -69,5 +69,10 @@ namespace TestingSystem.Models
 
         public virtual ICollection<ExamPaper> ExamPapersCreateUser { get; set; }
         public virtual ICollection<ExamPaper> ExamPapersModifiedUser { get; set; }
+
+        public static implicit operator User(int v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

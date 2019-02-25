@@ -1,6 +1,7 @@
 using System;
 using TestingSystem.Data.Infrastructure;
 using TestingSystem.Data.Repositories;
+using TestingSystem.Sevice;
 using Unity;
 
 namespace TestingSystem
@@ -46,7 +47,10 @@ namespace TestingSystem
             container.RegisterType<IDbFactory, DbFactory>();
 
             container.RegisterType<IQuestionRepository, QuestionRepository>();
+            container.RegisterType<IQuestionService, QuestionService>();
+
             container.RegisterType<IAnswerRepository, AnswerRepository>();
+            container.RegisterType<IAnswerService, AnswerService>();
         }
     }
 }

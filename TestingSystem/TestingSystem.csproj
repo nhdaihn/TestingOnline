@@ -164,6 +164,7 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\Question\QuestionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
@@ -7168,6 +7169,7 @@
     <Content Include="Areas\Admin\Views\HomeAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LayoutAdmin.cshtml" />
     <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\Question\Index.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -7225,6 +7227,10 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TestingSystem.DataTranferObject\TestingSystem.DataTranferObject.csproj">
+      <Project>{833a4585-3ac7-4553-bbbe-64f70eadf5d6}</Project>
+      <Name>TestingSystem.DataTranferObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TestingSystem.Data\TestingSystem.Data.csproj">
       <Project>{A61D7353-4E51-4242-8DD1-66615C53C063}</Project>
       <Name>TestingSystem.Data</Name>

@@ -72,6 +72,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TestingSystem.DataTranferObject\TestingSystem.DataTranferObject.csproj">
+      <Project>{833A4585-3AC7-4553-BBBE-64F70EADF5D6}</Project>
+      <Name>TestingSystem.DataTranferObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TestingSystem.Models\TestingSystem.Models.csproj">
       <Project>{b0244f25-247f-4f72-8c6e-72967cf69a57}</Project>
       <Name>TestingSystem.Models</Name>
