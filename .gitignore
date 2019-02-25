@@ -4,3 +4,10 @@
 
 /.vs
 /packages
+/TestingSystem.Sevice/obj/Debug
+/TestingSystem.Models/obj/Debug
+/TestingSystem.Data/obj/Debug
+/TestingSystem.DataTranferObject/obj/Debug
+/TestingSystem.Common/obj/Debug
+/TestingSystem/obj/Debug
+/TestingSystem/bin

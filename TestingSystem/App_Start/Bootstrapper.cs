@@ -18,7 +18,7 @@ namespace TestingSystem.App_Start
     {
         public static void Run()
         {
-            SetAutofacContainer();
+            //SetAutofacContainer();
             //Configure AutoMapper
             AutoMapperConfiguration.Configure();
         }
@@ -31,7 +31,7 @@ namespace TestingSystem.App_Start
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
 
             // Repositories
-            builder.RegisterAssemblyTypes(typeof(QuestionCategory).Assembly);
+            builder.RegisterAssemblyTypes(typeof(QuestionRepository).Assembly);
             builder.RegisterAssemblyTypes(typeof(AnswerRepository).Assembly)
                 .Where(t => t.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces().InstancePerRequest();
