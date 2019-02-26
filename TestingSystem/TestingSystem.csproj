@@ -7182,9 +7182,9 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Areas\Admin\Views\ExamPaper\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ExamPaper\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ExamPaper\Details.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
