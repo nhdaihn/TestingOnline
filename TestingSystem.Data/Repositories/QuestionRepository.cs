@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace TestingSystem.Data.Repositories
 {
     public interface IQuestionRepository : IRepository<Question>
     {
+         bool DeleteQuestion(int id);
+         Question FindID(int? id);
         IEnumerable<Question> SearchByContent(string input);
         IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel);
     }
@@ -20,7 +23,24 @@ namespace TestingSystem.Data.Repositories
         {
             
         }
-
+        public Question FindID(int? id)
+        {
+            var question = this.DbContext.Questions.FirstOrDefault(x => x.CategoryID == id);
+            return question;
+        }
+        public bool DeleteQuestion(int id)
+        {
+            var question = FindID(id);
+            if (question!= null)
+            {
+                this.DbContext.Questions.Remove(question);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel)
         {
             var result = this.DbContext.Questions.AsQueryable();
@@ -33,17 +53,18 @@ namespace TestingSystem.Data.Repositories
                     result = result.Where(x => x.Content.Contains(searchModel.Content));
 
                 if (searchModel.Level.HasValue)
-                    result = result.Where(x => x.Level >= searchModel.Level);
+                    result = result.Where(x => x.Level == searchModel.Level);
 
                 if (searchModel.CategoryID.HasValue)
-                    result = result.Where(x => x.CategoryID <= searchModel.CategoryID);
+                    result = result.Where(x => x.CategoryID == searchModel.CategoryID);
 
-                if (!string.IsNullOrEmpty(searchModel.Content))
-                    result = result.Where(x => x.CreatedBy <= searchModel.CreatedBy);
+                if (searchModel.CreatedBy.HasValue)
+                    result = result.Where(x => x.CreatedBy == searchModel.CreatedBy);
 
                 if (searchModel.CreatedDate.HasValue)
-                    result = result.Where(x => x.CreatedDate <= searchModel.CreatedDate);
+                    result = result.Where(x => x.CreatedDate == searchModel.CreatedDate);
             }
+
             return result;
         }
         public IEnumerable<Question> SearchByContent(string input)
@@ -52,5 +73,6 @@ namespace TestingSystem.Data.Repositories
                 .Where(x => x.Content.Contains(input.ToLower().Trim())).ToList();
             return search;
         }
+         
     }
 }

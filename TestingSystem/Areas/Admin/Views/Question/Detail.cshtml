@@ -1,0 +1,20 @@
+﻿@model TestingSystem.Models.Question
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">First</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th scope="row">Content</th>
+        <td>@Model.Content</td>
+    </tr>
+    </tbody>
+</table>
