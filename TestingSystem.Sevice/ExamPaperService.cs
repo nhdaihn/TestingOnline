@@ -12,9 +12,13 @@ namespace TestingSystem.Sevice
         IQueryable<ExamPaper> Filter(ExamPaperFilterModel examPaperFilterModel);
         List<ExamPaper> Search(string keySearch);
         IEnumerable<ExamPaper> GetAll();
-        string Create(ExamPaper examPaper);
-        List<ExamPaper> Details(int id);
-        string Delete(int id);
+        int Create(ExamPaper examPaper);
+
+        int Edit(ExamPaper examPaper);
+
+        ExamPaper GetExamPaperById(int id);
+
+        int Delete(int id);
     }
     public class ExamPaperService : IExamPaperService
     {
@@ -26,12 +30,17 @@ namespace TestingSystem.Sevice
             this.unitOfWork = unitOfWork;
         }
 
-        public string Create(ExamPaper examPaper)
+        public int Create(ExamPaper examPaper)
         {
            return examPaperRepository.Create(examPaper);
         }
 
-        public List<ExamPaper> Details(int id)
+        public int Edit(ExamPaper examPaper)
+        {
+            return examPaperRepository.Edit(examPaper);
+        }
+
+        public ExamPaper GetExamPaperById(int id)
         {
             return examPaperRepository.FindById(id);
         }
@@ -52,7 +61,7 @@ namespace TestingSystem.Sevice
             return examPaperRepository.Search(keySearch);
         }
 
-        public string Delete(int id)
+        public int Delete(int id)
         {
            return examPaperRepository.Delete(id);
         }
