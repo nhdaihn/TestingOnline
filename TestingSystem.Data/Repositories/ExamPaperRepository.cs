@@ -11,8 +11,9 @@ namespace TestingSystem.Data.Repositories
     {
         IQueryable<ExamPaper> Filter(ExamPaperFilterModel examPaperFilterModel);
         List<ExamPaper> Search(string keySearch);
-        string Create(ExamPaper examPaper);
-        List<ExamPaper> FindById(int id);
+        int Create(ExamPaper examPaper);
+        int Edit(ExamPaper examPaper);
+        ExamPaper FindById(int id);
         string Delete(int id);
     }
 
@@ -22,40 +23,41 @@ namespace TestingSystem.Data.Repositories
         {
         }
 
-        public string Create(ExamPaper examPaper)
+        public int Create(ExamPaper examPaper)
         {
             try
             {
-                if (examPaper != null)
-                {
-                    List<ExamPaper> listExamPapers = new List<ExamPaper>
-                {
-                    DbContext.ExamPapers.Add(new ExamPaper()
-                    {
-                       Title = examPaper.Title,
-                       CreatedBy = examPaper.CreatedBy,
-                       CreatedDate = examPaper.CreatedDate,
-                       ExamPaperQuesions = examPaper.ExamPaperQuesions,
-                       IsActive = examPaper.IsActive,
-                       Status = examPaper.Status,
-                       ModifiedBy = examPaper.ModifiedBy,
-                       NumberOfQuestion = examPaper.NumberOfQuestion,
-                       Time = examPaper.Time,
-                       ModifiedDate = examPaper.ModifiedDate
-                    })
-                };
-                    DbContext.SaveChanges();
-                    return "success";
-                }
-                else
-                {
-                    return "fail";
-                }
+                DbContext.ExamPapers.Add(examPaper);
+                return DbContext.SaveChanges();
+
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                return "fail";
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
+
+        public int Edit(ExamPaper examPaper)
+        {
+            try
+            {
+                ExamPaper exam = new ExamPaper();
+                exam = DbContext.ExamPapers.Find(examPaper.ExamPaperID);
+                exam.Title = examPaper.Title;
+                exam.NumberOfQuestion = examPaper.NumberOfQuestion;
+                exam.Time = examPaper.Time;
+                exam.Status = examPaper.Status;
+                exam.IsActive = examPaper.IsActive;
+                exam.ModifiedBy = examPaper.ModifiedBy;
+                exam.ModifiedDate = examPaper.ModifiedDate;
+                return DbContext.SaveChanges();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
             }
         }
 
@@ -140,14 +142,14 @@ namespace TestingSystem.Data.Repositories
             }
         }
 
-        List<ExamPaper> IExamPaperRepository.FindById(int id)
+        ExamPaper IExamPaperRepository.FindById(int id)
         {
 
             try
             {
-                List<ExamPaper> listeExamPapers = new List<ExamPaper>();
-                listeExamPapers = DbContext.ExamPapers.Where(x => x.ExamPaperID == id).ToList();
-                return listeExamPapers;
+                ExamPaper exam = new ExamPaper();
+                exam = DbContext.ExamPapers.Find(id);
+                return exam;
             }
             catch (Exception e)
             {

@@ -4,18 +4,26 @@ using TestingSystem.DataTranferObject;
 using TestingSystem.Sevice;
 using TestingSystem.Models;
 using System.Linq;
+using System;
 
 namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
 {
-    public class ExamPaperController : Controller
+    public class ExamPaperController : BaseController
     {
         private readonly IExamPaperService examPaperService;
 
+        public ExamPaperController(IExamPaperService examPaperService)
+        {
+            this.examPaperService = examPaperService;
+        }
+
+       
         public ActionResult ExamPapers()
         {
             return View();
         }
 
+        [ActionName("GetExamPapers")]
         public ActionResult GetExamPapers()
         {
             var examPapers = new List<TestingSystem.Models.ExamPaper>();
@@ -24,10 +32,70 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
         }
 
 
-        public ExamPaperController(IExamPaperService examPaperService)
+        [HttpGet]
+        [ActionName("ExamPaper")]
+        public ActionResult ExamPaper(int? examPaperId)
         {
-            this.examPaperService = examPaperService;
+            var model = new Models.ExamPaper();
+
+            if (examPaperId == null || examPaperId == 0)
+            {
+                ViewBag.IsUpdate = false;
+                return View(model);
+            }
+            model = examPaperService.GetExamPaperById(examPaperId.Value);
+            if (model != null)
+            {
+
+            }
+            ViewBag.Status = model.Status;
+            ViewBag.IsUpdate = true;
+            return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("ExamPaper")]
+        public ActionResult ExamPaper(Models.ExamPaper examPaper)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (examPaper.ExamPaperID == 0)
+                    {
+                        examPaper.CreatedDate = DateTime.Now;
+                        examPaper.CreatedBy = 1;
+                        examPaper.ModifiedBy = 1;
+                        if (examPaperService.Create(examPaper) > 0)
+                        {
+                            Success = "Insert exam paper successfully!";
+                            return RedirectToAction("ExamPapers");
+                        }
+                    }
+                    else
+                    {
+                        examPaper.ModifiedDate = DateTime.Now;
+                        examPaper.ModifiedBy = 1;
+                        if (examPaperService.Edit(examPaper) > 0)
+                        {
+                            Success = "Update exam paper successfully!";
+                            return RedirectToAction("ExamPapers");
+                        }
+                    }
+                }
+                Failure = "Something went wrong, please try again!";
+                return new JsonResult { Data = new { status = false } };
+            }
+            catch (Exception exception)
+            {
+                Failure = exception.Message;
+                return View(examPaper);
+            }
+        }
+
+
+
         // GET: Admin/ExamPaper
         [HttpGet]
         public ActionResult Index(ExamPaperFilterModel examPaperFilterModel)
@@ -56,7 +124,7 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
 
         public ActionResult Details(int id)
         {
-            return View(examPaperService.Details(id));
+            return View(examPaperService.GetExamPaperById(id));
         }
 
         public ActionResult Delete(int id)
