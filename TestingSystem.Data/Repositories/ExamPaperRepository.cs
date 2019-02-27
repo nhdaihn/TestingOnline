@@ -37,7 +37,7 @@ namespace TestingSystem.Data.Repositories
                        ModifiedBy = examPaper.ModifiedBy,
                        NumberOfQuestion = examPaper.NumberOfQuestion,
                        Time = examPaper.Time,
-                       ModifiebDate = examPaper.ModifiebDate
+                       ModifiedDate = examPaper.ModifiedDate
                     })
                 };
                 DbContext.SaveChanges();

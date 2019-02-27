@@ -22,9 +22,9 @@ namespace TestingSystem.Models
         [Required]
         public int CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
-        [Required]
-        public int ModifiedBy { get; set; }
-        public DateTime? ModifiebDate { get; set; }
+
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
 
         public virtual User CreaterUser { get; set; }

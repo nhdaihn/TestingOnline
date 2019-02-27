@@ -87,7 +87,6 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             }
 
         }
-        [HttpPost]
         public JsonResult Delete(int id)
         {
             Models.Question myQuestion = questionService.GetQuetionById(id);

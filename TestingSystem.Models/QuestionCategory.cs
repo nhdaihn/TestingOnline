@@ -19,11 +19,9 @@ namespace TestingSystem.Models
         public int CreatedBy { get; set; }
 
         public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
 
-        [Required]
-        public int ModifiedBy { get; set; }
-
-        public DateTime? ModifiebDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
 
         //[ForeignKey("ModifiedBys"), Column(Order = 1)]
