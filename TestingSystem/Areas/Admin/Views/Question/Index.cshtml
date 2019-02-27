@@ -39,7 +39,7 @@
     <div class="form-group">
         <label for="sel1">Level</label>
         <select class="form-control" id="Level" name="Level">
-            <option value="">Choice one</option>
+            <option value="" selected disabled hidden>Choice one</option>
             @foreach (var item in ViewBag.listLevel)
             {
                 <option value="@item.LevelId">@item.Name</option>
@@ -49,7 +49,7 @@
     <div class="form-group">
         <label for="sel1">Category</label>
         <select class="form-control" id="CategoryID" name="CategoryID">
-            <option value="">Choice one</option>
+            <option value="" selected disabled hidden>Choice one</option>
             @foreach (var item in ViewBag.listCategory)
             {
                 <option value="@item.CategoryID">@item.Name</option>
@@ -78,7 +78,7 @@
     <div class="card-header bg-light">Question</div>
     <div class="card-body">
         <div>
-            <a class="btn btn-success" href="/Admin/Banner/Create"><i class="fa fa-plus"></i> Create New</a>
+            <a class="btn btn-success" href="/Admin/Question/Create"><i class="fa fa-plus"></i> Create New</a>
         </div>
         <table class="table table-bordered">
             <tr class="nhdai-table-title">
@@ -96,10 +96,10 @@
                     IsActive
                 </th>
                 <th>
-                    CreatedBy
+                    Created By
                 </th>
                 <th>
-                    CreatedDate
+                    Created Date
                 </th>
                 <th></th>
             </tr>
@@ -112,7 +112,7 @@
                         <a href="/Admin/Question/Detail/@item.QuestionID">@item.Content</a>
                     </td>
                     <td>
-                        @item.Image
+                        <img src="/Content/QuestionUpload/Images/@item.Image" class="img-fluid" width="50" style="text-align: center" />
                     </td>
                     @foreach (var cate in ViewBag.listCategory)
                     {
@@ -124,7 +124,7 @@
                         }
                     }
                     <td>
-                        @item.IsActive
+                        @Html.DisplayFor(Model=> item.IsActive)@*<input  type="checkbox"  value="@item.IsActive" />*@
                     </td>
                     <td>
                         @item.CreatedBy
@@ -144,54 +144,6 @@
 </div>
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#btnRemove').click(function () {
-            var dem = 0;
-            $(".checkCheckbox").each(function (index) {
-                var id1 = $(this).attr('id');
-                var s = '#' + id1 + ':checked';
-
-                if ($(s).length > 0) {
-                    dem++;
-                }
-            });
-            if (dem < 1) {
-                alert("Please select one row to update!");
-            }
-            var i = 0;
-            if (dem > 0) {
-                var con = confirm('Are you sure?');
-                if (con) {
-                    $(".checkCheckbox").each(function () {
-                        var id1 = $(this).attr('id');
-                        var s = '#' + id1 + ':checked';
-                        var id = $(this).data('id');
-                        if ($(s).length > 0) {
-                            $.ajax({
-                                url: '/Admin/Question/Delete?id=' + id,
-                                type: "POST",
-                                data: JSON.stringify(id),
-                                dataType: "json",
-                                contentType: "application/json",
-                                success: function (res) {
-                                    var row = '#row-' + id;
-                                    if (res.status === true) {
-                                        i++;
-                                        $(row).remove();
-                                        if (i === dem) {
-                                            window.location.href = "/Admin/Question/Index";
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-
-            }
-        });
-
-    });
     function changeCheck() {
         if ($('#checkAll').is(":checked")) {
             $(".checkCheckbox").each(function (index) {
@@ -225,13 +177,6 @@
                 var id11 = $(this).attr('id');
                 var s = '#' + id11;
                 var a = $(s).prop('checked');
-                //if (a == true)
-                //{
-                //    $(a).prop("checked", true);
-                //} else {
-                //    $(a).prop("checked", false);
-                //}
-
                 $(s).attr("checked", a);
             });
 

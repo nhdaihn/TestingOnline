@@ -11,7 +11,7 @@ namespace TestingSystem.Sevice
 {
     public interface IAnswerService
     {
-        void AddAnswer(Answer answer);
+        int AddAnswer(Answer answer);
         void UpdateAnswer(Answer answer);
         void DeleteAnswer(Answer answer);
     }
@@ -26,9 +26,9 @@ namespace TestingSystem.Sevice
             this.unitOfWork = unitOfWork;
         }
 
-        public void AddAnswer(Answer answer)
+        public int AddAnswer(Answer answer)
         {
-             answerRepository.Add(answer);
+            return answerRepository.AddAnswer(answer);
         }
 
         public void DeleteAnswer(Answer answer)

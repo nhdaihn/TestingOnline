@@ -3906,6 +3906,10 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\QuestionUpload\Images\250px-Terry_Crews_by_Gage_Skidmore_5.jpg" />
+    <Content Include="Content\QuestionUpload\Images\NO+Logo+6-27.png" />
+    <Content Include="Content\QuestionUpload\Images\noimage.png" />
+    <Content Include="Content\QuestionUpload\Images\NotFound.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -3930,7 +3934,6 @@
     <Content Include="Areas\Admin\Views\ExamPaper\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Search.cshtml" />
-    <Content Include="Areas\Admin\Views\Question\Filter.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\Question\NotFound.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LayoutAdmin.cshtml" />
@@ -4144,6 +4147,8 @@
     <Content Include="Areas\Admin\Views\ExamPaper\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Question\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Question\Edit.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -4172,16 +4177,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Controllers\Account\" />
-    <Folder Include="Areas\Admin\Controllers\Exam-Question\" />
-    <Folder Include="Areas\Admin\Controllers\Exam\" />
     <Folder Include="Areas\Admin\Models\Account\" />
     <Folder Include="Areas\Admin\Models\Exam-Question\" />
     <Folder Include="Areas\Admin\Models\ExamPaper\" />
     <Folder Include="Areas\Admin\Models\Exam\" />
-    <Folder Include="Areas\Admin\Views\Account\" />
-    <Folder Include="Areas\Admin\Views\Exam-Question\" />
-    <Folder Include="Areas\Admin\Views\Exam\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

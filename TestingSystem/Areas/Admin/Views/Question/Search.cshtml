@@ -129,54 +129,6 @@
 </div>
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#btnRemove').click(function () {
-            var dem = 0;
-            $(".checkCheckbox").each(function (index) {
-                var id1 = $(this).attr('id');
-                var s = '#' + id1 + ':checked';
-
-                if ($(s).length > 0) {
-                    dem++;
-                }
-            });
-            if (dem < 1) {
-                alert("Please select one row to update!");
-            }
-            var i = 0;
-            if (dem > 0) {
-                var con = confirm('Are you sure?');
-                if (con) {
-                    $(".checkCheckbox").each(function () {
-                        var id1 = $(this).attr('id');
-                        var s = '#' + id1 + ':checked';
-                        var id = $(this).data('id');
-                        if ($(s).length > 0) {
-                            $.ajax({
-                                url: '/Admin/Question/Delete?id=' + id,
-                                type: "POST",
-                                data: JSON.stringify(id),
-                                dataType: "json",
-                                contentType: "application/json",
-                                success: function (res) {
-                                    var row = '#row-' + id;
-                                    if (res.status === true) {
-                                        i++;
-                                        $(row).remove();
-                                        if (i === dem) {
-                                            window.location.href = "/Admin/Question/Index";
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-
-            }
-        });
-
-    });
     function changeCheck() {
         if ($('#checkAll').is(":checked")) {
             $(".checkCheckbox").each(function (index) {
@@ -209,13 +161,7 @@
                 var id = $(this).data('id');
                 var id11 = $(this).attr('id');
                 var s = '#' + id11;
-                var a = $(s).prop('checked');
-                //if (a == true)
-                //{
-                //    $(a).prop("checked", true);
-                //} else {
-                //    $(a).prop("checked", false);
-                //}
+                var a = $(s).prop('checked');            
 
                 $(s).attr("checked", a);
             });

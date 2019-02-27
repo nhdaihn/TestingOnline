@@ -9,9 +9,9 @@ namespace TestingSystem.Sevice
 {
     public interface IQuestionService
     {
+        bool UpdateQuestion(Question question);
+        int AddQuestion(Question question);
         Question FindID(int? id);
-        void AddQuestion(Question question);
-        void UpdateQuestion(Question question);
         bool DeleteQuestion(int id);
         Question GetQuetionById(int id);
         IEnumerable<Question> SearchByContent(string input);
@@ -29,12 +29,6 @@ namespace TestingSystem.Sevice
             this.questionRepository = questionRepository;
             this.unitOfWork = unitOfWork;
         }
-
-        public void AddQuestion(Question question)
-        {
-            questionRepository.Add(question);
-        }
-
         public bool DeleteQuestion(int id)
         {
             return questionRepository.DeleteQuestion(id);
@@ -65,9 +59,14 @@ namespace TestingSystem.Sevice
             return questionRepository.SearchByContent(input);
         }
 
-        public void UpdateQuestion(Question question)
+        public bool UpdateQuestion(Question question)
         {
-            questionRepository.Update(question);
+            return questionRepository.UpdateQuestion(question);
+        }
+
+        int IQuestionService.AddQuestion(Question question)
+        {
+            return questionRepository.AddQuestion(question);
         }
     }
 }

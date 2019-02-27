@@ -12,29 +12,31 @@ namespace TestingSystem.Data.Repositories
 {
     public interface IQuestionRepository : IRepository<Question>
     {
-         bool DeleteQuestion(int id);
-         Question FindID(int? id);
+        bool UpdateQuestion(Question question);
+        int AddQuestion(Question question);
+        bool DeleteQuestion(int id);
+        Question FindID(int? id);
         IEnumerable<Question> SearchByContent(string input);
         IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel);
     }
-    public class QuestionRepository:RepositoryBase<Question>,IQuestionRepository
+    public class QuestionRepository : RepositoryBase<Question>, IQuestionRepository
     {
         public QuestionRepository(IDbFactory dbFactory) : base(dbFactory)
         {
-            
+
         }
         public Question FindID(int? id)
         {
-            var question = this.DbContext.Questions.FirstOrDefault(x => x.CategoryID == id);
+            var question = this.DbContext.Questions.FirstOrDefault(x => x.QuestionID == id);
             return question;
         }
         public bool DeleteQuestion(int id)
         {
-            var question = FindID(id);
-            if (question!= null)
+            var question = this.DbContext.Questions.Find(id);
+            if (question != null)
             {
                 this.DbContext.Questions.Remove(question);
-                return true;
+                return this.DbContext.SaveChanges() > 0;
             }
             else
             {
@@ -73,6 +75,33 @@ namespace TestingSystem.Data.Repositories
                 .Where(x => x.Content.Contains(input.ToLower().Trim())).ToList();
             return search;
         }
-         
+
+        public int AddQuestion(Question question)
+        {
+            question.CreatedDate = DateTime.Now;
+            this.DbContext.Questions.Add(question);
+            this.DbContext.SaveChanges();
+            return question.QuestionID;
+        }
+
+        public bool UpdateQuestion(Question question)
+        {
+            var objQuestion = this.DbContext.Questions.Find(question.QuestionID);
+            if (objQuestion != null)
+            {
+                objQuestion.Content = question.Content;
+                objQuestion.Image = question.Image;
+                objQuestion.Level = question.Level;
+                objQuestion.CategoryID = question.CategoryID;
+                objQuestion.IsActive = question.IsActive;
+                objQuestion.CreatedBy = question.CreatedBy;
+                objQuestion.CreatedDate = question.CreatedDate;
+                objQuestion.ModifiedBy = question.ModifiedBy;
+                objQuestion.ModifiedDate = DateTime.Now;
+                this.DbContext.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }
