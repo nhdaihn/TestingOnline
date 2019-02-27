@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
-using System.Web.UI.WebControls;
+using TestingSystem.DataTranferObject;
 using TestingSystem.Sevice;
-using TestingSystem.Models;
 
 namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
 {
@@ -14,9 +13,12 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
             this.examPaperService = examPaperService;
         }
         // GET: Admin/ExamPaper
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult Index(ExamPaperFilterModel examPaperFilterModel)
         {
-            return View(examPaperService.GetAll());
+
+            return View(examPaperService.Filter(examPaperFilterModel));
+            //return View(examPaperService.GetAll());
         }
 
         public ActionResult Create()
@@ -26,20 +28,42 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
         [HttpPost]
         public ActionResult Create(Models.ExamPaper examPaper)
         {
-            examPaperService.Create(examPaper);
-            
-            return View();
+            if (examPaperService.Create(examPaper).Equals("success"))
+            {
+                return RedirectToAction("Index", "ExamPaper");
+            }
+            else
+            {
+                return View();
+            }
         }
 
-        public ActionResult Detail(int id)
+        public ActionResult Details(int id)
         {
-            examPaperService.Detail(id);
-            return View();
+            return View(examPaperService.Details(id));
         }
 
         public ActionResult Delete(int id)
         {
-            return View();
+            if (id > 0)
+            {
+                if (examPaperService.Delete(id).Equals("success"))
+                {
+                    return RedirectToAction("Index", "ExamPaper");
+                }
+                else
+                {
+                    ViewBag.DeleteError = "Delete Error";
+                    return RedirectToAction("Index", "ExamPaper");
+                }
+            }
+            else
+            {
+                ViewBag.DeleteError = "Exam Paper does not exist ";
+                return RedirectToAction("Index", "ExamPaper");
+            }
+
+
         }
 
 
