@@ -14,7 +14,7 @@ namespace TestingSystem.Data.Repositories
         int Create(ExamPaper examPaper);
         int Edit(ExamPaper examPaper);
         ExamPaper FindById(int id);
-        string Delete(int id);
+        int Delete(int id);
     }
 
     public class ExamPaperRepository : RepositoryBase<ExamPaper>, IExamPaperRepository
@@ -61,7 +61,7 @@ namespace TestingSystem.Data.Repositories
             }
         }
 
-        public string Delete(int id)
+        public int Delete(int id)
         {
             try
             {
@@ -69,13 +69,9 @@ namespace TestingSystem.Data.Repositories
                 if (objExamPaper != null)
                 {
                     DbContext.ExamPapers.Remove(objExamPaper);
-                    DbContext.SaveChanges();
-                    return "success";
+                    return DbContext.SaveChanges();
                 }
-                else
-                {
-                    return "fail";
-                }
+                return 0;
             }
 
             catch (Exception e)

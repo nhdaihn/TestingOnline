@@ -133,25 +133,27 @@
                                 ids.push(rowId);
                             }
                         });
-                        debugger;
                         $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
                             $.ajax({
-                                url: "/Admin/ExamPaper/DeleteAll/",
+                                url: "/Admin/ExamPaper/Delete/",
                                 data: {
                                     ids: ids
                                 },
                                 type: "Get",
                                 datatype: "json",
                                 traditional: true,
-                                error: function () {
+                                error: function (data) {
                                     $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
                                     $("#error-msgbox-modal #error-msg1").text('');
                                     $('#error-msgbox-modal').modal('show');
                                 },
-                                success: function (data) {
-                                    debugger;
-                                    $.notify("Delete exam paper successfully!", "success");
-                                    location.reload();
+                                success: function (status) {
+                                    if (status) {
+                                        debugger;
+                                        $.notify("Delete exam paper successfully!", "success");
+                                        examPaperTable.ajax.reload();
+                                        //location.reload();
+                                    }
                                 }
 
                             });
@@ -160,6 +162,46 @@
                     }
 
                 });
+
+            setTimeout(function () {
+
+                $(".delete-row").on("click",
+                    function (e) {
+                        var ids = [];
+                        var id = $(this).data("val-id");
+                        if (ids.indexOf(id) < 0) {
+                            ids.push(id);
+                        }
+                        debugger;
+                        $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
+                            $.ajax({
+                                url: "/Admin/ExamPaper/Delete/",
+                                data: {
+                                    ids: ids
+                                },
+                                traditional: true,
+                                type: "Get",
+                                datatype: "json",
+                                error: function (status) {
+                                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                                    $("#error-msgbox-modal #error-msg1").text('');
+                                    $('#error-msgbox-modal').modal('show');
+                                },
+                                success: function (status) {
+                                    if (status) {
+                                        debugger;
+                                        $.notify("Delete exam paper successfully!", "success");
+                                        examPaperTable.ajax.reload();
+                                        //location.reload();
+                                    }
+                                }
+
+                            });
+                            e.stopPropagation();
+                        });
+                    });
+
+            }, 500);
 
             //$('.tablecontainer').on('click', 'a.popup', function (e) {
 
@@ -216,36 +258,7 @@
     </script>
     <script>
         $(document).ready(function () {
-            setTimeout(function () {
 
-                $(".delete-row").on("click",
-                    function (e) {
-                        var id = $(this).data("val-id");
-                        debugger;
-                        $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
-                            $.ajax({
-                                url: "/Admin/ExamPaper/Delete/",
-                                data: {
-                                    examPaperId: id
-                                },
-                                type: "Get",
-                                datatype: "json",
-                                error: function () {
-                                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
-                                    $("#error-msgbox-modal #error-msg1").text('');
-                                    $('#error-msgbox-modal').modal('show');
-                                },
-                                success: function (data) {
-                                    $.notify("Delete exam paper successfully!", "success");
-                                    location.reload();
-                                }
-
-                            });
-                            e.stopPropagation();
-                        });
-                    });
-
-            }, 500);
         });
     </script>
 }

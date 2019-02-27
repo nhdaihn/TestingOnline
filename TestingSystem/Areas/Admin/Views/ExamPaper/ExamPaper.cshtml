@@ -37,16 +37,16 @@
     <div class="form-group">
         <div class="col-md-4">
             <label>Status</label>
-            <select class="form-control">
+            <select class="form-control"  name="Status">
                 @if (status == true)
                 {
-                    <option name="Status" selected value="true">Public</option>
-                    <option name="Status" value="false">Draff</option>
+                    <option selected value="true">Public</option>
+                    <option value="false">Draff</option>
                 }
                 else
                 {
-                    <option name="Status" value="true">Public</option>
-                    <option name="Status" selected value="false">Draff</option>
+                    <option value="true">Public</option>
+                    <option selected value="false">Draff</option>
                 }
             </select>
             @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })

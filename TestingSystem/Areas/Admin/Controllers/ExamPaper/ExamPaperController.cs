@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using TestingSystem.DataTranferObject;
 using TestingSystem.Sevice;
-using TestingSystem.Models;
 using System.Linq;
 using System;
 
@@ -94,62 +92,72 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
             }
         }
 
-
-
-        // GET: Admin/ExamPaper
-        [HttpGet]
-        public ActionResult Index(ExamPaperFilterModel examPaperFilterModel)
+        public ActionResult Delete(List<int> ids)
         {
-
-            return View(examPaperService.Filter(examPaperFilterModel));
-            //return View(examPaperService.GetAll());
-        }
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Create(Models.ExamPaper examPaper)
-        {
-            if (examPaperService.Create(examPaper).Equals("success"))
+            try
             {
-                return RedirectToAction("Index", "ExamPaper");
-            }
-            else
-            {
-                return View();
-            }
-        }
-
-        public ActionResult Details(int id)
-        {
-            return View(examPaperService.GetExamPaperById(id));
-        }
-
-        public ActionResult Delete(int id)
-        {
-            if (id > 0)
-            {
-                if (examPaperService.Delete(id).Equals("success"))
+                if (ids.Count > 0)
                 {
-                    return RedirectToAction("Index", "ExamPaper");
+                    int i = 0;
+                    foreach (var id in ids)
+                    {
+                        if (examPaperService.Delete(id) > 0)
+                        {
+                            i++;
+                            continue;
+                        }
+                        else
+                        {
+                            //!!!!!!!!!!! break nhưng mà những cái record trc đó vẫn đã bị xóa
+                            break;
+                        }
+
+                    }
+                    if (i > 0)
+                    {
+                        Success = "Delete exam paper successfully!";
+                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                    }
                 }
-                else
-                {
-                    ViewBag.DeleteError = "Delete Error";
-                    return RedirectToAction("Index", "ExamPaper");
-                }
+                Failure = "Something went wrong, please try again!";
+                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception exception)
             {
-                ViewBag.DeleteError = "Exam Paper does not exist ";
-                return RedirectToAction("Index", "ExamPaper");
+                Failure = exception.Message;
+                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
-
-
         }
 
+        //// GET: Admin/ExamPaper
+        //[HttpGet]
+        //public ActionResult Index(ExamPaperFilterModel examPaperFilterModel)
+        //{
 
+        //    return View(examPaperService.Filter(examPaperFilterModel));
+        //    //return View(examPaperService.GetAll());
+        //}
+
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
+        //[HttpPost]
+        //public ActionResult Create(Models.ExamPaper examPaper)
+        //{
+        //    if (examPaperService.Create(examPaper).Equals("success"))
+        //    {
+        //        return RedirectToAction("Index", "ExamPaper");
+        //    }
+        //    else
+        //    {
+        //        return View();
+        //    }
+        //}
+
+        //public ActionResult Details(int id)
+        //{
+        //    return View(examPaperService.GetExamPaperById(id));
+        //}
     }
 }

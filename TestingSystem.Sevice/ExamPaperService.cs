@@ -18,7 +18,7 @@ namespace TestingSystem.Sevice
 
         ExamPaper GetExamPaperById(int id);
 
-        string Delete(int id);
+        int Delete(int id);
     }
     public class ExamPaperService : IExamPaperService
     {
@@ -61,7 +61,7 @@ namespace TestingSystem.Sevice
             return examPaperRepository.Search(keySearch);
         }
 
-        public string Delete(int id)
+        public int Delete(int id)
         {
            return examPaperRepository.Delete(id);
         }
