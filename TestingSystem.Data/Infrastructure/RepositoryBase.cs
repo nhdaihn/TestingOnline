@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Configuration;
 
 namespace TestingSystem.Data.Infrastructure
 {
@@ -61,6 +62,8 @@ namespace TestingSystem.Data.Infrastructure
 
         public virtual IEnumerable<T> GetAll()
         {
+            //.Configuration .ProxyCreationEnabled = false;
+            DbContext.Configuration.ProxyCreationEnabled = false;
             return dbSet.ToList();
         }
 

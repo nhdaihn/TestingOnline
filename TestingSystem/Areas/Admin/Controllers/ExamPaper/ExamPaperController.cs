@@ -1,12 +1,28 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using TestingSystem.DataTranferObject;
 using TestingSystem.Sevice;
+using TestingSystem.Models;
+using System.Linq;
 
 namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
 {
     public class ExamPaperController : Controller
     {
         private readonly IExamPaperService examPaperService;
+
+        public ActionResult ExamPapers()
+        {
+            return View();
+        }
+
+        public ActionResult GetExamPapers()
+        {
+            var examPapers = new List<TestingSystem.Models.ExamPaper>();
+            examPapers = examPaperService.GetAll().ToList();
+            return Json(new { data = examPapers }, JsonRequestBehavior.AllowGet);
+        }
+
 
         public ExamPaperController(IExamPaperService examPaperService)
         {
