@@ -21,9 +21,9 @@
                 <th>Title</th>
                 <th>Questions</th>
                 <th>Time</th>
-                @*<th>Status</th>
-                <th>IsActive</th>*@
                 <th>Created Date</th>
+                <th>Status</th>
+                <th>Is Active</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -54,7 +54,7 @@
     @Html.Partial("_MessageBoxDelete");
     <script type="text/javascript">
         $(document).ready(function () {
-            debugger;
+
             var examPaperTable = $('#examPaperTable').DataTable({
                 //orderCellsTop: true,
                 //fixedHeader: true,
@@ -69,13 +69,32 @@
                     { "data": "Title", "autoWidth": true },
                     { "data": "NumberOfQuestion", "autoWidth": true },
                     { "data": "Time", "autoWidth": true },
-                    //{ "data": "Status", "autoWidth": true },
-                    //{ "data": "IsActive", "autoWidth": true },
                     {
                         "data": "CreatedDate", "autoWidth": true, "render": function (data) {
                             return moment(data).format('DD/MM/YYYY');
                         }
                     },
+                    {
+                        "data": "Status", "autoWidth": true, "render": function (data) {
+                            if (data) {
+                                return '<input type="checkbox" disabled checked/>';
+                            }
+                            else {
+                                return '<input type="checkbox" disabled />';
+                            }
+                        }
+                    },
+                    {
+                        "data": "IsActive", "autoWidth": true, "render": function (data) {
+                            if (data) {
+                                return '<input type="checkbox" disabled checked/>';
+                            }
+                            else {
+                                return '<input type="checkbox" disabled />';
+                            }
+                        }
+                    },
+
                     {
                         "data": "ExamPaperID", "width": "15px", "render": function (data) {
                             return '<a class="update-row" href="/Admin/ExamPaper/ExamPaper/?examPaperId=' + data + '"><span class="glyphicon glyphicon-pencil"></span></a>   <a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
@@ -88,7 +107,7 @@
                     'orderable': false,
                     'className': 'dt-body-center',
                     'render': function (data, type, full, meta) {
-                        return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                        return '<input type="checkbox" class="delete-all-checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
                     }
                 }],
                 'order': [[1, 'asc']]
@@ -119,8 +138,8 @@
 
             $("#delete-all").on("click",
                 function (e) {
-                    var data = examPaperTable.$('input[type="checkbox"]:checked');
-
+                    var data = examPaperTable.$('input.delete-all-checkbox:checkbox:checked');
+                    debugger;
                     if (data.length === 0) {
                         $("#error-msgbox-modal #error-msg").text('Please choose record to delete!');
                         $("#error-msgbox-modal #error-msg1").text('');
@@ -147,13 +166,13 @@
                                     $("#error-msgbox-modal #error-msg1").text('');
                                     $('#error-msgbox-modal').modal('show');
                                 },
-                                success: function (status) {
-                                    if (status) {
+                                success: function (data) {
+                                    if (data.status) {
                                         debugger;
                                         $.notify("Delete exam paper successfully!", "success");
-                                        examPaperTable.ajax.reload();
-                                        //location.reload();
+                                        //examPaperTable.ajax.reload();
                                     }
+                                    location.reload();
                                 }
 
                             });
@@ -172,7 +191,7 @@
                         if (ids.indexOf(id) < 0) {
                             ids.push(id);
                         }
-                        debugger;
+
                         $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
                             $.ajax({
                                 url: "/Admin/ExamPaper/Delete/",
@@ -187,13 +206,13 @@
                                     $("#error-msgbox-modal #error-msg1").text('');
                                     $('#error-msgbox-modal').modal('show');
                                 },
-                                success: function (status) {
-                                    if (status) {
+                                success: function (data) {
+                                    if (data.status) {
                                         debugger;
                                         $.notify("Delete exam paper successfully!", "success");
-                                        examPaperTable.ajax.reload();
-                                        //location.reload();
+                                        //examPaperTable.ajax.reload();
                                     }
+                                    location.reload();
                                 }
 
                             });
@@ -210,7 +229,7 @@
             //});
 
             //function OpenPopup(pageUrl) {
-            //    debugger;
+            //
             //    var $pageContent = $('<div/>');
             //    $pageContent.load(pageUrl, function () {
 
@@ -254,11 +273,6 @@
 
             //    $dialog.dialog('open');
             //};
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-
         });
     </script>
 }

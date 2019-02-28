@@ -8,6 +8,8 @@ using System.Web;
 using System.IO;
 using System.Linq;
 using System;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace TestingSystem.Areas.Admin.Controllers.Question
 {
@@ -237,6 +239,15 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             }
             questionService.UpdateQuestion(question);
             return RedirectToAction("Index");
+        }
+
+
+        public ActionResult GetQuestionsByExamPaperId(int examPaperId)
+        {
+            var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
+            questions = questionService.GetQuestionsByExamPaperId(examPaperId).ToList();
+
+            return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }
     }
 }

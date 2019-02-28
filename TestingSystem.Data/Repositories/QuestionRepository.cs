@@ -19,6 +19,8 @@ namespace TestingSystem.Data.Repositories
         Question FindID(int? id);
         IEnumerable<Question> SearchByContent(string input);
         IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel);
+
+        IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId);
     }
     public class QuestionRepository : RepositoryBase<Question>, IQuestionRepository
     {
@@ -44,6 +46,7 @@ namespace TestingSystem.Data.Repositories
                 return 0;
             }
         }
+
         public IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel)
         {
             var result = this.DbContext.Questions.AsQueryable();
@@ -126,6 +129,29 @@ namespace TestingSystem.Data.Repositories
                 });
             }
             return listQuestionDTOs;
+        }
+
+        public IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId)
+        {
+            DbContext.Configuration.ProxyCreationEnabled = false;
+            var examPaperQuestions = DbContext.ExamPaperQuesions.Where(e => e.ExamPaperID == examPaperId).ToList();
+            List<QuestionDto> questionsDto = new List<QuestionDto>();
+            foreach(var item in examPaperQuestions)
+            {
+                var question = new Question();
+                var questionDto = new QuestionDto();
+                question = DbContext.Questions.SingleOrDefault(e => e.QuestionID == item.QuestionID);
+                questionDto.IsActive = question.IsActive;
+                questionDto.Content = question.Content;
+                questionDto.Image = question.Image;
+                questionDto.CreatedBy = question.CreatedBy;
+                questionDto.CreatedDate = question.CreatedDate;
+                questionDto.ModifiedBy = question.ModifiedBy;
+                questionDto.ModifiedDate = question.ModifiedDate;
+                questionDto.CategoryID = question.CategoryID;
+                questionsDto.Add(questionDto);
+            }
+            return questionsDto;
         }
     }
 }
