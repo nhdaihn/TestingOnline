@@ -3938,7 +3938,6 @@
     <Content Include="Areas\Admin\Views\ExamPaper\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\Question\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Search.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\Question\NotFound.cshtml" />
@@ -4153,6 +4152,11 @@
     <Content Include="Areas\Admin\Views\ExamPaper\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Question\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Question\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ExamPaper\ExamPaper.cshtml" />
+    <Content Include="Areas\Admin\Views\ExamPaper\ExamPapers.cshtml" />
+    <Content Include="Areas\Admin\Views\Question\Questions.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

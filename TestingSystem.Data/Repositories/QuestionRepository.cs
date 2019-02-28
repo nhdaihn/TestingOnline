@@ -12,9 +12,10 @@ namespace TestingSystem.Data.Repositories
 {
     public interface IQuestionRepository : IRepository<Question>
     {
+        IEnumerable<QuestionDto> GetAllQuestionDtos();
         bool UpdateQuestion(Question question);
         int AddQuestion(Question question);
-        bool DeleteQuestion(int id);
+        int DeleteQuestion(int id);
         Question FindID(int? id);
         IEnumerable<Question> SearchByContent(string input);
         IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel);
@@ -27,20 +28,20 @@ namespace TestingSystem.Data.Repositories
         }
         public Question FindID(int? id)
         {
-            var question = this.DbContext.Questions.FirstOrDefault(x => x.QuestionID == id);
+            var question = this.DbContext.Questions.SingleOrDefault(x => x.QuestionID == id);
             return question;
         }
-        public bool DeleteQuestion(int id)
+        public int DeleteQuestion(int id)
         {
             var question = this.DbContext.Questions.Find(id);
             if (question != null)
             {
                 this.DbContext.Questions.Remove(question);
-                return this.DbContext.SaveChanges() > 0;
+                return DbContext.SaveChanges();
             }
             else
             {
-                return false;
+                return 0;
             }
         }
         public IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel)
@@ -102,6 +103,29 @@ namespace TestingSystem.Data.Repositories
                 return true;
             }
             return false;
+        }
+
+        public IEnumerable<QuestionDto> GetAllQuestionDtos()
+        {
+            List<QuestionDto> listQuestionDTOs = new List<QuestionDto>();
+            foreach (var item in GetAll())
+            {
+                listQuestionDTOs.Add(new QuestionDto
+                {
+                    QuestionID = item.QuestionID,
+                    IsActive = item.IsActive,
+                    Content = item.Content,
+                    Image = item.Image,
+                    CreatedBy = item.CreatedBy,
+                    CreatedDate = item.CreatedDate,
+                    ModifiedBy = item.ModifiedBy,
+                    ModifiedDate = item.ModifiedDate,
+                    CategoryID = item.CategoryID,
+                    // category name fix cung truoc
+                    CategoryName = "Fake"
+                });
+            }
+            return listQuestionDTOs;
         }
     }
 }
