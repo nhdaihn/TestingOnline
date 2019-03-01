@@ -9,7 +9,7 @@ namespace TestingSystem.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AnswerID { get; set; }
         [Required]
-        public string Content { get; set; }
+        public string AnswerContent { get; set; }
         [Required]
         public bool IsCorrect { get; set; }
         [Required]

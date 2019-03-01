@@ -190,11 +190,18 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return RedirectToAction("Index");
         }
 
-
         public ActionResult GetQuestionsByExamPaperId(int examPaperId)
         {
             var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
             questions = questionService.GetQuestionsByExamPaperId(examPaperId).ToList();
+
+            return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetQuestionsByQuestionCategoryId(int categoryId)
+        {
+            var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
+            questions = questionService.GetQuestionsByQuestionCategoryId(categoryId).ToList();
 
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }

@@ -1,0 +1,126 @@
+﻿<!-- Modal -->
+<div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Question List</h4>
+                <div class="tablecontainer">
+
+                    <select class="form-control" id="CategoryId" name="CategoryId">
+                        <option selected value="51">Public</option>
+                        <option value="45">Draff</option>
+                    </select>
+                    <br />
+                    <table id="questionTable" class="display" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" name="select_all" value="1" id="question-select-all"></th>
+                                <th>Content</th>
+                                <th>Level</th>
+                                <th>Category</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (TempData["Success"] != null)
+{
+    <script type="text/javascript">
+            $.notify(@Html.Raw(Json.Encode(TempData["Success"])), "success");
+    </script>
+}
+
+@Html.Partial("_MessageBoxError");
+@if (!string.IsNullOrEmpty((string)TempData["Failure"]))
+{
+    <script type="text/javascript">
+            // !!!??? chỗ html.raw, ko hiểu sao ko nhận ViewData
+            $("#error-msgbox-modal #error-msg").text(@Html.Raw(Json.Encode(TempData["Failure"])));
+            $("#error-msgbox-modal #error-msg1").text('');
+            $('#error-msgbox-modal').modal('show');
+    </script>
+}
+@Html.Partial("_MessageBoxDelete");
+
+<script>
+    $(document).ready(function () {
+
+        $('#CategoryId').change(function () {
+            debugger;
+            var categoryId = $(this).val();
+            var questionTable = $('#questionTable').DataTable({
+                "destroy": true,
+
+                //"processing": true,
+                "ajax": {
+                    "url": "/Admin/Question/GetQuestionsByQuestionCategoryId/?categoryId=" + categoryId,
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "ExamPaperQuestionID", "autoWidth": true },
+                    { "data": "Content", "autoWidth": true },
+                    { "data": "Level", "autoWidth": true },
+                    { "data": "CategoryName", "autoWidth": true },
+                    {
+                        "data": "ExamPaperQuestionID", "width": "15px", "render": function (data) {
+                            return '<a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
+                        },
+                    }
+                ],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center',
+                    'render': function (data, type, full, meta) {
+                        return '<input type="checkbox" class="delete-all-checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                    }
+                }],
+                'order': [[1, 'asc']]
+
+            });
+
+        });
+
+        // Handle click on "Select all" control
+        $('#question-select-all').on('click', function () {
+            // Get all rows with search applied
+            var rows = examPaperQuestionTable.rows({ 'search': 'applied' }).nodes();
+            // Check/uncheck checkboxes for all rows in the table
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+
+        // Handle click on checkbox to set state of "Select all" control
+        $('#examPaperQuestionTable tbody').on('change', 'input[type="checkbox"]', function () {
+            // If checkbox is not checked
+            if (!this.checked) {
+                var el = $('#question-select-all').get(0);
+                // If "Select all" control is checked and has 'indeterminate' property
+                if (el && el.checked && ('indeterminate' in el)) {
+                    // Set visual state of "Select all" control
+                    // as 'indeterminate'
+                    el.indeterminate = true;
+                }
+            }
+        });
+    });
+</script>

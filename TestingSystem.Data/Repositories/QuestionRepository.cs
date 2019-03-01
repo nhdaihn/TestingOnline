@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestingSystem.Data.Infrastructure;
 using TestingSystem.DataTranferObject.Question;
 using TestingSystem.Models;
@@ -20,6 +17,9 @@ namespace TestingSystem.Data.Repositories
         IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel);
 
         IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId);
+
+        IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryId(int categoryId);
+
     }
     public class QuestionRepository : RepositoryBase<Question>, IQuestionRepository
     {
@@ -112,7 +112,7 @@ namespace TestingSystem.Data.Repositories
             DbContext.Configuration.ProxyCreationEnabled = false;
             var examPaperQuestions = DbContext.ExamPaperQuesions.Where(e => e.ExamPaperID == examPaperId).ToList();
             List<QuestionDto> questionsDto = new List<QuestionDto>();
-            foreach(var item in examPaperQuestions)
+            foreach (var item in examPaperQuestions)
             {
                 var question = new Question();
                 var questionDto = new QuestionDto();
@@ -125,6 +125,31 @@ namespace TestingSystem.Data.Repositories
                 questionDto.ModifiedBy = question.ModifiedBy;
                 questionDto.ModifiedDate = question.ModifiedDate;
                 questionDto.CategoryID = question.CategoryID;
+                questionDto.CategoryName = DbContext.QuestionCategories.SingleOrDefault(q => q.CategoryID == question.CategoryID).Name;
+                questionDto.ExamPaperQuestionID = item.ExamPaperQuesionID;
+                questionsDto.Add(questionDto);
+            }
+            return questionsDto;
+        }
+
+        public IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryId(int categoryId)
+        {
+            DbContext.Configuration.ProxyCreationEnabled = false;
+            var questions = DbContext.Questions.Where(e => e.CategoryID == categoryId).ToList();
+            List<QuestionDto> questionsDto = new List<QuestionDto>();
+            foreach (var item in questions)
+            {
+                var questionDto = new QuestionDto();
+                questionDto.IsActive = item.IsActive;
+                questionDto.Content = item.Content;
+                questionDto.Image = item.Image;
+                questionDto.CreatedBy = item.CreatedBy;
+                questionDto.CreatedDate = item.CreatedDate;
+                questionDto.ModifiedBy = item.ModifiedBy;
+                questionDto.ModifiedDate = item.ModifiedDate;
+                questionDto.CategoryID = item.CategoryID;
+                questionDto.CategoryName = DbContext.QuestionCategories.SingleOrDefault(q => q.CategoryID == item.CategoryID).Name;
+                questionDto.QuestionID = item.QuestionID;
                 questionsDto.Add(questionDto);
             }
             return questionsDto;

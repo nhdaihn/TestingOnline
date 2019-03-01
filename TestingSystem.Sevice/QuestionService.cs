@@ -18,6 +18,7 @@ namespace TestingSystem.Sevice
         IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel);
         IEnumerable<Question> GetAllQuestion();
         IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId);
+        IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryId(int categoryId);
 
     }
     public class QuestionService : IQuestionService
@@ -73,6 +74,11 @@ namespace TestingSystem.Sevice
         public IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId)
         {
             return questionRepository.GetQuestionsByExamPaperId(examPaperId);
+        }
+
+        public IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryId(int categoryId)
+        {
+            return questionRepository.GetQuestionsByQuestionCategoryId(categoryId);
         }
     }
 }

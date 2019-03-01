@@ -29,5 +29,7 @@ namespace TestingSystem.DataTranferObject.Question
         public int? ModifiedBy { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
+
+        public int? ExamPaperQuestionID { get; set; }
     }
 }
