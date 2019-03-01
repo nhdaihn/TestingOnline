@@ -1,0 +1,104 @@
+﻿@model List<TestingSystem.Models.Answer>
+@{
+    ViewBag.Title = "Insert Answer";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<style>
+</style>
+<div style="background-color:white;">
+
+    @using (Html.BeginForm("CreateAnswer", "Question", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        if (ViewBag.Message != null)
+        {
+            <div style="border:solid 1px green">
+                @ViewBag.Message
+            </div>
+        }
+
+        <table id="dataTable" class="table table-bordered" cellpadding="0" cellspacing="0">
+            <tr>
+                <th>Answer Content</th>
+                <th>IsCorrect</th>
+                <th></th>
+            </tr>
+            @if (Model != null && Model.Count > 0)
+            {
+                int j = 0;
+                foreach (var i in Model)
+                {
+                    <tr style="border:1px solid black">
+                        <td>@Html.TextBoxFor(a => a[j].AnswerContent)</td>
+                        <td>@Html.CheckBoxFor(a => a[j].IsCorrect, new { @id = "chk1", @class = "chkWebSite", value = "true" })</td>
+                        <td>
+                            @if (j > 0)
+                            {
+                                <a href="#" class="remove">Remove</a>
+                            }
+                        </td>
+                    </tr>
+                    j++;
+                }
+            }
+        </table>
+        <div><div><a href="#" id="addNew">Add New</a></div></div>
+        <input type="submit" value="Save Bulk Data" />
+    }
+</div>
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    <script language="javascript">
+        $(document).ready(function () {
+            //1. Add new row
+            $("#addNew").click(function (e) {
+                e.preventDefault();
+                var $tableBody = $("#dataTable");
+                var $trLast = $tableBody.find("tr:last");
+                var $trNew = $trLast.clone();
+
+                var suffix = $trNew.find(':input:first').attr('name').match(/\d+/);
+                $trNew.find("td:last").html('<a href="javascript:void(0);" class="removeInput">Remove</a>');
+                $.each($trNew.find(':input'), function (i, val) {
+                    // Replaced Name
+                    var oldN = $(this).attr('name');
+                    var newN = oldN.replace('[' + suffix + ']', '[' + (parseInt(suffix) + 1) + ']');
+                    $(this).attr('name', newN);
+                    //Replaced value
+                    var type = $(this).attr('type');
+                    if (type.toLowerCase() == "text") {
+                        $(this).attr('value', '');
+                    }
+
+                    // If you have another Type then replace with default value
+                    $(this).removeClass("input-validation-error");
+
+                });
+                $trLast.after($trNew);
+
+                // Re-assign Validation
+                var form = $("form")
+                    .removeData("validator")
+                    .removeData("unobtrusiveValidation");
+                $.validator.unobtrusive.parse(form);
+            });
+
+            // 2. Remove
+
+            setTimeout(function() {
+                    $("a.removeInput").on("click", function (e) {
+                        debugger;
+                        e.preventDefault();
+                        $(this).parent().parent().remove();
+                    });
+
+                },
+                3000);
+
+        });
+    </script>
+}
+

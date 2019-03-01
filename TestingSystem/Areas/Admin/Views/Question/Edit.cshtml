@@ -12,90 +12,106 @@
 <div class="card">
     <div class="card-header bg-light">Create Question</div>
     <div class="card-body">
-        <form action="/Admin/Question/Edit/@Model.QuestionID" method="post" enctype="multipart/form-data">
+        <form action="/Admin/Question/Edit" method="post" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
             <div class="form-horizontal">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <input type="hidden" value="@Model.QuestionID" name="QuestionID" />
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="Content">Content Question</label>
-                    <div class="col-md-10">
-                        <input type="text" name="Content" class="form-control" value="@Model.Content" required />
-                        <span class="field-validation-valid text-danger" data-valmsg-for="Content" data-valmsg-replace="true"></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="Image">Image</label>
-                    <div class="col-md-10">
-                        <img id="FileImage" src="~/Content/QuestionUpload/Images/@Model.Image" alt="your image" class="img-thumbnail" width="150" />
-                        <input type="file" name="Image" class="form-control" id="imgInp" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="control-label col-md-2">Level</label>
-                    <select class="form-control" id="Level" name="Level" required>
-                        @foreach (var item in ViewBag.listLevel)
-                        {
-                            if (Model.Level == item.LevelStep)
-                            {
-                                <option selected value="@Model.Level">
-                                    @item.Name
-                                </option>
-                            }
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label " style="margin-bottom: 10px;margin-left: 19px;" for="Content">Content Question</label>
+                            <div class="col-md-10">
+                                <input type="text" name="Content" class="form-control" value="@Model.Content" required />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="Content" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-left: 0px;">
+                            <label for="control-label " style="margin-left: 7px;">Level</label>
+                            <select class="form-control" id="Level" name="Level" required>
+                                @foreach (var item in ViewBag.listLevel)
+                                {
+                                    if (Model.Level == item.LevelStep)
+                                    {
+                                        <option selected value="@Model.Level">
+                                            @item.Name
+                                        </option>
+                                    }
 
-                            if (Model.Level != item.LevelStep)
-                            {
-                                <option selected value="@Model.Level">
-                                    @item.Name
-                                </option>
-                            }
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="control-label col-md-2">Category</label>
-                    <select class="form-control" id="CategoryID" name="CategoryID" required>
-                        @foreach (var item in ViewBag.listCategory)
-                        {
+                                    if (Model.Level != item.LevelStep)
+                                    {
+                                        <option selected value="@Model.Level">
+                                            @item.Name
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <div class="checkbox">
+                                    @Html.EditorFor(model => model.IsActive)
+                                    @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="control-label ">Category</label>
+                            <select class="form-control" id="CategoryID" name="CategoryID" required>
+                                @foreach (var item in ViewBag.listCategory)
+                                {
 
-                            if (Model.CategoryID == item.CategoryID)
-                            {
-                                <option selected value="@Model.CategoryID">
-                                    @item.Name
-                                </option>
-                            }
-                            if (Model.CategoryID != item.CategoryID)
-                            {
-                                <option value="@Model.CategoryID">
-                                    @item.Name
-                                </option>
-                            }
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        <div class="checkbox">
-                            @Html.EditorFor(model => model.IsActive)
-                            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                                    if (Model.CategoryID == item.CategoryID)
+                                    {
+                                        <option selected value="@Model.CategoryID">
+                                            @item.Name
+                                        </option>
+                                    }
+                                    if (Model.CategoryID != item.CategoryID)
+                                    {
+                                        <option value="@Model.CategoryID">
+                                            @item.Name
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-left: -15px">
+                            <label class="control-label " for="Image" style="margin-right: 50px;margin-bottom: 16px;">Image</label>
+                            <div class="col-md-10">
+                                <img id="FileImage" src="~/Content/QuestionUpload/Images/@Model.Image" alt="your image" class="img-thumbnail" width="150" />
+                                <input type="file" name="Image" class="form-control" id="imgInp" />
+                            </div>
                         </div>
                     </div>
                 </div>
-                <input type="hidden" value="@Model.CreatedBy" name="CreatedBy" />
-                <input type="hidden" value="@Model.CreatedDate" name="CreatedDate" />
-                <input type="hidden" value="@Model.ModifiedBy" name="ModifiedBy" />
-                <input type="hidden" value="@Model.ModifiedDate" name="ModifiedDate" />
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Update" class="btn btn-primary" />
-                        <a class="btn btn-info" href="/Admin/Question/Index">Back to List</a>
-                    </div>
+
+                <input type="hidden" value="1" name="CreatedBy" />
+                <input type="hidden" value="1" name="ModifiedBy" />
+
+            </div>
+            <div>
+                @*  *@
+                <input type="text" name="Content" class="form - control textbox" required />
+                <input type="checkbox" name="IsCorrect" value="true">
+
+                <input type="text" name="Content" class="form - control textbox" required />
+                <input type="checkbox" name="IsCorrect" value="true">
+
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <a class="btn btn-info" href="/Admin/Question/Index">Back to List</a>
                 </div>
             </div>
         </form>
     </div>
 </div>
+
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>
     function readURL(input) {

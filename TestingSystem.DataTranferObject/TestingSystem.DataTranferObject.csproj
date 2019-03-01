@@ -46,6 +46,7 @@
     <Compile Include="Question\Level.cs" />
     <Compile Include="Question\QuestionDto.cs" />
     <Compile Include="Question\QuestionFilterModel.cs" />
+    <Compile Include="Question\TranferID.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -12,6 +12,7 @@ namespace TestingSystem.Data.Repositories
 {
     public interface IQuestionRepository : IRepository<Question>
     {
+        IEnumerable<Level> GetAlLevels();
         IEnumerable<QuestionDto> GetAllQuestionDtos();
         bool UpdateQuestion(Question question);
         int AddQuestion(Question question);
@@ -24,9 +25,10 @@ namespace TestingSystem.Data.Repositories
     }
     public class QuestionRepository : RepositoryBase<Question>, IQuestionRepository
     {
-        public QuestionRepository(IDbFactory dbFactory) : base(dbFactory)
+        private readonly IQuestionCategoryRepository questionCategory;
+        public QuestionRepository(IDbFactory dbFactory, IQuestionCategoryRepository questionCategory) : base(dbFactory)
         {
-
+            this.questionCategory = questionCategory;
         }
         public Question FindID(int? id)
         {
@@ -83,8 +85,8 @@ namespace TestingSystem.Data.Repositories
         public int AddQuestion(Question question)
         {
             question.CreatedDate = DateTime.Now;
-            this.DbContext.Questions.Add(question);
-            this.DbContext.SaveChanges();
+            DbContext.Questions.Add(question);
+            DbContext.SaveChanges();
             return question.QuestionID;
         }
 
@@ -125,9 +127,10 @@ namespace TestingSystem.Data.Repositories
                     ModifiedDate = item.ModifiedDate,
                     CategoryID = item.CategoryID,
                     // category name fix cung truoc
-                    CategoryName = "Fake"
+                    CategoryName = questionCategory.FindCategoryByID(item.CategoryID).Name
                 });
             }
+
             return listQuestionDTOs;
         }
 
@@ -136,7 +139,7 @@ namespace TestingSystem.Data.Repositories
             DbContext.Configuration.ProxyCreationEnabled = false;
             var examPaperQuestions = DbContext.ExamPaperQuesions.Where(e => e.ExamPaperID == examPaperId).ToList();
             List<QuestionDto> questionsDto = new List<QuestionDto>();
-            foreach(var item in examPaperQuestions)
+            foreach (var item in examPaperQuestions)
             {
                 var question = new Question();
                 var questionDto = new QuestionDto();
@@ -152,6 +155,15 @@ namespace TestingSystem.Data.Repositories
                 questionsDto.Add(questionDto);
             }
             return questionsDto;
+        }
+
+        public IEnumerable<Level> GetAlLevels()
+        {
+            List<Level> listLevels = new List<Level>();
+            listLevels.Add(new Level { LevelId = 1, LevelStep = 1, Name = "Easy" });
+            listLevels.Add(new Level { LevelId = 2, LevelStep = 2, Name = "Normal" });
+            listLevels.Add(new Level { LevelId = 3, LevelStep = 3, Name = "Hard" });
+            return listLevels;
         }
     }
 }

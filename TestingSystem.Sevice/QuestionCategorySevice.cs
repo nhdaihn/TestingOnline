@@ -39,9 +39,19 @@ namespace TestingSystem.Sevice
             return questionCategory.DeleteQuestionCategory(dsxoa);
         }
 
+        public QuestionCategory FindCategoryByID(int? id)
+        {
+            return questionCategory.FindCategoryByID(id);
+        }
+
         public IEnumerable<QuestionCategory> GetAll()
         {
             return questionCategory.GetAll();
+        }
+
+        public IEnumerable<QuestionCategory> GetAllQuestionCategories()
+        {
+            return questionCategory.GetAllQuestionCategories();
         }
 
         public IEnumerable<User> GetAllUser()
@@ -82,6 +92,8 @@ namespace TestingSystem.Sevice
         int DeleteQuestionCategory(int[] dsxoa);
         int Delete(int id);
         QuestionCategory GetById(int id);
-       
+        QuestionCategory FindCategoryByID(int? id);
+        IEnumerable<QuestionCategory> GetAllQuestionCategories();
+
     }
 }

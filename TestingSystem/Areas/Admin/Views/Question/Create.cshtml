@@ -1,7 +1,10 @@
-﻿
+﻿@using TestingSystem.DataTranferObject.Question
+@using TestingSystem.Models
 @{
     ViewBag.Title = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var listCategories = ViewData["Category"] as List<QuestionCategory>;
+    var listLevels = ViewData["Level"] as List<Level>;
 }
 <style>
     .card {
@@ -29,10 +32,14 @@
                             <label for="control-label " style="margin-left: 7px;">Level</label>
                             <select class="form-control" id="Level" name="Level" required>
                                 <option value="" selected disabled hidden>Choice one</option>
-                                @foreach (var item in ViewBag.listLevel)
+                                @if (listLevels != null)
                                 {
-                                    <option value="@item.LevelStep">@item.Name</option>
+                                    foreach (var item in listLevels)
+                                    {
+                                        <option value="@item.LevelStep">@item.Name</option>
+                                    }
                                 }
+
                             </select>
                         </div>
                         <div class="form-group">
@@ -47,14 +54,17 @@
                             <label for="control-label ">Category</label>
                             <select class="form-control" style="margin-top: 11px;" id="CategoryID" name="CategoryID" required>
                                 <option value="" selected disabled hidden>Choice one</option>
-                                @foreach (var item in ViewBag.listCategory)
+                                @if (listCategories != null)
                                 {
-                                    <option value="@item.CategoryID">@item.Name</option>
+                                    foreach (var item in listCategories)
+                                    {
+                                        <option value="@item.CategoryID">@item.Name</option>
+                                    }
                                 }
                             </select>
                         </div>
                         <div class="form-group" style="margin-left: -15px">
-                            <label class="control-label " for="Image">Image</label>
+                            <label class="control-label " for="Image" style="margin-right: 50px;margin-bottom: 16px;">Image</label>
                             <div class="col-md-10">
                                 <img id="FileImage" src="~/Content/QuestionUpload/Images/noimage.png" alt="your image" class="img-thumbnail" width="150" />
                                 <input type="file" name="Image" class="form-control" id="imgInp" />
@@ -62,24 +72,13 @@
                         </div>
                     </div>
                 </div>
-                                            
-                <input type="hidden" value="1" name="CreatedBy" />
-                <input type="hidden" value="1" name="ModifiedBy" />
-
-            </div>
-            <div>
-                @*  *@
-                <input type="text" name="Content" class="form - control textbox" required />
-                <input type="checkbox" name="IsCorrect" value="true">
-
-                <input type="text" name="Content" class="form - control textbox" required />
-                <input type="checkbox" name="IsCorrect" value="true">
-
+                @*<input type="hidden" value="1" name="CreatedBy" />
+                    <input type="hidden" value="1" name="ModifiedBy" />*@
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Create" class="btn btn-primary" />
-                    <a class="btn btn-info" href="/Admin/Question/Index">Back to List</a>
+                    <a class="btn btn-info" href="/Admin/Question/Questions">Back to List</a>
                 </div>
             </div>
         </form>
@@ -105,4 +104,6 @@
         readURL(this);
     });
 </script>
+
+
 

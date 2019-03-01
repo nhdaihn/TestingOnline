@@ -94,10 +94,10 @@
                     },
                     {
                         "data": "QuestionID", "width": "15px", "render": function (data) {
-                            return '<a class="update-row" href="/Admin/Question/Edit/?questionID=' + data + '"><span class="glyphicon glyphicon-pencil"></span></a>   <a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
+                            return '<a class="update-row" href="/Admin/Question/Edit/' + data + '"><span class="glyphicon glyphicon-pencil"></span></a>   <a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
                         },
                     }
-                  
+
 
                 ],
                 'columnDefs': [{
@@ -106,7 +106,7 @@
                     'orderable': false,
                     'className': 'dt-body-center',
                     'render': function (data, type, full, meta) {
-                        return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                        return '<input type="checkbox" class="delete-all-checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
                     }
                 }],
                 'order': [[1, 'asc']]
@@ -138,8 +138,8 @@
 
             $("#delete-all").on("click",
                 function (e) {
-                    var data = examPaperTable.$('input[type="checkbox"]:checked');
-
+                    var data = examPaperTable.$('input.delete-all-checkbox:checkbox:checked');
+                    debugger;
                     if (data.length === 0) {
                         $("#error-msgbox-modal #error-msg").text('Please choose record to delete!');
                         $("#error-msgbox-modal #error-msg1").text('');
@@ -166,13 +166,13 @@
                                     $("#error-msgbox-modal #error-msg1").text('');
                                     $('#error-msgbox-modal').modal('show');
                                 },
-                                success: function (status) {
-                                    if (status) {
+                                success: function (data) {
+                                    if (data.status) {
                                         debugger;
-                                        $.notify("Delete exam paper successfully!", "success");
-                                        examPaperTable.ajax.reload();
-                                        //location.reload();
+                                        $.notify("Delete question successfully!", "success");
+                                        //examPaperTable.ajax.reload();
                                     }
+                                    location.reload();
                                 }
 
                             });

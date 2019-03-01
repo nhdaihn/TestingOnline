@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestingSystem.Data.Infrastructure;
+﻿using TestingSystem.Data.Infrastructure;
 using TestingSystem.Models;
 
 namespace TestingSystem.Data.Repositories
@@ -12,6 +7,7 @@ namespace TestingSystem.Data.Repositories
     {
         int AddAnswer(Answer answer);
     }
+
     public class AnswerRepository : RepositoryBase<Answer>, IAnswerRepository
     {
         public AnswerRepository(IDbFactory dbFactory) : base(dbFactory)
@@ -21,9 +17,11 @@ namespace TestingSystem.Data.Repositories
 
         public int AddAnswer(Answer answer)
         {
-            DbContext.Answers.Add(answer);
-            this.DbContext.SaveChanges();
-            return 1;
+            {
+                DbContext.Answers.Add(answer);
+                this.DbContext.SaveChanges();
+                return 1;
+            }
         }
     }
 }

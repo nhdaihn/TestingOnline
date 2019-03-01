@@ -8,8 +8,6 @@ using System.Web;
 using System.IO;
 using System.Linq;
 using System;
-using System.Linq;
-using Newtonsoft.Json;
 
 namespace TestingSystem.Areas.Admin.Controllers.Question
 {
@@ -17,11 +15,13 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
     {
         private readonly IQuestionService questionService;
         private readonly IAnswerService answerService;
+        private readonly IQuestionCategorySevice questionCategorySevice;
 
-        public QuestionController(IQuestionService questionService, IAnswerService answerService)
+        public QuestionController(IQuestionService questionService, IAnswerService answerService, IQuestionCategorySevice questionCategorySevice)
         {
             this.questionService = questionService;
             this.answerService = answerService;
+            this.questionCategorySevice = questionCategorySevice;
         }
         public ActionResult Questions()
         {
@@ -32,20 +32,15 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         [ActionName("GetQuestions")]
         public ActionResult GetQuestions()
         {
-            List<QuestionCategory> listCategory = new List<QuestionCategory>();
-            listCategory.Add(new QuestionCategory { CategoryID = 21, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
-            listCategory.Add(new QuestionCategory { CategoryID = 25, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
-            List<Level> listLevels = new List<Level>();
-            listLevels.Add(new Level { LevelId = 1, LevelStep = 1, Name = "Easy" });
-            listLevels.Add(new Level { LevelId = 2, LevelStep = 2, Name = "Normal" });
-            listLevels.Add(new Level { LevelId = 3, LevelStep = 3, Name = "Hard" });
+            var listCategory = questionCategorySevice.GetAll();
             //get all category
             ViewBag.listCategory = listCategory;
             //get all level
-            ViewBag.listLevel = listLevels;
+
+            ViewBag.listLevel = questionCategorySevice.GetAllQuestionCategories();
 
             var listQuestionDtos = questionService.GetAllQuestionDtos();
-            return Json(new { data = listQuestionDtos }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = listQuestionDtos.OrderBy(x => x.CategoryID) }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Search(string input)
         {
@@ -101,6 +96,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             //ViewBag.IsUpdate = true;
 
         }
+
         [HttpGet]
         public ActionResult Delete(List<int> ids)
         {
@@ -138,29 +134,27 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult Create()
         {
-            List<Models.QuestionCategory> listCategory = new List<Models.QuestionCategory>();
-            listCategory.Add(new Models.QuestionCategory { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
-            listCategory.Add(new Models.QuestionCategory { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
-
-            List<Level> listLevels = new List<Level>();
-            listLevels.Add(new Level { LevelId = 1, LevelStep = 1, Name = "Easy" });
-            listLevels.Add(new Level { LevelId = 2, LevelStep = 2, Name = "Normal" });
-            listLevels.Add(new Level { LevelId = 3, LevelStep = 3, Name = "Hard" });
-
             //get all category
-            ViewBag.listCategory = listCategory;
+            var listCategory = questionCategorySevice.GetAllQuestionCategories();
             //get all level
-            ViewBag.listLevel = listLevels;
+            var listLevels = questionService.GetAlLevels();
+            ViewData["Category"] = listCategory;
+            ViewData["Level"] = listLevels;
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
         public ActionResult Create(Models.Question question, HttpPostedFileBase Image, Answer answer)
         {
-
+            Session["CreatedBy"] = 1;
+            Session["ModifiedBy"] = 1;
+            question.CreatedBy = Convert.ToInt32(Session["CreatedBy"]);
+            question.ModifiedBy = Convert.ToInt32(Session["ModifiedBy"]);
             if (Image != null && Image.ContentLength > 0)
             {
                 string filePath = Path.Combine(Server.MapPath("~/Content/QuestionUpload/Images/"), Path.GetFileName(Image.FileName));
@@ -171,34 +165,45 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             {
                 question.Image = null;
             }
-            if (questionService.AddQuestion(question) > 0)
-            {
+            var addQuestion = questionService.AddQuestion(question);
+            TranferID.ID = addQuestion;
+            return RedirectToAction("CreateAnswer");
 
-                answer.QuestionID = questionService.AddQuestion(question);
-                answerService.AddAnswer(answer);
-                return RedirectToAction("Questions");
-            }
-            else
-            {
-                ModelState.AddModelError("", "Error!");
-            }
-
-
-
-            return View(question);
+            //ViewBag.questionContent = question.Content;
+            //ViewBag.questionID = question.QuestionID;
 
         }
+
+        public ActionResult CreateAnswer()
+        {
+            // This is only for show by default one row for insert data to the database
+            List<Answer> ci = new List<Answer> { new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false } };
+            return View(ci);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateAnswer(List<Answer> ci)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var i in ci)
+                {
+                    i.QuestionID = TranferID.ID;
+                    answerService.AddAnswer(i);
+
+                }
+                ViewBag.Message = "Data successfully saved!";
+                ModelState.Clear();
+            }
+
+            return RedirectToAction("Questions");
+        }
+
         public ActionResult Edit(int? id)
         {
-            List<Models.QuestionCategory> listCategory = new List<Models.QuestionCategory>();
-            listCategory.Add(new Models.QuestionCategory { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
-            listCategory.Add(new Models.QuestionCategory { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
-            listCategory.Add(new Models.QuestionCategory { CategoryID = 11, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Python" });
+            var listCategory = questionCategorySevice.GetAll();
 
-            List<Level> listLevels = new List<Level>();
-            listLevels.Add(new Level { LevelId = 1, LevelStep = 1, Name = "Easy" });
-            listLevels.Add(new Level { LevelId = 2, LevelStep = 2, Name = "Normal" });
-            listLevels.Add(new Level { LevelId = 3, LevelStep = 3, Name = "Hard" });
+            var listLevels = questionService.GetAlLevels();
 
             //get all category
             ViewBag.listCategory = listCategory;
@@ -238,7 +243,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 question.Image = img;
             }
             questionService.UpdateQuestion(question);
-            return RedirectToAction("Index");
+            return RedirectToAction("Questions");
         }
 
 

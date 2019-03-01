@@ -14,7 +14,7 @@ namespace TestingSystem.Data.Repositories
 {
     public class QuestionCategoryRepository : RepositoryBase<QuestionCategory>, IQuestionCategoryRepository
     {
-       
+
         public QuestionCategoryRepository(IDbFactory dbFactory) : base(dbFactory)
         {
         }
@@ -59,7 +59,7 @@ namespace TestingSystem.Data.Repositories
 
         public int DeleteQuestionCategory(int[] dsxoa)
         {
-            foreach(int i in dsxoa)
+            foreach (int i in dsxoa)
             {
                 QuestionCategory category = DbContext.QuestionCategories.Find(i);
                 DbContext.QuestionCategories.Remove(category);
@@ -67,21 +67,32 @@ namespace TestingSystem.Data.Repositories
             return DbContext.SaveChanges();
         }
 
+        public QuestionCategory FindCategoryByID(int? id)
+        {
+            var questionCategory = this.DbContext.QuestionCategories.SingleOrDefault(x => x.CategoryID == id);
+            return questionCategory;
+        }
+
+        public IEnumerable<QuestionCategory> GetAllQuestionCategories()
+        {
+            var listCategory = this.DbContext.QuestionCategories.ToList();
+            return listCategory;
+        }
+
         public IEnumerable<User> GetAllUser()
         {
             return DbContext.Users.ToList();
         }
 
-        public IEnumerable<QuestionCategory> SearchCategories(string txtSearch)  
+        public IEnumerable<QuestionCategory> SearchCategories(string txtSearch)
         {
-                 var listSearchCategory = from category in DbContext.QuestionCategories
+            var listSearchCategory = from category in DbContext.QuestionCategories
                                      where category.Name.Contains(txtSearch) || category.CreatedDate.ToString().Contains(txtSearch)
-                                           
-                                          select category;
-                 
+
+                                     select category;
+
             return listSearchCategory.ToList();
         }
-
         public int UpdateCategoryQuestion(QuestionCategory questionCategory)
         {
             QuestionCategory listQuestionCategory = DbContext.QuestionCategories.Find(questionCategory.CategoryID);
@@ -94,6 +105,7 @@ namespace TestingSystem.Data.Repositories
 
             return DbContext.SaveChanges();
         }
+
     }
 
     public interface IQuestionCategoryRepository : IRepository<QuestionCategory>
@@ -104,6 +116,8 @@ namespace TestingSystem.Data.Repositories
         int DeleteQuestionCategory(int[] dsxoa);
         IEnumerable<QuestionCategory> SearchCategories(string txtSearch);
         int Delete(int id);
+        QuestionCategory FindCategoryByID(int? id);
+        IEnumerable<QuestionCategory> GetAllQuestionCategories();
 
     }
 }
