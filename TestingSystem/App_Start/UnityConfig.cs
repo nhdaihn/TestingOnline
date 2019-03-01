@@ -49,6 +49,8 @@ namespace TestingSystem
 
             container.RegisterType<IQuestionRepository, QuestionRepository>();
             container.RegisterType<IQuestionService, QuestionService>();
+            container.RegisterType<IQuestionCategoryRepository, QuestionCategoryRepository>();
+            container.RegisterType<IQuestionCategorySevice, QuestionCategorySevice>();
 
             container.RegisterType<IAnswerRepository, AnswerRepository>();
             container.RegisterType<IAnswerService, AnswerService>();

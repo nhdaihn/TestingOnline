@@ -484,7 +484,28 @@
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
-    <script src="~/Scripts/notify.min.js"></script>
+<script src="~/Scripts/notify.min.js"></script>
+<script>
+    $(function () {
+        $('#example1').DataTable()
+        $('#example2').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': false,
+            'ordering': true,
+            'info': false,
+            'autoWidth': true
+        });
+       
+       
+   
+           
+       
+    })
+   
+    
+</script>
+
     @RenderSection("scripts", required: false)
 
 </body>

@@ -22,9 +22,9 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         public ActionResult Index(QuestionFilterModel questionFilter)
         {
             //Test  Data
-            List<QuestionCategory> listCategory = new List<QuestionCategory>();
-            listCategory.Add(new QuestionCategory { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
-            listCategory.Add(new QuestionCategory { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
+            List<Models.QuestionCategory> listCategory = new List<Models.QuestionCategory>();
+            listCategory.Add(new Models.QuestionCategory { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
+            listCategory.Add(new Models.QuestionCategory { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
             List<Level> listLevels = new List<Level>();
             listLevels.Add(new Level { LevelId = 1, LevelStep = 1, Name = "Easy" });
             listLevels.Add(new Level { LevelId = 2, LevelStep = 2, Name = "Normal" });
@@ -38,9 +38,9 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         }
         public ActionResult Search(string input)
         {
-            List<QuestionCategory> listCategory = new List<QuestionCategory>();
-            listCategory.Add(new QuestionCategory { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
-            listCategory.Add(new QuestionCategory { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
+            List<Models.QuestionCategory> listCategory = new List<Models.QuestionCategory>();
+            listCategory.Add(new Models.QuestionCategory { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
+            listCategory.Add(new Models.QuestionCategory { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
             List<Level> listLevels = new List<Level>();
             listLevels.Add(new Level { LevelId = 1, LevelStep = 1, Name = "Easy" });
             listLevels.Add(new Level { LevelId = 2, LevelStep = 2, Name = "Normal" });
@@ -87,9 +87,9 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         }
         public ActionResult Create()
         {
-            List<QuestionCategory> listCategory = new List<QuestionCategory>();
-            listCategory.Add(new QuestionCategory { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
-            listCategory.Add(new QuestionCategory { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
+            List<Models.QuestionCategory> listCategory = new List<Models.QuestionCategory>();
+            listCategory.Add(new Models.QuestionCategory { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
+            listCategory.Add(new Models.QuestionCategory { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
 
             List<Level> listLevels = new List<Level>();
             listLevels.Add(new Level { LevelId = 1, LevelStep = 1, Name = "Easy" });
@@ -137,10 +137,10 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         }
         public ActionResult Edit(int? id)
         {
-            List<QuestionCategory> listCategory = new List<QuestionCategory>();
-            listCategory.Add(new QuestionCategory { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
-            listCategory.Add(new QuestionCategory { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
-            listCategory.Add(new QuestionCategory { CategoryID = 11, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Python" });
+            List<Models.QuestionCategory> listCategory = new List<Models.QuestionCategory>();
+            listCategory.Add(new Models.QuestionCategory { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
+            listCategory.Add(new Models.QuestionCategory { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
+            listCategory.Add(new Models.QuestionCategory { CategoryID = 11, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Python" });
 
             List<Level> listLevels = new List<Level>();
             listLevels.Add(new Level { LevelId = 1, LevelStep = 1, Name = "Easy" });
