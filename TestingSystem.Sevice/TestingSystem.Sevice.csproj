@@ -45,6 +45,7 @@
     <Compile Include="ExamPaperQuestionService.cs" />
     <Compile Include="ExamPaperService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionCategorySevice.cs" />
     <Compile Include="QuestionService.cs" />
   </ItemGroup>
   <ItemGroup>
