@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TestingSystem.DataTranferObject.Question
+{
+    public class QuestionDto
+    {
+        public int QuestionID { get; set; }
+
+        public string Content { get; set; }
+
+        public string Image { get; set; }
+
+        public int Level { get; set; }
+
+        public int CategoryID { get; set; }
+  
+        public string CategoryName { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public int CreatedBy { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+
+        public int? ModifiedBy { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
+    }
+}

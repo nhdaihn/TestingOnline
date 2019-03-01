@@ -170,6 +170,7 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ExamPaperQuestion\ExamPaperQuestionController.cs" />
     <Compile Include="Areas\Admin\Controllers\ExamPaper\ExamPaperController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\QuestionCategory\QuestionCategoryController.cs" />
@@ -3944,7 +3945,6 @@
     <Content Include="Areas\Admin\Views\ExamPaper\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\Question\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Search.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\Question\NotFound.cshtml" />
@@ -4161,9 +4161,13 @@
     <Content Include="Areas\Admin\Views\ExamPaper\Details.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPaper.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPapers.cshtml" />
-    <Content Include="Areas\Admin\Views\QuestionCategory\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_MessageBoxDelete.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_MessageBoxError.cshtml" />
+    <Content Include="Areas\Admin\Views\Question\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Question\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ExamPaper\ExamPaper.cshtml" />
+    <Content Include="Areas\Admin\Views\ExamPaper\ExamPapers.cshtml" />
+    <Content Include="Areas\Admin\Views\Question\Questions.cshtml" />
     <Content Include="Areas\Admin\Views\QuestionCategory\AddCategory.cshtml" />
     <Content Include="Areas\Admin\Views\QuestionCategory\EditCategory.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
@@ -4200,6 +4204,7 @@
     <Folder Include="Areas\Admin\Models\Exam\" />
     <Folder Include="Areas\Admin\Views\Account\" />
     <Folder Include="Areas\Admin\Views\Exam-Question\" />
+    <Folder Include="Areas\Admin\Views\ExamPaperQuestion\" />
     <Folder Include="Areas\Admin\Views\Exam\" />
     <Folder Include="Models\" />
   </ItemGroup>
