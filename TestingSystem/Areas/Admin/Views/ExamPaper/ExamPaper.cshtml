@@ -72,20 +72,25 @@
 }
 
 @* Question list *@
+<br />
+<br />
 <h4>Question List</h4>
 <div class="tablecontainer">
-   
+
     <div class="button-area">
         <a class="group-btn" id="btn-add" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-plus"></span>   Add new</a>
         <a class="group-btn" id="btn-export" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-save"></span>   Export file</a>
         <a class="group-btn" id="btn-import" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-open"></span>   Import file</a>
         <a class="btn-delete-all" id="delete-all" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>   Delete all</a>
     </div>
+    <br />
+    <button type="button" id="btn-add-question" class="btn btn-info btn-lg" data-toggle="modal">Open Large Modal</button>
 
-    <table id="questionTable" class="display" cellspacing="0" width="100%">
+    <br />
+    <table id="examPaperQuestionTable" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th><input type="checkbox" name="select_all" value="1" id="question-select-all"></th>
+                <th><input type="checkbox" name="select_all" value="1" id="exam-paper-question-select-all"></th>
                 <th>Content</th>
                 <th>Level</th>
                 <th>Category</th>
@@ -96,9 +101,12 @@
         </thead>
     </table>
 </div>
+<br />
+
 
 @section scripts
 {
+
     @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>*@
     <script>
         $(document).ready(function () {
@@ -158,20 +166,20 @@
             });
 
 
-            var questionTable = $('#questionTable').DataTable({
+            var examPaperQuestionTable = $('#examPaperQuestionTable').DataTable({
                 //orderCellsTop: true,
                 //fixedHeader: true,
-                
+
                 "ajax": {
                     "url": "/Admin/Question/GetQuestionsByExamPaperId/?examPaperId=@Model.ExamPaperID",
                     "type": "GET",
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": "QuestionID", "autoWidth": true },
+                    { "data": "ExamPaperQuestionID", "autoWidth": true },
                     { "data": "Content", "autoWidth": true },
                     { "data": "Level", "autoWidth": true },
-                    { "data": "Category", "autoWidth": true },
+                    { "data": "CategoryName", "autoWidth": true },
                     {
                         "data": "CreatedDate", "autoWidth": true, "render": function (data) {
                             return moment(data).format('DD/MM/YYYY');
@@ -189,7 +197,7 @@
                     },
 
                     {
-                        "data": "QuestionID", "width": "15px", "render": function (data) {
+                        "data": "ExamPaperQuestionID", "width": "15px", "render": function (data) {
                             return '<a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
                         },
                     }
@@ -208,18 +216,18 @@
             });
 
             // Handle click on "Select all" control
-            $('#question-select-all').on('click', function () {
+            $('#exam-paper-question-select-all').on('click', function () {
                 // Get all rows with search applied
-                var rows = questionTable.rows({ 'search': 'applied' }).nodes();
+                var rows = examPaperQuestionTable.rows({ 'search': 'applied' }).nodes();
                 // Check/uncheck checkboxes for all rows in the table
                 $('input[type="checkbox"]', rows).prop('checked', this.checked);
             });
 
             // Handle click on checkbox to set state of "Select all" control
-            $('#questionTable tbody').on('change', 'input[type="checkbox"]', function () {
+            $('#examPaperQuestionTable tbody').on('change', 'input[type="checkbox"]', function () {
                 // If checkbox is not checked
                 if (!this.checked) {
-                    var el = $('#question-select-all').get(0);
+                    var el = $('#exam-paper-question-select-all').get(0);
                     // If "Select all" control is checked and has 'indeterminate' property
                     if (el && el.checked && ('indeterminate' in el)) {
                         // Set visual state of "Select all" control
@@ -231,7 +239,7 @@
 
             $("#delete-all").on("click",
                 function (e) {
-                    var data = questionTable.$('input.delete-all-checkbox:checkbox:checked');
+                    var data = examPaperQuestionTable.$('input.delete-all-checkbox:checkbox:checked');
                     debugger;
                     if (data.length === 0) {
                         $("#error-msgbox-modal #error-msg").text('Please choose record to delete!');
@@ -245,9 +253,10 @@
                                 ids.push(rowId);
                             }
                         });
+                        debugger;
                         $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
                             $.ajax({
-                                url: "/Admin/Question/DeleteQuestionByQuestionIdAndExamPaperId/",
+                                url: "/Admin/ExamPaperQuestion/Delete/",
                                 data: {
                                     ids: ids
                                 },
@@ -263,7 +272,7 @@
                                     if (data.status) {
                                         debugger;
                                         $.notify("Delete question successfully!", "success");
-                                        questionTable.ajax.reload();
+                                        examPaperQuestionTable.ajax.reload();
                                     }
                                     //location.reload();
                                 }
@@ -284,10 +293,9 @@
                         if (ids.indexOf(id) < 0) {
                             ids.push(id);
                         }
-
                         $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
                             $.ajax({
-                                url: "/Admin/Question/DeleteQuestionByQuestionIdAndExamPaperId/",
+                                url: "/Admin/ExamPaperQuestion/Delete/",
                                 data: {
                                     ids: ids
                                 },
@@ -303,7 +311,7 @@
                                     if (data.status) {
                                         debugger;
                                         $.notify("Delete question successfully!", "success");
-                                       questionTable.ajax.reload();
+                                       examPaperQuestionTable.ajax.reload();
                                     }
                                     //location.reload();
                                 }
@@ -314,6 +322,10 @@
                     });
 
             }, 500);
+
+            $('#btn-add-question').click(function () {
+                $('#basicExampleModal').modal('show');
+            });
 
         });
     </script>
@@ -336,4 +348,6 @@
             $('#error-msgbox-modal').modal('show');
         </script>
     }
+    @Html.Partial("_MessageBoxDelete");
+    @Html.Partial("~/Areas/Admin/Views/ExamPaperQuestion/ExamPaperQuestions.cshtml");
 }

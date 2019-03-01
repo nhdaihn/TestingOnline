@@ -4157,6 +4157,8 @@
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPapers.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_MessageBoxDelete.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_MessageBoxError.cshtml" />
+    <Content Include="Areas\Admin\Views\ExamPaperQuestion\ExamPaperQuestions.cshtml" />
+    <Content Include="Areas\Admin\Views\Question\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPaper.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPapers.cshtml" />
@@ -4198,9 +4200,6 @@
     <Folder Include="Areas\Admin\Models\ExamPaper\" />
     <Folder Include="Areas\Admin\Models\Exam\" />
     <Folder Include="Areas\Admin\Views\Account\" />
-    <Folder Include="Areas\Admin\Views\Exam-Question\" />
-    <Folder Include="Areas\Admin\Views\ExamPaperQuestion\" />
-    <Folder Include="Areas\Admin\Views\Exam\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

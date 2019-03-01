@@ -11,6 +11,12 @@ namespace TestingSystem.Sevice
 {
     public interface IExamPaperQuestionService
     {
+        int DeleteExamPaperQuestionByExamPaperIdAndQuestionId(int examPaperId, int questionId);
+
+        int DeleteExamPaperQuestion(int examPaperQuestionId);
+
+
+        ExamPaperQuesion GetPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId);
 
         IEnumerable<ExamPaperQuesion> GetExamPaperQuestionsByExamPaperId(int examPaperId);
     }
@@ -28,6 +34,21 @@ namespace TestingSystem.Sevice
         public IEnumerable<ExamPaperQuesion> GetExamPaperQuestionsByExamPaperId(int examPaperId)
         {
             return examPaperQuestionRepository.GetExamPaperQuesionsByExamPaperId(examPaperId);
+        }
+
+        public ExamPaperQuesion GetPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId)
+        {
+            return examPaperQuestionRepository.GetPaperQuesionByExamPaperIdAndQuestionId(examPaperId, questionId);
+        }
+
+        public int DeleteExamPaperQuestionByExamPaperIdAndQuestionId(int examPaperId, int questionId)
+        {
+            return examPaperQuestionRepository.DeleteExamPaperQuestionByExamPaperIdAndQuestionId(examPaperId, questionId);
+        }
+
+        public int DeleteExamPaperQuestion(int examPaperQuestionId)
+        {
+            return examPaperQuestionRepository.DeleteExamPaperQuestion(examPaperQuestionId);
         }
     }
 }

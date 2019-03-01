@@ -12,6 +12,13 @@ namespace TestingSystem.Data.Repositories
     {
  
         IEnumerable<ExamPaperQuesion> GetExamPaperQuesionsByExamPaperId(int examPaperId);
+
+        int DeleteExamPaperQuestionByExamPaperIdAndQuestionId(int examPaperId, int questionId);
+
+        int DeleteExamPaperQuestion(int examPaperQuestionId);
+
+
+        ExamPaperQuesion GetPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId);
     }
     public class ExamPaperQuestionRepository : RepositoryBase<ExamPaperQuesion>, IExamPaperQuestionRepository
     {
@@ -22,8 +29,67 @@ namespace TestingSystem.Data.Repositories
 
         public IEnumerable<ExamPaperQuesion> GetExamPaperQuesionsByExamPaperId(int examPaperId)
         {
-            var examPaperQuestions = DbContext.ExamPaperQuesions.Where(e => e.ExamPaperID == examPaperId);
-            return examPaperQuestions;
+            try
+            {
+                var examPaperQuestions = DbContext.ExamPaperQuesions.Where(e => e.ExamPaperID == examPaperId);
+                return examPaperQuestions;
+            }
+            catch (Exception e )
+            {
+                Console.Write(e.Message);
+                throw;
+            }
+            
+        }
+
+        public ExamPaperQuesion GetPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId)
+        {
+            try
+            {
+                ExamPaperQuesion examPaperQuesion = new ExamPaperQuesion();
+                examPaperQuesion = DbContext.ExamPaperQuesions.SingleOrDefault(e => e.ExamPaperID == examPaperId && e.QuestionID == questionId);
+                return examPaperQuesion;
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message);
+                throw;
+            }
+
+        }
+
+        public int DeleteExamPaperQuestionByExamPaperIdAndQuestionId(int examPaperId,int questionId)
+        {
+            try
+            {
+                ExamPaperQuesion examPaperQuesion = new ExamPaperQuesion();
+                examPaperQuesion = GetPaperQuesionByExamPaperIdAndQuestionId(examPaperId, questionId);
+                DbContext.ExamPaperQuesions.Remove(examPaperQuesion);
+                return DbContext.SaveChanges();
+            }
+
+            catch (Exception e)
+            {
+                Console.Write(e);
+                throw;
+            }
+        }
+
+        public int DeleteExamPaperQuestion(int examPaperQuestionId)
+        {
+            try
+            {
+                ExamPaperQuesion examPaperQuesion = new ExamPaperQuesion();
+                examPaperQuesion = DbContext.ExamPaperQuesions.FirstOrDefault(e => e.ExamPaperQuesionID == examPaperQuestionId);
+                DbContext.ExamPaperQuesions.Remove(examPaperQuesion);
+                return DbContext.SaveChanges();
+            }
+
+            catch (Exception e)
+            {
+                Console.Write(e);
+                throw;
+            }
         }
 
     }
