@@ -145,19 +145,25 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
 
         public ActionResult Create()
         {
+            // This is only for show by default one row for insert data to the database
+            List<Answer> answers = new List<Answer>
+            {
+                new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false },
+                new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false },
+            };           
             //get all category
             var listCategory = questionCategorySevice.GetAllQuestionCategories();
             //get all level
             var listLevels = questionService.GetAlLevels();
             ViewData["Category"] = listCategory;
             ViewData["Level"] = listLevels;
-            return View();
+            return View(answers);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Create(Models.Question question, HttpPostedFileBase Image, Answer answer)
+        public ActionResult Create(Models.Question question, HttpPostedFileBase Image, List<Answer> listAnswers)
         {
             Session["CreatedBy"] = 1;
             Session["ModifiedBy"] = 1;
@@ -175,7 +181,21 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             }
             var addQuestion = questionService.AddQuestion(question);
             TranferID.ID = addQuestion;
-            return RedirectToAction("CreateAnswer");
+            // Create Answer
+            foreach (var i in listAnswers)
+            {
+                i.QuestionID = TranferID.ID;
+                if (i.QuestionID <= 0)
+                {
+                    return RedirectToAction("Create", "Question");
+                }
+                else
+                {
+                    answerService.AddAnswer(i);
+                }
+            }
+
+            return RedirectToAction("Questions");
 
             //ViewBag.questionContent = question.Content;
             //ViewBag.questionID = question.QuestionID;
@@ -186,8 +206,8 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         {
 
             // This is only for show by default one row for insert data to the database
-            List<Answer> ci = new List<Answer> { new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false } };
-            return View(ci);
+            List<Answer> answers = new List<Answer> { new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false } };
+            return View(answers);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -220,6 +240,12 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             var listCategory = questionCategorySevice.GetAll();
 
             var listLevels = questionService.GetAlLevels();
+            //1get all Answer by Question ID
+            var listAnswerByQuestionID = questionService.GetAlLevels(); // temp
+            ViewBag.listAnswerByQuestionI = listAnswerByQuestionID;//temp
+            //2Count Answer
+            var countAnswer = 3;//temp
+            ViewBag.countAnswer = countAnswer;//temp
 
             //get all category
             ViewBag.listCategory = listCategory;
