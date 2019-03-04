@@ -13,7 +13,7 @@
     }
 </style>
 <div class="card">
-    <div class="card-header bg-light">Create Question</div>
+    <div class="card-header bg-light"><h3>Create Question</h3></div>
     <div class="card-body">
         <form action="/Admin/Question/Create" method="post" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
@@ -51,8 +51,11 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="control-label ">Category</label>
-                            <select class="form-control" style="margin-top: 11px;" id="CategoryID" name="CategoryID" required>
+                            <div>
+                                <label for="control-label ">Category</label>
+                            </div>
+                          
+                            <select class="form-control col-md-10" id="CategoryID" name="CategoryID" required>
                                 <option value="" selected disabled hidden>Choice one</option>
                                 @if (listCategories != null)
                                 {
@@ -62,6 +65,9 @@
                                     }
                                 }
                             </select>
+                            <div class="col-md-2">
+                                <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#ModalAddCate">+</button>
+                            </div>
                         </div>
                         <div class="form-group" style="margin-left: -15px">
                             <label class="control-label " for="Image" style="margin-right: 50px;margin-bottom: 16px;">Image</label>
@@ -76,7 +82,7 @@
                     <input type="hidden" value="1" name="ModifiedBy" />*@
             </div>
             <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
+                <div class="">
                     <input type="submit" value="Create" class="btn btn-primary" />
                     <a class="btn btn-info" href="/Admin/Question/Questions">Back to List</a>
                 </div>
@@ -84,6 +90,36 @@
         </form>
     </div>
 </div>
+
+<div class="modal fade" id="ModalAddCate" tabindex="-1" role="dialog" aria-labelledby="ModalAddCate" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="Name">Category Name</label>
+                    <input type="text" name="Name" class="form-control" id="cateName" />
+                </div>
+                <div class="form-group">
+                    <label for="Description">Is Active</label>
+                    <input type="checkbox" name="IsActive" value="true" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"  data-dismiss="modal" id="AddCate">Add</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>
@@ -104,6 +140,47 @@
         readURL(this);
     });
 </script>
+<script>
+    $('#AddCate').off('click').click(function () {
+        debugger;
+        var catename = $('[name=Name]');
+        var validate = false;
+        if (catename.val() === "") {
+            catename.css('border', '1px solid red');
+        }
+        else {
+            catename.css('border', '1px solid green');
+            validate = true;
+        }
+        if (validate) {
+            var categoryObj = {
+                Name: $('[name=Name]').val(),
+                IsActive: $('[name=IsActive]').val()
+            };
+            $.ajax({
+                url: "/Admin/Question/AddCategory",
+                type: 'POST',
+                dataType: 'JSON',
+                data: JSON.stringify(categoryObj),
+                contentType: "application/json",
+                success: function (result) {
+                    //if (result > 0) {
+                        $('#CategoryID').append($('<option>', {
+                            value: result,
+                            text: catename.val()
+                        }));
+                      $("#ModalAddCate").modal("hide");
+                   // }
+                    //else {
+                    //    console.log('Add Category Fail!');
+                    //}
+                }
+            });
+        }
+    });
+
+</script>
+
 
 
 

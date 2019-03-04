@@ -21,20 +21,25 @@ namespace TestingSystem.Data.Repositories
 
         public int AddCategoryQuestion(QuestionCategory questionCategory)
         {
-            List<QuestionCategory> listExamPapers = new List<QuestionCategory>
-            {
-                DbContext.QuestionCategories.Add(new QuestionCategory()
-                {
-                    Name = questionCategory.Name,
-                    IsActive = questionCategory.IsActive,
-                    CreatedBy = questionCategory.CreatedBy,
-                    CreatedDate = DateTime.Now,
-                    ModifiedBy = questionCategory.ModifiedBy,
-                    ModifiedDate = DateTime.Now,
 
-                })
-            };
-            return DbContext.SaveChanges();
+            //DbContext.QuestionCategories.Add(new QuestionCategory()
+            //{
+            //    Name = questionCategory.Name,
+            //    IsActive = questionCategory.IsActive,
+            //    CreatedBy = questionCategory.CreatedBy,
+            //    CreatedDate = DateTime.Now,
+            //    ModifiedBy = questionCategory.ModifiedBy,
+            //    ModifiedDate = DateTime.Now,
+
+            //});
+            questionCategory.ModifiedDate = DateTime.Now;
+            questionCategory.CreatedDate = DateTime.Now;
+            DbContext.QuestionCategories.Add(questionCategory);
+            DbContext.SaveChanges();
+            return questionCategory.CategoryID;
+
+            //DbContext.SaveChanges();
+            //return questionCategory.CategoryID;
         }
 
         public int Delete(int id)
