@@ -28,6 +28,7 @@
                 <th>Created Date</th>
                 <th>Action</th>
             </tr>
+        <a style="text-decoration: none; color: black"></a>
         </thead>
     </table>
 </div>
@@ -66,7 +67,12 @@
                 },
                 "columns": [
                     { "data": "QuestionID", "autoWidth": true },
-                    { "data": "Content", "autoWidth": true },
+
+                    {
+                        "data": "Content", "autoWidth": true, "render": function (data) {
+                            return '<a href="" style="text-decoration: none; color: black">' + data + '</a>';
+                        }
+                    },
                     {
                         "data": "Image", "autoWidth": true, "render": function (data) {
                             return '<img src="/Content/QuestionUpload/Images/' + data + '" width="50"/>';

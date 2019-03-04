@@ -101,7 +101,7 @@ namespace TestingSystem.Data.Repositories
                 objQuestion.CategoryID = question.CategoryID;
                 objQuestion.IsActive = question.IsActive;
                 objQuestion.CreatedBy = question.CreatedBy;
-                objQuestion.CreatedDate = question.CreatedDate;
+                objQuestion.CreatedDate = objQuestion.CreatedDate;
                 objQuestion.ModifiedBy = question.ModifiedBy;
                 objQuestion.ModifiedDate = DateTime.Now;
                 this.DbContext.SaveChanges();
