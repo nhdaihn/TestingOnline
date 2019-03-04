@@ -23,6 +23,14 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             this.answerService = answerService;
             this.questionCategorySevice = questionCategorySevice;
         }
+        [HttpPost]
+        public JsonResult AddCategory(Models.QuestionCategory category)
+        {
+            //fix cung
+            category.ModifiedBy = 1;
+            category.CreatedBy = 1;
+            return Json(questionCategorySevice.AddCategoryQuestion(category), JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Questions()
         {
 
@@ -176,27 +184,35 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
 
         public ActionResult CreateAnswer()
         {
+
             // This is only for show by default one row for insert data to the database
             List<Answer> ci = new List<Answer> { new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false } };
             return View(ci);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateAnswer(List<Answer> ci)
+        public ActionResult CreateAnswer(List<Answer> listAnswers)
         {
-            if (ModelState.IsValid)
-            {
-                foreach (var i in ci)
+                if (ModelState.IsValid)
                 {
-                    i.QuestionID = TranferID.ID;
-                    answerService.AddAnswer(i);
+                    foreach (var i in listAnswers)
+                    {
+                        i.QuestionID = TranferID.ID;
+                        if (i.QuestionID <=0)
+                        {
+                            return RedirectToAction("Create", "Question");
+                        }
+                        else
+                        {
+                            answerService.AddAnswer(i);
+                        }
+                    }
 
+                    ViewBag.Message = "Data successfully saved!";
+                    ModelState.Clear();
                 }
-                ViewBag.Message = "Data successfully saved!";
-                ModelState.Clear();
-            }
 
-            return RedirectToAction("Questions");
+                return RedirectToAction("Questions");
         }
 
         public ActionResult Edit(int? id)
