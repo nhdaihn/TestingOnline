@@ -23,7 +23,7 @@ namespace TestingSystem.Models
         public string UserName { get; set; }
 
         [Required]
-        [MaxLength(20)]
+        [MaxLength(50)]
         public string Password { get; set; }
 
         public DateTime? CreatedDate { get; set; }

@@ -7,7 +7,7 @@ namespace TestingSystem.App_Start
     {
         public static void Initialize()
         {
-            Database.SetInitializer(new SeedData());
+            //Database.SetInitializer(new SeedData());
 
             using (var db = new TestingSystemEntities())
             {

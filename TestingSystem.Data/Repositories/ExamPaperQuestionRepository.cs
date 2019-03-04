@@ -17,8 +17,9 @@ namespace TestingSystem.Data.Repositories
 
         int DeleteExamPaperQuestion(int examPaperQuestionId);
 
+        int InsertExamPaperQuestion(int examPaperId, int questionId);
 
-        ExamPaperQuesion GetPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId);
+        ExamPaperQuesion GetExamPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId);
     }
     public class ExamPaperQuestionRepository : RepositoryBase<ExamPaperQuesion>, IExamPaperQuestionRepository
     {
@@ -42,7 +43,7 @@ namespace TestingSystem.Data.Repositories
             
         }
 
-        public ExamPaperQuesion GetPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId)
+        public ExamPaperQuesion GetExamPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId)
         {
             try
             {
@@ -63,7 +64,7 @@ namespace TestingSystem.Data.Repositories
             try
             {
                 ExamPaperQuesion examPaperQuesion = new ExamPaperQuesion();
-                examPaperQuesion = GetPaperQuesionByExamPaperIdAndQuestionId(examPaperId, questionId);
+                examPaperQuesion = GetExamPaperQuesionByExamPaperIdAndQuestionId(examPaperId, questionId);
                 DbContext.ExamPaperQuesions.Remove(examPaperQuesion);
                 return DbContext.SaveChanges();
             }
@@ -88,6 +89,23 @@ namespace TestingSystem.Data.Repositories
             catch (Exception e)
             {
                 Console.Write(e);
+                throw;
+            }
+        }
+
+        public int InsertExamPaperQuestion(int examPaperId, int questionId)
+        {
+            try
+            {
+                ExamPaperQuesion examPaperQuesion = new ExamPaperQuesion();
+                examPaperQuesion.ExamPaperID = examPaperId;
+                examPaperQuesion.QuestionID = questionId;
+                DbContext.ExamPaperQuesions.Add(examPaperQuesion);
+                return DbContext.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
                 throw;
             }
         }
