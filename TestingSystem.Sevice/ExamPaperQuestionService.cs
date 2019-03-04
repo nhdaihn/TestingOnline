@@ -15,8 +15,9 @@ namespace TestingSystem.Sevice
 
         int DeleteExamPaperQuestion(int examPaperQuestionId);
 
+        int InsertExamPaperQuestion(int examPaperId, int questionId);
 
-        ExamPaperQuesion GetPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId);
+        ExamPaperQuesion GetExamPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId);
 
         IEnumerable<ExamPaperQuesion> GetExamPaperQuestionsByExamPaperId(int examPaperId);
     }
@@ -36,9 +37,9 @@ namespace TestingSystem.Sevice
             return examPaperQuestionRepository.GetExamPaperQuesionsByExamPaperId(examPaperId);
         }
 
-        public ExamPaperQuesion GetPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId)
+        public ExamPaperQuesion GetExamPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId)
         {
-            return examPaperQuestionRepository.GetPaperQuesionByExamPaperIdAndQuestionId(examPaperId, questionId);
+            return examPaperQuestionRepository.GetExamPaperQuesionByExamPaperIdAndQuestionId(examPaperId, questionId);
         }
 
         public int DeleteExamPaperQuestionByExamPaperIdAndQuestionId(int examPaperId, int questionId)
@@ -49,6 +50,11 @@ namespace TestingSystem.Sevice
         public int DeleteExamPaperQuestion(int examPaperQuestionId)
         {
             return examPaperQuestionRepository.DeleteExamPaperQuestion(examPaperQuestionId);
+        }
+
+        public int InsertExamPaperQuestion(int examPaperId, int questionId)
+        {
+            return examPaperQuestionRepository.InsertExamPaperQuestion(examPaperId, questionId);
         }
     }
 }

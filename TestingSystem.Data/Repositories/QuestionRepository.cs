@@ -20,15 +20,21 @@ namespace TestingSystem.Data.Repositories
 
         IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId);
 
-        IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryId(int categoryId);
+        IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId);
+
+        IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId,int number);
 
     }
     public class QuestionRepository : RepositoryBase<Question>, IQuestionRepository
     {
         private readonly IQuestionCategoryRepository questionCategory;
-        public QuestionRepository(IDbFactory dbFactory, IQuestionCategoryRepository questionCategory) : base(dbFactory)
+        private readonly IExamPaperQuestionRepository examPaperQuestionRepository;
+
+
+        public QuestionRepository(IDbFactory dbFactory, IQuestionCategoryRepository questionCategory,IExamPaperQuestionRepository examPaperQuestionRepository) : base(dbFactory)
         {
             this.questionCategory = questionCategory;
+            this.examPaperQuestionRepository = examPaperQuestionRepository;
         }
         public Question FindID(int? id)
         {
@@ -159,27 +165,73 @@ namespace TestingSystem.Data.Repositories
             return questionsDto;
         }
 
-        public IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryId(int categoryId)
+        public IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId)
         {
             DbContext.Configuration.ProxyCreationEnabled = false;
+
+            List<int> temQuestionId = new List<int>();
+            List<ExamPaperQuesion> examPaperQuesions = new List<ExamPaperQuesion>();
+            examPaperQuesions = examPaperQuestionRepository.GetExamPaperQuesionsByExamPaperId(examPaperId).ToList();
+            foreach(var item in examPaperQuesions)
+            {
+                temQuestionId.Add(item.QuestionID);
+            }
+
             var questions = DbContext.Questions.Where(e => e.CategoryID == categoryId).ToList();
             List<QuestionDto> questionsDto = new List<QuestionDto>();
             foreach (var item in questions)
             {
-                var questionDto = new QuestionDto();
-                questionDto.IsActive = item.IsActive;
-                questionDto.Content = item.Content;
-                questionDto.Image = item.Image;
-                questionDto.CreatedBy = item.CreatedBy;
-                questionDto.CreatedDate = item.CreatedDate;
-                questionDto.ModifiedBy = item.ModifiedBy;
-                questionDto.ModifiedDate = item.ModifiedDate;
-                questionDto.CategoryID = item.CategoryID;
-                questionDto.CategoryName = DbContext.QuestionCategories.SingleOrDefault(q => q.CategoryID == item.CategoryID).Name;
-                questionDto.QuestionID = item.QuestionID;
-                questionsDto.Add(questionDto);
+                int i = 0;
+                foreach (var id in temQuestionId)
+                {
+                    if (item.QuestionID == id)
+                    {
+                        i++;
+                        break;
+                    }
+                }
+                if (i == 0)
+                {
+                    var questionDto = new QuestionDto();
+                    questionDto.IsActive = item.IsActive;
+                    questionDto.Content = item.Content;
+                    questionDto.Image = item.Image;
+                    questionDto.CreatedBy = item.CreatedBy;
+                    questionDto.CreatedDate = item.CreatedDate;
+                    questionDto.ModifiedBy = item.ModifiedBy;
+                    questionDto.ModifiedDate = item.ModifiedDate;
+                    questionDto.CategoryID = item.CategoryID;
+                    questionDto.CategoryName = DbContext.QuestionCategories.SingleOrDefault(q => q.CategoryID == item.CategoryID).Name;
+                    questionDto.QuestionID = item.QuestionID;
+                    questionsDto.Add(questionDto);
+                }
             }
             return questionsDto;
+        }
+
+        public IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId, int number)
+        {
+            List<QuestionDto> tempQuestionDtos = new List<QuestionDto>();
+            tempQuestionDtos = GetQuestionsByQuestionCategoryIdAndExamPaperId(categoryId, examPaperId).ToList();
+            if(tempQuestionDtos.Count <= number)
+            {
+                return tempQuestionDtos;
+            }
+            else
+            {
+                List<QuestionDto> questionDtos = new List<QuestionDto>();
+                int length = tempQuestionDtos.Count();
+                for(int i = 0; i < number; i++)
+                {
+                    Random rnd = new Random();
+                    int index = 0;
+                    List<int> indexs = new List<int>();
+                    index = rnd.Next(0, length);
+                    questionDtos.Add(tempQuestionDtos[index]);
+                }
+                return questionDtos;
+            }
+
         }
 
         public IEnumerable<Level> GetAlLevels()

@@ -20,7 +20,8 @@ namespace TestingSystem.Sevice
         IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel);
         IEnumerable<Question> GetAllQuestion();
         IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId);
-        IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryId(int categoryId);
+        IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId);
+        IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId, int number);
 
     }
     public class QuestionService : IQuestionService
@@ -83,14 +84,19 @@ namespace TestingSystem.Sevice
             return questionRepository.GetQuestionsByExamPaperId(examPaperId);
         }
 
-        public IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryId(int categoryId)
+        public IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId)
         {
-            return questionRepository.GetQuestionsByQuestionCategoryId(categoryId);
+            return questionRepository.GetQuestionsByQuestionCategoryIdAndExamPaperId(categoryId,examPaperId);
         }
 
         public IEnumerable<Level> GetAlLevels()
         {
             return questionRepository.GetAlLevels();
+        }
+
+        public IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId, int number)
+        {
+            return questionRepository.RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(categoryId, examPaperId, number);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TestingSystem.DataTranferObject.Question;
 using TestingSystem.Sevice;
 
 namespace TestingSystem.Areas.Admin.Controllers.ExamPaperQuestion
@@ -10,10 +11,13 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaperQuestion
     public class ExamPaperQuestionController : BaseController
     {
         private readonly IExamPaperQuestionService examPaperQuestionService;
+        private readonly IQuestionService questionService;
 
-        public ExamPaperQuestionController(IExamPaperQuestionService examPaperQuestionService)
+
+        public ExamPaperQuestionController(IExamPaperQuestionService examPaperQuestionService,IQuestionService questionService)
         {
             this.examPaperQuestionService = examPaperQuestionService;
+            this.questionService = questionService;
         }
 
         public ActionResult GetExamPaperQuestionsByExamPaperId(int examPaperId)
@@ -59,5 +63,49 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaperQuestion
                 return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public ActionResult Insert(int examPaperId,int questionId)
+        {
+            try
+            {
+                if (examPaperQuestionService.InsertExamPaperQuestion(examPaperId, questionId) > 0)
+                {
+                    Success = "Add question into exam paper successfully!";
+                    return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                }
+
+                Failure = "Something went wrong, please try again!";
+                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exception)
+            {
+                Failure = exception.Message;
+                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId,int examPaperId, int number)
+        {
+            try
+            {
+                List<QuestionDto> questionDtos = new List<QuestionDto>();
+                questionDtos = questionService.RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(categoryId, examPaperId, number).ToList();
+                foreach(var item in questionDtos)
+                {
+                    examPaperQuestionService.InsertExamPaperQuestion(examPaperId, item.QuestionID);
+                }
+                Success = "Add question into exam paper successfully!";
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exception)
+            {
+                Failure = exception.Message;
+                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
     }
 }

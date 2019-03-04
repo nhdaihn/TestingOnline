@@ -296,10 +296,10 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetQuestionsByQuestionCategoryId(int categoryId)
+        public ActionResult GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId)
         {
             var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
-            questions = questionService.GetQuestionsByQuestionCategoryId(categoryId).ToList();
+            questions = questionService.GetQuestionsByQuestionCategoryIdAndExamPaperId(categoryId,examPaperId).ToList();
 
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }

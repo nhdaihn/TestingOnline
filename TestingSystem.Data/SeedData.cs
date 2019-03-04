@@ -7,19 +7,19 @@ namespace TestingSystem.Data
 {
     public class SeedData : DropCreateDatabaseIfModelChanges<TestingSystemEntities>
     {
-        protected override void Seed(TestingSystemEntities context)
-        {
-            //GetQuestionCategories().ForEach(c => context.QuestionCategories.Add(c));
-            //context.Commit
-            //GetQuestions().ForEach(c => context.Questions.Add(c));
-            //context.Commit();
-            //GetAnswers().ForEach(c => context.Answers.Add(c));
-            //context.Commit();
-            //GetExamPapers().ForEach(c => context.ExamPapers.Add(c));
-            //context.Commit();
-            //GetExamPaperQuesions().ForEach(c => context.ExamPaperQuesions.Add(c));
-            //context.Commit();
-        }
+        //protected override void Seed(TestingSystemEntities context)
+        //{
+        //    //GetQuestionCategories().ForEach(c => context.QuestionCategories.Add(c));
+        //    //context.Commit
+        //    //GetQuestions().ForEach(c => context.Questions.Add(c));
+        //    //context.Commit();
+        //    //GetAnswers().ForEach(c => context.Answers.Add(c));
+        //    //context.Commit();
+        //    //GetExamPapers().ForEach(c => context.ExamPapers.Add(c));
+        //    //context.Commit();
+        //    //GetExamPaperQuesions().ForEach(c => context.ExamPaperQuesions.Add(c));
+        //    //context.Commit();
+        //}
         //private static List<QuestionCategory> GetQuestionCategories()
         //{
         //    var list = new List<QuestionCategory>

@@ -14,9 +14,13 @@
                 <div class="tablecontainer">
 
                     <select class="form-control" id="CategoryId" name="CategoryId">
-                        <option selected value="51">Public</option>
-                        <option value="45">Draff</option>
+                        <option selected value="149">Public</option>
+                        <option value="50">Draff</option>
                     </select>
+                    @*<form id="randomForm" method="post">*@
+                        <input type="text" id="RandomNumber" name="RandomNumber"/>
+                        <button id="random">Random question</button>
+                    @*</form>*@
                     <br />
                     <table id="questionTable" class="display" cellspacing="0" width="100%">
                         <thead>
@@ -66,23 +70,24 @@
         $('#CategoryId').change(function () {
             debugger;
             var categoryId = $(this).val();
+            var examPaperId = $('#ExamPaperID').val();
             var questionTable = $('#questionTable').DataTable({
                 "destroy": true,
 
                 //"processing": true,
                 "ajax": {
-                    "url": "/Admin/Question/GetQuestionsByQuestionCategoryId/?categoryId=" + categoryId,
+                    "url": "/Admin/Question/GetQuestionsByQuestionCategoryIdAndExamPaperId/?categoryId=" + categoryId + "&examPaperId=" + examPaperId,
                     "type": "GET",
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": "ExamPaperQuestionID", "autoWidth": true },
+                    { "data": "QuestionID", "autoWidth": true },
                     { "data": "Content", "autoWidth": true },
                     { "data": "Level", "autoWidth": true },
                     { "data": "CategoryName", "autoWidth": true },
                     {
-                        "data": "ExamPaperQuestionID", "width": "15px", "render": function (data) {
-                            return '<a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
+                        "data": "QuestionID", "width": "15px", "render": function (data) {
+                            return '<a class="add-question-row" data-questionid-val="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
                         },
                     }
                 ],
@@ -92,10 +97,76 @@
                     'orderable': false,
                     'className': 'dt-body-center',
                     'render': function (data, type, full, meta) {
-                        return '<input type="checkbox" class="delete-all-checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                        return '<input type="checkbox" class="add-all-question-checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
                     }
                 }],
                 'order': [[1, 'asc']]
+
+            });
+
+            setTimeout(function () {
+                $(".add-question-row").on("click",
+                    function (e) {
+                        //var ids = [];
+                        var id = $(this).data("questionid-val");
+                        var examPaperId = $('#ExamPaperID').val();
+                        debugger;
+                        //if (ids.indexOf(id) < 0) {
+                        //    ids.push(id);
+                        //}
+                        $.ajax({
+                            url: "/Admin/ExamPaperQuestion/Insert/",
+                            data: {
+                                examPaperId: examPaperId,
+                                questionId: id,
+                            },
+                            traditional: true,
+                            type: "POST",
+                            datatype: "json",
+                            error: function (status) {
+                                $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                                $("#error-msgbox-modal #error-msg1").text('');
+                                $('#error-msgbox-modal').modal('show');
+                            },
+                            success: function (data) {
+                                if (data.status) {
+                                    debugger;
+                                    $.notify("Add question into exam paper successfully!", "success");
+                                    $('#questionTable').DataTable().ajax.reload();
+                                    $('#examPaperQuestionTable').DataTable().ajax.reload();
+                                }
+                                //location.reload();
+                            }
+
+                        });
+                    }); 
+
+            }, 1000);
+        });
+
+        $('#random').on("click", function () {
+            var number = $('#RandomNumber').val();
+            var categoryId = $('#CategoryId').val();
+            var examPaperId = $('#ExamPaperID').val();
+            debugger;
+            $.ajax({
+                url: "/Admin/ExamPaperQuestion/RandomQuestionsByCategoryIdAndExamPaperIdAndNumber/?categoryId=" + categoryId + "&examPaperId=" + examPaperId + "&number=" + number,
+                traditional: true,
+                type: "GET",
+                datatype: "json",
+                error: function (status) {
+                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                    $("#error-msgbox-modal #error-msg1").text('');
+                    $('#error-msgbox-modal').modal('show');
+                },
+                success: function (data) {
+                    if (data.status) {
+                        debugger;
+                        $.notify("Random question into exam paper successfully!", "success");
+                        $('#questionTable').DataTable().ajax.reload();
+                        $('#examPaperQuestionTable').DataTable().ajax.reload();
+                    }
+                }
 
             });
 
