@@ -22,6 +22,9 @@ namespace TestingSystem.Sevice
         IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId);
         IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId);
         IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId, int number);
+        IEnumerable<Answer> GetAnswersAndQuestion(int? id);
+        IEnumerable<Question> GetAllQuestions();
+        IEnumerable<Answer> GetAllAnswers();
 
     }
     public class QuestionService : IQuestionService
@@ -97,6 +100,20 @@ namespace TestingSystem.Sevice
         public IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId, int number)
         {
             return questionRepository.RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(categoryId, examPaperId, number);
+        }
+        public IEnumerable<Answer> GetAnswersAndQuestion(int? id)
+        {
+            return questionRepository.GetAnswersAndQuestion(id);
+        }
+
+        public IEnumerable<Question> GetAllQuestions()
+        {
+            return questionRepository.GetAllQuestions();
+        }
+
+        public IEnumerable<Answer> GetAllAnswers()
+        {
+            return questionRepository.GetAllAnswers();
         }
     }
 }

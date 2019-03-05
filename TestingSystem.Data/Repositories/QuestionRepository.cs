@@ -20,9 +20,12 @@ namespace TestingSystem.Data.Repositories
 
         IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId);
 
-        IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId);
+        IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId, int examPaperId);
 
-        IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId,int number);
+        IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId, int number);
+        IEnumerable<Answer> GetAnswersAndQuestion(int? id);
+        IEnumerable<Question> GetAllQuestions();
+        IEnumerable<Answer> GetAllAnswers();
 
     }
     public class QuestionRepository : RepositoryBase<Question>, IQuestionRepository
@@ -31,7 +34,7 @@ namespace TestingSystem.Data.Repositories
         private readonly IExamPaperQuestionRepository examPaperQuestionRepository;
 
 
-        public QuestionRepository(IDbFactory dbFactory, IQuestionCategoryRepository questionCategory,IExamPaperQuestionRepository examPaperQuestionRepository) : base(dbFactory)
+        public QuestionRepository(IDbFactory dbFactory, IQuestionCategoryRepository questionCategory, IExamPaperQuestionRepository examPaperQuestionRepository) : base(dbFactory)
         {
             this.questionCategory = questionCategory;
             this.examPaperQuestionRepository = examPaperQuestionRepository;
@@ -165,14 +168,14 @@ namespace TestingSystem.Data.Repositories
             return questionsDto;
         }
 
-        public IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId)
+        public IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId, int examPaperId)
         {
             DbContext.Configuration.ProxyCreationEnabled = false;
 
             List<int> temQuestionId = new List<int>();
             List<ExamPaperQuesion> examPaperQuesions = new List<ExamPaperQuesion>();
             examPaperQuesions = examPaperQuestionRepository.GetExamPaperQuesionsByExamPaperId(examPaperId).ToList();
-            foreach(var item in examPaperQuesions)
+            foreach (var item in examPaperQuesions)
             {
                 temQuestionId.Add(item.QuestionID);
             }
@@ -213,7 +216,7 @@ namespace TestingSystem.Data.Repositories
         {
             List<QuestionDto> tempQuestionDtos = new List<QuestionDto>();
             tempQuestionDtos = GetQuestionsByQuestionCategoryIdAndExamPaperId(categoryId, examPaperId).ToList();
-            if(tempQuestionDtos.Count <= number)
+            if (tempQuestionDtos.Count <= number)
             {
                 return tempQuestionDtos;
             }
@@ -238,6 +241,21 @@ namespace TestingSystem.Data.Repositories
             }
 
         }
+        public IEnumerable<Answer> GetAnswersAndQuestion(int? id)
+        {
+            var listAnswer = DbContext.Answers.Where(x => x.QuestionID == id);
+            return listAnswer.ToList();
+        }
+
+        public IEnumerable<Question> GetAllQuestions()
+        {
+            return DbContext.Questions.ToList();
+        }
+
+        public IEnumerable<Answer> GetAllAnswers()
+        {
+            return DbContext.Answers.ToList();
+        }
 
         public IEnumerable<Level> GetAlLevels()
         {
@@ -247,5 +265,6 @@ namespace TestingSystem.Data.Repositories
             listLevels.Add(new Level { LevelId = 3, LevelStep = 3, Name = "Hard" });
             return listLevels;
         }
+
     }
 }
