@@ -23,6 +23,9 @@ namespace TestingSystem.Data.Repositories
         IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId);
 
         IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId,int number);
+        IEnumerable<Answer> GetAnswersAndQuestion(int id);
+        IEnumerable<Question> GetAllQuestions();
+        IEnumerable<Answer> GetAllAnswers();
 
     }
     public class QuestionRepository : RepositoryBase<Question>, IQuestionRepository
@@ -232,6 +235,21 @@ namespace TestingSystem.Data.Repositories
                 return questionDtos;
             }
 
+        }
+        public IEnumerable<Answer> GetAnswersAndQuestion(int id)
+        {
+            var listAnswer = DbContext.Answers.Where(x => x.QuestionID == id);
+            return listAnswer.ToList();
+        }
+
+        public IEnumerable<Question> GetAllQuestions()
+        {
+            return DbContext.Questions.ToList();
+        }
+
+        public IEnumerable<Answer> GetAllAnswers()
+        {
+            return DbContext.Answers.ToList();
         }
 
         public IEnumerable<Level> GetAlLevels()
