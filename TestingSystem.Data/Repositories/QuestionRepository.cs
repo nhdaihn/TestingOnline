@@ -221,12 +221,17 @@ namespace TestingSystem.Data.Repositories
             {
                 List<QuestionDto> questionDtos = new List<QuestionDto>();
                 int length = tempQuestionDtos.Count();
-                for(int i = 0; i < number; i++)
+                List<int> indexs = new List<int>();
+                for (int i = 0; i < number; i++)
                 {
-                    Random rnd = new Random();
                     int index = 0;
-                    List<int> indexs = new List<int>();
-                    index = rnd.Next(0, length);
+                    Random rnd = new Random();
+                    do
+                    {
+                        index = rnd.Next(0, length);
+                    }
+                    while (indexs.Contains(index));
+                    indexs.Add(index);                    
                     questionDtos.Add(tempQuestionDtos[index]);
                 }
                 return questionDtos;
