@@ -6,13 +6,12 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
     var listCategories = ViewData["Category"] as List<QuestionCategory>;
     var listLevels = ViewData["Level"] as List<Level>;
-    var count = 0;
 }
 <style>
     .card {
         padding-left: 50px;
         padding-right: 50px;
-        background-color:papayawhip;
+        /*background-color:papayawhip;*/
     }
 </style>
 <div class="card">
@@ -93,7 +92,7 @@
                         //count++;
                         <tr style="border:1px solid black">
                             <td style="text-align: right;"><b>Answer</b></td>
-                            <td>@Html.TextBoxFor(a => a[j].AnswerContent, new { @class = "form-control"})</td>
+                            <td>@Html.TextBoxFor(a => a[j].AnswerContent, new { @class = "form-control" })</td>
                             <td>@Html.CheckBoxFor(a => a[j].IsCorrect, new { @id = "chk1", @class = "chkWebSite", value = "true" })</td>
                             <td>
                                 @if (j > 0)
@@ -142,7 +141,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary"  data-dismiss="modal" id="AddCate">Add</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="AddCate">Add</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -267,7 +266,6 @@
 
         },
             3000);
-
     });
 </script>
 

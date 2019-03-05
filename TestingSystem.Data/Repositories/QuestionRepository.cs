@@ -260,6 +260,5 @@ namespace TestingSystem.Data.Repositories
             listLevels.Add(new Level { LevelId = 3, LevelStep = 3, Name = "Hard" });
             return listLevels;
         }
-
     }
 }

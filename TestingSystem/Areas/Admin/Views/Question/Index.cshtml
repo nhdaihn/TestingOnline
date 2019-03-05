@@ -1,128 +1,69 @@
-﻿@model IEnumerable<TestingSystem.Models.Question>
+﻿@using TestingSystem.DataTranferObject.Question
+@using TestingSystem.Models
+@model IEnumerable<TestingSystem.Models.Question>
 
 @{
-    /**/
-
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var listCategories = ViewData["Category"] as List<QuestionCategory>;
+    var listLevels = ViewData["Level"] as List<Level>;
 }
 <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-<form class="form-inline searchform card" action="/Admin/Question/Index/">
-    <div class="form-group">
-        <label for="sel1">Level</label>
-        <select class="form-control" id="Level" name="Level">
-            <option value="" selected disabled hidden>Choice one</option>
-            @foreach (var item in ViewBag.listLevel)
-            {
-                <option value="@item.LevelId">@item.Name</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="sel1">Category</label>
-        <select class="form-control" id="CategoryID" name="CategoryID">
-            <option value="" selected disabled hidden>Choice one</option>
-            @foreach (var item in ViewBag.listCategory)
-            {
-                <option value="@item.CategoryID">@item.Name</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="CreateBy">Created By</label>
-        <input type="text" class="form-control" id="CreateBy" name="CreatedBy">
-    </div>
-    <div class="form-group">
-        <label for="CreatedDate">Created Date</label>
-        <input type="date" class="form-control" id="CreatedDate" name="CreatedDate">
-    </div>
-    <div class="form-group">
-        <label for="Content">Content</label>
-        <input type="text" class="form-control" id="Content" name="Content">
-    </div>
-    <button type="submit" class="btn btn-default">Filter</button>
-</form>
-<form action="/Admin/Question/Search/">
-    <input type="text" placeholder="Search.." name="input">
-    <button type="submit">Submit</button>
-</form>
-<div class="card">
-    <div class="card-header bg-light">Question</div>
-    <div class="card-body">
-        <div>
-            <a class="btn btn-success" href="/Admin/Question/Create"><i class="fa fa-plus"></i> Create New</a>
-        </div>
-        <table class="table table-bordered">
-            <tr class="nhdai-table-title">
-                <th><input type="checkbox" name="checkAll" id="checkAll" onclick="toggle(this);" style="text-align:center; vertical-align: middle;" /> </th>
-                <th>
-                    Content
-                </th>
-                <th>
-                    Image
-                </th>
-                <th>
-                    Category
-                </th>
-                <th>
-                    IsActive
-                </th>
-                <th>
-                    Created By
-                </th>
-                <th>
-                    Created Date
-                </th>
-                <th></th>
-            </tr>
 
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td style="text-align:center; vertical-align: middle;"><input type="checkbox" class="checkCheckbox" data-id="@item.QuestionID" name="cb_@item.QuestionID" id="cb_@item.QuestionID" /></td>
-                    <td class="contentQuestion">
-                        <a href="/Admin/Question/Detail/@item.QuestionID">@item.Content</a>
-                    </td>
-                    <td>
-                        <img src="/Content/QuestionUpload/Images/@item.Image" class="img-fluid" width="50" style="text-align: center" />
-                    </td>
-                    @foreach (var cate in ViewBag.listCategory)
-                    {
-                        if (item.CategoryID == cate.CategoryID)
-                        {
-                            <td>
-                                @cate.Name
-                            </td>
-                        }
-                    }
-                    <td>
-
-                        @Html.DisplayFor(Model => item.IsActive)@*<input  type="checkbox"  value="@item.IsActive" />*@
-                    </td>
-                    <td>
-                        @item.CreatedBy
-                    </td>
-                    <td>
-                        @Convert.ToDateTime(item.CreatedDate).ToString("dd/MM/yyyy")
-                    </td>
-                    <td>
-                        <a class="btn btn-warning btn-sm" href="/Admin/Question/Edit/@item.QuestionID"><i class="fa fa-pencil"></i> Edit</a>
-                        <a class="btn btn-danger btn-sm" href="/Admin/Question/Delete/@item.QuestionID"><i class="fa fa-trash"></i> Delete</a>
-                    </td>
-                </tr>
-            }
-        </table>
-        <a class="btn" id="btnRemove" name="btnRemove" style="background:burlywood; color: yellow;padding: 4px">Remove</a>
-    </div>
-</div>
-@*  *@
 <div class="tablecontainer">
+    <form action="">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="">Create By</label>
+                    <input type="text" class="form-control" id="email" name="CreatedBy">
+                </div>
+                <div class="form-group">
+                    <label for="">Created Date</label>
+                    <input type="date" class="form-control" id="pwd" name="CreatedDate">
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="">Caregory</label>
+                    <select class="form-control" id="CategoryID" name="CategoryID" style="margin-left: -8px;width: 247px;" required>
+                        <option value="" selected disabled hidden>-Choice one-</option>
+                        @if (listCategories != null)
+                        {
+                            foreach (var item in listCategories)
+                            {
+                                <option value="@item.CategoryID">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="">Level</label>
+                    <select class="form-control" id="Level" name="Level" style="margin-left:-9px;width: 248px; margin-bottom: 20px" required="">
+                        <option value="" selected disabled hidden>-Choice one-</option>
+                        @if (listLevels != null)
+                        {
+                            foreach (var item in listLevels)
+                            {
+                                <option value="@item.LevelStep">@item.Name</option>
+                            }
+                        }
+
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </div>
+    </form>
+
     @*<a class="popup btn btn-primary" href="/Employee/Employee/0">Add new</a>*@
     <div class="button-area">
-        <a class="group-btn" id="btn-add" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-plus"></span>   Add new</a>
-        <a class="group-btn" id="btn-export" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-save"></span>   Export file</a>
-        <a class="group-btn" id="btn-import" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-open"></span>   Import file</a>
-        <a class="btn-delete-all" id="delete-all" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>   Delete all</a>
+        <a class="group-btn" id="btn-add" href="/Admin/Question/Create/"><span class="glyphicon glyphicon-plus"></span> Add new</a>
+        <a class="group-btn" id="btn-export" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-save"></span> Export file</a>
+        <a class="group-btn" id="btn-import" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-open"></span> Import file</a>
+        <a class="btn-delete-all" id="delete-all" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span> Delete all</a>
     </div>
 
     <table id="examPaperTable" class="display" cellspacing="0" width="100%">
@@ -137,6 +78,7 @@
                 <th>Created Date</th>
                 <th>Action</th>
             </tr>
+            <a style="text-decoration: none; color: black"></a>
         </thead>
     </table>
 </div>
@@ -164,22 +106,42 @@
     @Html.Partial("_MessageBoxDelete");
     <script type="text/javascript">
         $(document).ready(function () {
-            debugger;
             var examPaperTable = $('#examPaperTable').DataTable({
                 //orderCellsTop: true,
                 //fixedHeader: true,
 
                 "ajax": {
-                    "url": /*"/Admin/Question/Index"*/,
+                    "url": "/Admin/Question/Index/",
                     "type": "GET",
                     "datatype": "json"
                 },
                 "columns": [
                     { "data": "QuestionID", "autoWidth": true },
-                    { "data": "Content", "autoWidth": true },
-                    { "data": "Image", "autoWidth": true },
-                    { "data": "Category", "autoWidth": true },
-                    { "data": "IsActive", "autoWidth": true },
+
+                    {
+                        "data": "Content", "autoWidth": true, "render": function (data) {
+                            return '<a href="" style="text-decoration: none; color: black">' + data + '</a>';
+                        }
+                    },
+                    {
+                        "data": "Image", "autoWidth": true, "render": function (data) {
+                            return '<img src="/Content/QuestionUpload/Images/' + data + '" width="50"/>';
+                        }
+
+                    },
+
+                    { "data": "CategoryName", "autoWidth": true },
+                    {
+                        "data": "IsActive", "autoWidth": true, "render": function (data) {
+                            if (data.valueOf("True")) {
+                                return ' <input type="checkbox" disabled="" checked="">';
+                            } else {
+                                return ' <input type="checkbox" disabled="">';
+                            }
+
+                        }
+
+                    },
                     { "data": "CreatedBy", "autoWidth": true },
                     {
                         "data": "CreatedDate", "autoWidth": true, "render": function (data) {
@@ -188,9 +150,11 @@
                     },
                     {
                         "data": "QuestionID", "width": "15px", "render": function (data) {
-                            return '<a class="update-row" href="/Admin/Question/Delete/' + data + '"><span class="glyphicon glyphicon-pencil"></span></a>   <a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
+                            return '<a class="update-row" href="/Admin/Question/Edit/' + data + '"><span class="glyphicon glyphicon-pencil"></span></a>   <a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
                         },
                     }
+
+
                 ],
                 'columnDefs': [{
                     'targets': 0,
@@ -198,10 +162,11 @@
                     'orderable': false,
                     'className': 'dt-body-center',
                     'render': function (data, type, full, meta) {
-                        return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                        return '<input type="checkbox" class="delete-all-checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
                     }
                 }],
                 'order': [[1, 'asc']]
+
 
             });
 
@@ -229,8 +194,8 @@
 
             $("#delete-all").on("click",
                 function (e) {
-                    var data = examPaperTable.$('input[type="checkbox"]:checked');
-
+                    var data = examPaperTable.$('input.delete-all-checkbox:checkbox:checked');
+                    debugger;
                     if (data.length === 0) {
                         $("#error-msgbox-modal #error-msg").text('Please choose record to delete!');
                         $("#error-msgbox-modal #error-msg1").text('');
@@ -245,7 +210,7 @@
                         });
                         $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
                             $.ajax({
-                                url: "/Admin/ExamPaper/Delete/",
+                                url: "/Admin/Question/Delete/",
                                 data: {
                                     ids: ids
                                 },
@@ -257,13 +222,13 @@
                                     $("#error-msgbox-modal #error-msg1").text('');
                                     $('#error-msgbox-modal').modal('show');
                                 },
-                                success: function (status) {
-                                    if (status) {
+                                success: function (data) {
+                                    if (data.status) {
                                         debugger;
-                                        $.notify("Delete exam paper successfully!", "success");
-                                        examPaperTable.ajax.reload();
-                                        //location.reload();
+                                        $.notify("Delete question successfully!", "success");
+                                        //examPaperTable.ajax.reload();
                                     }
+                                    location.reload();
                                 }
 
                             });
@@ -285,7 +250,7 @@
                         debugger;
                         $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
                             $.ajax({
-                                url: "/Admin/ExamPaper/Delete/",
+                                url: "/Admin/Question/Delete/",
                                 data: {
                                     ids: ids
                                 },
@@ -302,7 +267,7 @@
                                         debugger;
                                         $.notify("Delete exam paper successfully!", "success");
                                         examPaperTable.ajax.reload();
-                                        //location.reload();
+                                        location.reload();
                                     }
                                 }
 

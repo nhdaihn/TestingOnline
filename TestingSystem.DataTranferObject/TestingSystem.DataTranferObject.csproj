@@ -44,9 +44,19 @@
     <Compile Include="ExamPaper\ExamPaperFilterModel .cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Question\Level.cs" />
+    <Compile Include="Question\QuestionAnswerDTO.cs" />
     <Compile Include="Question\QuestionDto.cs" />
     <Compile Include="Question\QuestionFilterModel.cs" />
     <Compile Include="Question\TranferID.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TestingSystem.Models\TestingSystem.Models.csproj">
+      <Project>{b0244f25-247f-4f72-8c6e-72967cf69a57}</Project>
+      <Name>TestingSystem.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

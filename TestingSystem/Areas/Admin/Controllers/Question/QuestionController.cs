@@ -33,23 +33,20 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         }
         public ActionResult Questions()
         {
-
+            var listCategory = questionCategorySevice.GetAllQuestionCategories();
+            var listLevels = questionService.GetAlLevels();
+            ViewData["Category"] = listCategory;
+            ViewData["Level"] = listLevels;
             return View();
         }
-
         [ActionName("GetQuestions")]
         public ActionResult GetQuestions()
-        {
-            var listCategory = questionCategorySevice.GetAll();
-            //get all category
-            ViewBag.listCategory = listCategory;
-            //get all level
-
-            ViewBag.listLevel = questionCategorySevice.GetAllQuestionCategories();
-
+        {        
+            // đổi thành filter.
             var listQuestionDtos = questionService.GetAllQuestionDtos();
             return Json(new { data = listQuestionDtos.OrderBy(x => x.CategoryID) }, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult Search(string input)
         {
             List<Models.QuestionCategory> listCategory = new List<Models.QuestionCategory>();
@@ -150,7 +147,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             {
                 new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false },
                 new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false },
-            };           
+            };
             //get all category
             var listCategory = questionCategorySevice.GetAllQuestionCategories();
             //get all level
@@ -202,62 +199,63 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
 
         }
 
-        public ActionResult CreateAnswer()
-        {
+        //public ActionResult CreateAnswer()
+        //{
 
-            // This is only for show by default one row for insert data to the database
-            List<Answer> answers = new List<Answer> { new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false } };
-            return View(answers);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateAnswer(List<Answer> listAnswers)
-        {
-                if (ModelState.IsValid)
-                {
-                    foreach (var i in listAnswers)
-                    {
-                        i.QuestionID = TranferID.ID;
-                        if (i.QuestionID <=0)
-                        {
-                            return RedirectToAction("Create", "Question");
-                        }
-                        else
-                        {
-                            answerService.AddAnswer(i);
-                        }
-                    }
+        //    // This is only for show by default one row for insert data to the database
+        //    List<Answer> answers = new List<Answer> { new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false } };
+        //    return View(answers);
+        //}
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult CreateAnswer(List<Answer> listAnswers)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        foreach (var i in listAnswers)
+        //        {
+        //            i.QuestionID = TranferID.ID;
+        //            if (i.QuestionID <= 0)
+        //            {
+        //                return RedirectToAction("Create", "Question");
+        //            }
+        //            else
+        //            {
+        //                answerService.AddAnswer(i);
+        //            }
+        //        }
 
-                    ViewBag.Message = "Data successfully saved!";
-                    ModelState.Clear();
-                }
+        //        ViewBag.Message = "Data successfully saved!";
+        //        ModelState.Clear();
+        //    }
 
-                return RedirectToAction("Questions");
-        }
+        //    return RedirectToAction("Questions");
+        //}
 
         public ActionResult Edit(int? id)
         {
             var listCategory = questionCategorySevice.GetAll();
-
             var listLevels = questionService.GetAlLevels();
-            //1get all Answer by Question ID
-            var listAnswerByQuestionID = questionService.GetAlLevels(); // temp
-            ViewBag.listAnswerByQuestionI = listAnswerByQuestionID;//temp
-            //2Count Answer
-            var countAnswer = 3;//temp
-            ViewBag.countAnswer = countAnswer;//temp
-
-            //get all category
             ViewBag.listCategory = listCategory;
-            //get all level
             ViewBag.listLevel = listLevels;
+            //Get Answer.
+            var listAnswerByQuestionID = questionService.GetAnswersAndQuestion(id);
+            ViewBag.listAnswerByQuestionID = listAnswerByQuestionID;
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             else
             {
+                // dto
+                QuestionAnswerDTO mymodel = new QuestionAnswerDTO();
                 var question = questionService.FindID(id);
+                var answer = questionService.GetAnswersAndQuestion(id);
+                ViewBag.Answer = answer;
+                mymodel.Question = question;
+                mymodel.Answers = answer.ToList();
+                //
                 if (question == null)
                 {
                     return PartialView("~/Areas/Admin/Views/Question/NotFound.cshtml");
@@ -271,8 +269,12 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Edit(Models.Question question, HttpPostedFileBase Image)
+        public ActionResult Edit(Models.Question question, HttpPostedFileBase Image, string[] AnswerContent, string[] IsCorrect)
         {
+            //fix cung
+            question.ModifiedBy = 1;
+            question.CreatedBy = 1;
+            //
             if (Image != null && Image.ContentLength > 0)
             {
                 string filePath = Path.Combine(Server.MapPath("~/Content/QuestionUpload/Images/"), Path.GetFileName(Image.FileName));
@@ -281,10 +283,23 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             }
             else
             {
-                var img = questionService.GetQuetionById(question.QuestionID).Image;
+                var img = questionService.FindID(question.QuestionID).Image;
                 question.Image = img;
             }
             questionService.UpdateQuestion(question);
+            //
+            //foreach (Answer item in listAnswers)
+            //{
+            //    if (item.QuestionID <= 0)
+            //    {
+            //        return RedirectToAction("Edit", "Question");
+            //    }
+            //    else
+            //    {
+            //        answerService.UpdateAnswer(item);
+            //    }
+            //}
+
             return RedirectToAction("Questions");
         }
 
@@ -296,10 +311,10 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId)
+        public ActionResult GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId, int examPaperId)
         {
             var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
-            questions = questionService.GetQuestionsByQuestionCategoryIdAndExamPaperId(categoryId,examPaperId).ToList();
+            questions = questionService.GetQuestionsByQuestionCategoryIdAndExamPaperId(categoryId, examPaperId).ToList();
 
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }

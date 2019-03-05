@@ -12,7 +12,7 @@ namespace TestingSystem.Sevice
     public interface IAnswerService
     {
         int AddAnswer(Answer answer);
-        void UpdateAnswer(Answer answer);
+        bool UpdateAnswer(Answer answer);
         void DeleteAnswer(Answer answer);
     }
     public class AnswerService : IAnswerService
@@ -36,9 +36,9 @@ namespace TestingSystem.Sevice
             answerRepository.Delete(answer);
         }
 
-        public void UpdateAnswer(Answer answer)
+        public bool UpdateAnswer(Answer answer)
         {
-           answerRepository.Update(answer);
+            return answerRepository.UpdateAnswer(answer);
         }
     }
 }
