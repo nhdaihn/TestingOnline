@@ -22,16 +22,10 @@ namespace TestingSystem.Models
         [Required]
         public int CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
-
         public int? ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
-
-
         public virtual User CreaterUser { get; set; }
-        public virtual User ModifiedUser { get; set; }
-
-
-
+        public virtual User ModifiedUser { get; set; }  
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual QuestionCategory QuestionCategory { get; set; }
         public ICollection<ExamPaperQuesion> ExamPaperQuesions { get; set; }

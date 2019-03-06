@@ -9,7 +9,6 @@ namespace TestingSystem.Data.Migrations
         {
             AlterColumn("dbo.Users", "Password", c => c.String(nullable: false, maxLength: 50));
         }
-        
         public override void Down()
         {
             AlterColumn("dbo.Users", "Password", c => c.String(nullable: false, maxLength: 20));
