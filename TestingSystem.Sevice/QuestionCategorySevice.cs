@@ -64,12 +64,22 @@ namespace TestingSystem.Sevice
             return questionCategory.GetById(id);
         }
 
+        public bool QuestionCategoryID(int id)
+        {
+            return questionCategory.QuestionCategoryID(id);
+        }
+
         public void SaveQuestionCategory()
         {
             unitOf.Commit();
         }
 
         public IEnumerable<QuestionCategory> Search(string txtSearch)
+        {
+            return questionCategory.SearchCategories(txtSearch);
+        }
+
+        public IEnumerable<QuestionCategory> SearchCategories(string txtSearch)
         {
             return questionCategory.SearchCategories(txtSearch);
         }
@@ -87,13 +97,15 @@ namespace TestingSystem.Sevice
         void SaveQuestionCategory();
         IEnumerable<User> GetAllUser();
         int UpdateCategoryQuestion(QuestionCategory questionCategory);
-       
+
         IEnumerable<QuestionCategory> Search(string txtSearch);
         int DeleteQuestionCategory(int[] dsxoa);
         int Delete(int id);
         QuestionCategory GetById(int id);
         QuestionCategory FindCategoryByID(int? id);
         IEnumerable<QuestionCategory> GetAllQuestionCategories();
+        bool QuestionCategoryID(int id);
 
+        IEnumerable<QuestionCategory> SearchCategories(string txtSearch);
     }
 }
