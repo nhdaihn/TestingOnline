@@ -28,7 +28,14 @@ namespace TestingSystem.Data.Repositories
             try
             {
                 DbContext.ExamPapers.Add(examPaper);
-                return DbContext.SaveChanges();
+                if (DbContext.SaveChanges() > 0)
+                {
+                    return examPaper.ExamPaperID;
+                }
+                else
+                {
+                    return 0;
+                }
 
             }
             catch (Exception e)

@@ -69,8 +69,18 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Rotativa.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.Core.2.0.0\lib\net45\Rotativa.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Rotativa.MVC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.MVC.2.0.3\lib\net45\Rotativa.MVC.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -3911,9 +3921,11 @@
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\QuestionUpload\Images\Chelsea_old_logo.png" />
+    <Content Include="Content\QuestionUpload\Images\i.png" />
     <Content Include="Content\QuestionUpload\Images\product.jpg" />
     <Content Include="Content\QuestionUpload\Images\skysports-david-luiz-emerson_4574973.jpg" />
     <Content Include="Content\QuestionUpload\Images\Team1 %281%29.png" />
+    <Content Include="Content\style-export-to-pdf.css" />
     <Content Include="Content\style.css" />
     <Content Include="Content\QuestionUpload\Images\250px-Terry_Crews_by_Gage_Skidmore_5.jpg" />
     <Content Include="Content\QuestionUpload\Images\NO+Logo+6-27.png" />
@@ -3923,6 +3935,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
@@ -4571,6 +4584,11 @@
     <Content Include="Areas\Admin\Views\Question\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Question\CreateAnswer.cshtml" />
     <Content Include="Areas\Admin\Views\QuestionCategory\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Question\QuestionExcelAnswer.cshtml" />
+    <Content Include="Areas\Admin\Views\ExamPaper\ImportExamPaper.cshtml" />
+    <Content Include="App_Browsers\qt.browser" />
+    <Content Include="Areas\Admin\Views\ExamPaper\ExportToPdf.cshtml" />
+    <Content Include="fonts\tahoma_0.ttf" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -4619,6 +4637,7 @@
     <Folder Include="Areas\Admin\Models\ExamPaper\" />
     <Folder Include="Areas\Admin\Models\Exam\" />
     <Folder Include="Areas\Admin\Views\Account\" />
+    <Folder Include="FileExcel\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

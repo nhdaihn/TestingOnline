@@ -8,6 +8,8 @@
 }
 
 <h4>Exam Paper</h4>
+<br />
+<a class="group-btn" id="btn-export" href="/Admin/ExamPaper/ExportToPdfView/?examPaperId=@Model.ExamPaperID"><span class="glyphicon glyphicon-save"></span>   Export file</a>
 @using (Html.BeginForm("ExamPaper", "ExamPaper", FormMethod.Post, new { id = "ExamPaperForm", area = "Admin" }))//"popupForm"
 {
     @Html.AntiForgeryToken()
@@ -66,8 +68,8 @@
             </div>
         </div>
         <input type="submit" value="Save" class="btn btn-primary" />
-        <input type="submit" value="Create and refresh" class="btn btn-primary" />
-        @Html.ActionLink("Back", "ExamPapers", "ExamPaper", new { area = "Admin", @class = "btn btn btn-light" })
+        <input type="submit" value="Save and refresh" class="btn btn-primary" />
+        @Html.ActionLink("Back", "ExamPapers", "ExamPaper", new { area = "Admin", @class = ""})
     </div>
 }
 
@@ -76,26 +78,18 @@
 <br />
 <h4>Question List</h4>
 <div class="tablecontainer">
-
-    <div class="button-area">
-        <a class="group-btn" id="btn-add" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-plus"></span>   Add new</a>
-        <a class="group-btn" id="btn-export" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-save"></span>   Export file</a>
-        <a class="group-btn" id="btn-import" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-open"></span>   Import file</a>
-        <a class="btn-delete-all" id="delete-all" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>   Delete all</a>
-    </div>
+    <button type="button" id="btn-add-question" class="btn btn-primary">Add questions</button>
     <br />
-    <button type="button" id="btn-add-question" class="btn btn-info btn-lg" data-toggle="modal">Open Large Modal</button>
-
     <br />
     <table id="examPaperQuestionTable" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th><input type="checkbox" name="select_all" value="1" id="exam-paper-question-select-all"></th>
                 <th>Content</th>
-                <th>Level</th>
                 <th>Category</th>
-                <th>Created Date</th>
-                <th>Is Active</th>
+                <th>Level</th>
+                <th>CreatedDate</th>
+                <th>IsActive</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -176,17 +170,17 @@
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": "ExamPaperQuestionID", "autoWidth": true },
-                    { "data": "Content", "autoWidth": true },
-                    { "data": "Level", "autoWidth": true },
-                    { "data": "CategoryName", "autoWidth": true },
+                    { "data": "ExamPaperQuestionID", "width": "3%" },
+                    { "data": "Content", "width": "60%" },
+                    { "data": "CategoryName", "width": "20%" },
+                    { "data": "Level", "width": "5%" },
                     {
-                        "data": "CreatedDate", "autoWidth": true, "render": function (data) {
+                        "data": "CreatedDate", "width": "6%", "render": function (data) {
                             return moment(data).format('DD/MM/YYYY');
                         }
                     },
                     {
-                        "data": "IsActive", "autoWidth": true, "render": function (data) {
+                        "data": "IsActive", "width": "3%", "render": function (data) {
                             if (data) {
                                 return '<input type="checkbox" disabled checked/>';
                             }
@@ -197,7 +191,7 @@
                     },
 
                     {
-                        "data": "ExamPaperQuestionID", "width": "15px", "render": function (data) {
+                        "data": "ExamPaperQuestionID", "width": "3%", "render": function (data) {
                             return '<a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
                         },
                     }

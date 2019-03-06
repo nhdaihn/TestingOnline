@@ -335,7 +335,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         {
             if (excelfile == null)
             {
-                ViewBag.ThongBao = "Vui long chon file !";
+                ViewBag.ThongBao = "Please choose excel file to import exam paper!";
                 return View();
             }
             else
@@ -350,11 +350,9 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                         Visible = true
                     };
                     Excel.Workbook workbook = application.Workbooks.Open(path);
-                    Excel.Worksheet worksheet = workbook.Sheets[@"Sheet1"];
+                    Excel.Worksheet worksheet = workbook.Sheets[@"ExamPaper"];
                     Excel.Range range = worksheet.UsedRange;
 
-                    //Excel.Worksheet worksheet1 = workbook.Sheets["Sheet2"];
-                    //Excel.Range range1 = worksheet1.UsedRange;
 
                     Models.ExamPaper examPaper = new Models.ExamPaper();
                     examPaper.Title = ((Excel.Range)range.Cells[3, 1]).Text;
@@ -406,7 +404,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 }
                 else
                 {
-                    ViewBag.ThongBao = "Vui long chon dung file excel !";
+                    ViewBag.ThongBao = "Please choose excel file to import exam paper!";
                     return View();
                 }
             }
