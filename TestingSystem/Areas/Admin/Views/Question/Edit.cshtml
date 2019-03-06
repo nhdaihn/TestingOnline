@@ -191,9 +191,11 @@
                     </div>
                 </div>
             </div>
+            <p></p>
+            @*<hr style="border: 1px solid gray;width: 929px"/>*@
             @*<div><a href="#" id="addNew" style="margin-right:40px; float: right">Add More Aswer</a></div>*@
             @*<div><input type="button" class="btn btn-success" id="addNew" value="Add More Aswer" style="float: right;margin-right:40px;"/></div>*@
-            <table id="dataTable" class="table table-bordered" cellpadding="0" cellspacing="0" style="margin-left:10px ">
+            <table id="dataTable" class="table table-bordered" cellpadding="0" cellspacing="0" style="margin-left:44px ">
                 <tr>
                     <th></th>
                     <th>Answer Content</th>
@@ -207,15 +209,17 @@
                 {
                     //count++;
                     <tr style="border:1px solid black">
-                        <td style="text-align: right;"><b>Answer</b></td>
+                        <td style="text-align: center"><b>Answer</b></td>
                         <td>
                             @*@Html.HiddenFor(m => item.AnswerID, new { @class = "form-control" })*@
-                            <input type="hidden" name="AnswerID" value="@item.AnswerID">
                             @*@Html.EditorFor(m => item.AnswerContent, new { @id = "chk1", @class = "chkWebSite", value = "true" })*@
-                            <input type="text" name="AnswerContent" value="@item.AnswerContent">
+                            @*<td>@Html.CheckBoxFor(m => item.IsCorrect, new { @id = "chk1", @class = "chkWebSite", value = "true" })</td>*@
+                            <input type="hidden" id="AnswerID" name="AnswerID" value="@item.AnswerID">
+                            <input type="text" id="ck1" name="AnswerContent" value="@item.AnswerContent" onchange="myFunction(this)" class="form-control chkWebSite">
                         </td>
-                        <td><input type="checkbox" checked="@item.IsCorrect" name="IsCorrect" /></td>
-                        @*<td>@Html.CheckBoxFor(m => item.IsCorrect, new { @id = "chk1", @class = "chkWebSite", value = "true" })</td>*@
+                        <td>
+                            <input type="checkbox" id="IsCorrect" checked="@item.IsCorrect" name="IsCorrect" value="@item.AnswerContent" />
+                        </td>
                         <td>
                             @if (j > 0)
                             {
@@ -409,6 +413,12 @@
     $("#imgInp").change(function () {
         readURL(this);
     });
+</script>
+@* change content answer => change value iscorrect tag *@
+<script>
+    function myFunction(val) {
+        document.getElementById("IsCorrect").value = val.value; 
+    }
 </script>
 
 

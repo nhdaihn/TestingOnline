@@ -11,6 +11,7 @@ namespace TestingSystem.Sevice
 {
     public interface IAnswerService
     {
+        List<Answer> GetAnswersByQuestionID(int? id);
         int AddAnswer(Answer answer);
         bool UpdateAnswer(Answer answer);
         void DeleteAnswer(Answer answer);
@@ -34,6 +35,11 @@ namespace TestingSystem.Sevice
         public void DeleteAnswer(Answer answer)
         {
             answerRepository.Delete(answer);
+        }
+
+        public List<Answer> GetAnswersByQuestionID(int? id)
+        {
+            return answerRepository.GetAnswersByQuestionID(id);
         }
 
         public bool UpdateAnswer(Answer answer)

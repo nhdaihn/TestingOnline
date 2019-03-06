@@ -9,12 +9,20 @@ namespace TestingSystem.Data.Repositories
 {
     public interface IQuestionRepository : IRepository<Question>
     {
+        /// <summary>
+        /// Fuction Get Question 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        QuestionDto GetQuestionInQuestionDTO(int? id);
+        string GetNameLevelByQuestionID(int id);
         IEnumerable<Level> GetAlLevels();
         IEnumerable<QuestionDto> GetAllQuestionDtos();
         bool UpdateQuestion(Question question);
         int AddQuestion(Question question);
         int DeleteQuestion(int id);
         Question FindID(int? id);
+        bool CheckQuestionInExamPaperQuesion(int id);
         IEnumerable<Question> SearchByContent(string input);
         IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel);
 
@@ -46,16 +54,24 @@ namespace TestingSystem.Data.Repositories
         }
         public int DeleteQuestion(int id)
         {
-            var question = this.DbContext.Questions.Find(id);
-            if (question != null)
+            if (CheckQuestionInExamPaperQuesion(id)==false)
             {
-                this.DbContext.Questions.Remove(question);
-                return DbContext.SaveChanges();
+                var question = this.DbContext.Questions.Find(id);
+                if (question != null)
+                {
+                    this.DbContext.Questions.Remove(question);
+                    return DbContext.SaveChanges();
+                }
+                else
+                {
+                    return 0;
+                }
             }
             else
             {
                 return 0;
             }
+
         }
 
         public IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel)
@@ -135,8 +151,9 @@ namespace TestingSystem.Data.Repositories
                     ModifiedBy = item.ModifiedBy,
                     ModifiedDate = item.ModifiedDate,
                     CategoryID = item.CategoryID,
-                    // category name fix cung truoc
-                    CategoryName = questionCategory.FindCategoryByID(item.CategoryID).Name
+                    CategoryName = questionCategory.FindCategoryByID(item.CategoryID).Name,
+                    Level = item.Level,
+                    LevelName = GetNameLevelByQuestionID(item.QuestionID)
                 });
             }
 
@@ -259,6 +276,46 @@ namespace TestingSystem.Data.Repositories
             listLevels.Add(new Level { LevelId = 2, LevelStep = 2, Name = "Normal" });
             listLevels.Add(new Level { LevelId = 3, LevelStep = 3, Name = "Hard" });
             return listLevels;
+        }
+
+        public string GetNameLevelByQuestionID(int id)
+        {
+            var name = DbContext.Questions.FirstOrDefault(x => x.QuestionID == id);
+            if (name.Level == 1)
+            {
+                return "Easy";
+            }
+            if (name.Level == 2)
+            {
+                return "Normal";
+            }
+            if (name.Level == 3)
+            {
+                return "Hard";
+            }
+            else
+            {
+                return "None";
+            }
+        }
+
+        public QuestionDto GetQuestionInQuestionDTO(int? id)
+        {
+            var question = GetAllQuestionDtos().SingleOrDefault(x => x.QuestionID == id);
+            return question;
+        }
+
+        public bool CheckQuestionInExamPaperQuesion(int id)
+        {
+            var question = DbContext.ExamPaperQuesions.SingleOrDefault(x => x.QuestionID == id);
+            if (question == null)
+            {
+                return false;//Not Exist
+            }
+            else
+            {
+                return true;// Exist
+            }
         }
     }
 }

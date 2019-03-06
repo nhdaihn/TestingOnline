@@ -8,10 +8,11 @@ using System.Web;
 using System.IO;
 using System.Linq;
 using System;
+using System.Activities.Statements;
 
 namespace TestingSystem.Areas.Admin.Controllers.Question
 {
-    public class QuestionController : BaseController
+    public class QuestionController : BaseController, IDisposable
     {
         private readonly IQuestionService questionService;
         private readonly IAnswerService answerService;
@@ -29,6 +30,8 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             //fix cung
             category.ModifiedBy = 1;
             category.CreatedBy = 1;
+            // Default is true when create in CreateQuesiton View
+            category.IsActive = true;
             return Json(questionCategorySevice.AddCategoryQuestion(category), JsonRequestBehavior.AllowGet);
         }
         public ActionResult Questions()
@@ -41,7 +44,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         }
         [ActionName("GetQuestions")]
         public ActionResult GetQuestions()
-        {        
+        {
             // đổi thành filter.
             var listQuestionDtos = questionService.GetAllQuestionDtos();
             return Json(new { data = listQuestionDtos.OrderBy(x => x.CategoryID) }, JsonRequestBehavior.AllowGet);
@@ -72,7 +75,8 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             }
             else
             {
-                var question = questionService.FindID(id);
+                ViewBag.listAnswerByQuestion = answerService.GetAnswersByQuestionID(id);
+                var question = questionService.GetQuestionInQuestionDTO(id);
                 if (question == null)
                 {
                     return PartialView("~/Areas/Admin/Views/Question/NotFound.cshtml");
@@ -122,7 +126,6 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                             //!!!!!!!!!!! break nhưng mà những cái record trc đó vẫn đã bị xóa
                             break;
                         }
-
                     }
                     if (i > 0)
                     {
@@ -162,6 +165,10 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         [ValidateInput(false)]
         public ActionResult Create(Models.Question question, HttpPostedFileBase Image, List<Answer> listAnswers)
         {
+            //using (TransactionScope transaction = new TransactionScope())
+            //{
+            //    transaction.Complete();
+            //}
             Session["CreatedBy"] = 1;
             Session["ModifiedBy"] = 1;
             question.CreatedBy = Convert.ToInt32(Session["CreatedBy"]);
@@ -269,8 +276,17 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Edit(Models.Question question, HttpPostedFileBase Image, string[] AnswerContent, string[] IsCorrect)
+        public ActionResult Edit(Models.Question question, HttpPostedFileBase Image, int[] AnswerID, string[] AnswerContent, string[] IsCorrect)
         {
+            List<Answer> listAnswer = new List<Answer>();
+            for (int i = 0; i < AnswerID.Length; i++)
+            {
+                Answer answer = new Answer();
+                answer.AnswerID = AnswerID[i];
+                answer.AnswerContent = AnswerContent[i];
+                answer.IsCorrect = IsCorrect.Contains(AnswerContent[i]);
+                listAnswer.Add(answer);
+            }
             //fix cung
             question.ModifiedBy = 1;
             question.CreatedBy = 1;
@@ -287,18 +303,20 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 question.Image = img;
             }
             questionService.UpdateQuestion(question);
-            //
-            //foreach (Answer item in listAnswers)
-            //{
-            //    if (item.QuestionID <= 0)
-            //    {
-            //        return RedirectToAction("Edit", "Question");
-            //    }
-            //    else
-            //    {
-            //        answerService.UpdateAnswer(item);
-            //    }
-            //}
+
+            foreach (var item in listAnswer)
+            {
+                item.QuestionID = question.QuestionID;
+                if (item.QuestionID <= 0)
+                {
+                    return RedirectToAction("Edit", "Question");
+                }
+                else
+                {
+
+                    answerService.UpdateAnswer(item);
+                }
+            }
 
             return RedirectToAction("Questions");
         }

@@ -73,9 +73,10 @@
                 <th>Content</th>
                 <th>Image</th>
                 <th>Category</th>
+                <th>Level</th>
                 <th>IsActive</th>
-                <th>Created By</th>
-                <th>Created Date</th>
+                <th>Created</th>
+                <th>Date</th>
                 <th>Action</th>
             </tr>
             <a style="text-decoration: none; color: black"></a>
@@ -131,6 +132,7 @@
                     },
 
                     { "data": "CategoryName", "autoWidth": true },
+                    { "data": "LevelName", "autoWidth": true },
                     {
                         "data": "IsActive", "autoWidth": true, "render": function (data) {
                             if (data.valueOf("True")) {
@@ -247,7 +249,6 @@
                         if (ids.indexOf(id) < 0) {
                             ids.push(id);
                         }
-                        debugger;
                         $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
                             $.ajax({
                                 url: "/Admin/Question/Delete/",
