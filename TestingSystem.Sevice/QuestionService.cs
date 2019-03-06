@@ -9,6 +9,7 @@ namespace TestingSystem.Sevice
 {
     public interface IQuestionService
     {
+        QuestionDto GetQuestionInQuestionDTO(int? id);
         IEnumerable<Level> GetAlLevels();
         IEnumerable<QuestionDto> GetAllQuestionDtos();
         bool UpdateQuestion(Question question);
@@ -114,6 +115,11 @@ namespace TestingSystem.Sevice
         public IEnumerable<Answer> GetAllAnswers()
         {
             return questionRepository.GetAllAnswers();
+        }
+
+        public QuestionDto GetQuestionInQuestionDTO(int? id)
+        {
+            return questionRepository.GetQuestionInQuestionDTO(id);
         }
     }
 }

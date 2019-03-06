@@ -15,6 +15,7 @@ namespace TestingSystem.DataTranferObject.Question
         public string Image { get; set; }
 
         public int Level { get; set; }
+        public string LevelName { get; set; }
 
         public int CategoryID { get; set; }
   
