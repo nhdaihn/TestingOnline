@@ -22,7 +22,7 @@ namespace TestingSystem.Sevice
         IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId);
         IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId);
         IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId, int number);
-        IEnumerable<Answer> GetAnswersByQuestionId(int id);
+        IEnumerable<Answer> GetAnswersByQuestionId(int? id);
         IEnumerable<Question> GetAllQuestions();
         IEnumerable<Answer> GetAllAnswers();
 
@@ -101,7 +101,7 @@ namespace TestingSystem.Sevice
         {
             return questionRepository.RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(categoryId, examPaperId, number);
         }
-        public IEnumerable<Answer> GetAnswersByQuestionId(int id)
+        public IEnumerable<Answer> GetAnswersByQuestionId(int? id)
         {
             return questionRepository.GetAnswersByQuestionId(id);
         }

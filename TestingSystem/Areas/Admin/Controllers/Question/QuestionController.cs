@@ -88,7 +88,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 var question = questionService.FindID(id);
                 if (question == null)
                 {
-                    return PartialView("~/Areas/Admin/Views/Question/NotFound.cshtml");
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
                 {
@@ -277,7 +277,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 var question = questionService.FindID(id);
                 if (question == null)
                 {
-                    return PartialView("~/Areas/Admin/Views/Question/NotFound.cshtml");
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
                 {
