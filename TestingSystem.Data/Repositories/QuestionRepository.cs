@@ -31,7 +31,7 @@ namespace TestingSystem.Data.Repositories
         IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId, int examPaperId);
 
         IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId, int number);
-        IEnumerable<Answer> GetAnswersAndQuestion(int? id);
+        IEnumerable<Answer> GetAnswersByQuestionId(int id);
         IEnumerable<Question> GetAllQuestions();
         IEnumerable<Answer> GetAllAnswers();
 
@@ -173,6 +173,7 @@ namespace TestingSystem.Data.Repositories
                 questionDto.IsActive = question.IsActive;
                 questionDto.Content = question.Content;
                 questionDto.Image = question.Image;
+                questionDto.QuestionID = question.QuestionID;
                 questionDto.CreatedBy = question.CreatedBy;
                 questionDto.CreatedDate = question.CreatedDate;
                 questionDto.ModifiedBy = question.ModifiedBy;
@@ -241,19 +242,24 @@ namespace TestingSystem.Data.Repositories
             {
                 List<QuestionDto> questionDtos = new List<QuestionDto>();
                 int length = tempQuestionDtos.Count();
+                List<int> indexs = new List<int>();
                 for (int i = 0; i < number; i++)
                 {
-                    Random rnd = new Random();
                     int index = 0;
-                    List<int> indexs = new List<int>();
-                    index = rnd.Next(0, length);
+                    Random rnd = new Random();
+                    do
+                    {
+                        index = rnd.Next(0, length);
+                    }
+                    while (indexs.Contains(index));
+                    indexs.Add(index);                    
                     questionDtos.Add(tempQuestionDtos[index]);
                 }
                 return questionDtos;
             }
 
         }
-        public IEnumerable<Answer> GetAnswersAndQuestion(int? id)
+        public IEnumerable<Answer> GetAnswersByQuestionId(int id)
         {
             var listAnswer = DbContext.Answers.Where(x => x.QuestionID == id);
             return listAnswer.ToList();

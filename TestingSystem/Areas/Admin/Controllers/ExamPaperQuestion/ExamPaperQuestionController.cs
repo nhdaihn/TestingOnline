@@ -104,8 +104,5 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaperQuestion
                 return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
         }
-
-
-
     }
 }

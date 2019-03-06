@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using TestingSystem.Data.Infrastructure;
 using TestingSystem.Models;
 
@@ -20,26 +14,15 @@ namespace TestingSystem.Data.Repositories
         }
 
         public int AddCategoryQuestion(QuestionCategory questionCategory)
-        {
+       {
 
-            //DbContext.QuestionCategories.Add(new QuestionCategory()
-            //{
-            //    Name = questionCategory.Name,
-            //    IsActive = questionCategory.IsActive,
-            //    CreatedBy = questionCategory.CreatedBy,
-            //    CreatedDate = DateTime.Now,
-            //    ModifiedBy = questionCategory.ModifiedBy,
-            //    ModifiedDate = DateTime.Now,
-
-            //});
+          
             questionCategory.ModifiedDate = DateTime.Now;
             questionCategory.CreatedDate = DateTime.Now;
             DbContext.QuestionCategories.Add(questionCategory);
             DbContext.SaveChanges();
             return questionCategory.CategoryID;
-
-            //DbContext.SaveChanges();
-            //return questionCategory.CategoryID;
+           
         }
 
         public int Delete(int id)
@@ -89,14 +72,23 @@ namespace TestingSystem.Data.Repositories
             return DbContext.Users.ToList();
         }
 
+        public bool QuestionCategoryID(int id)
+        {
+            var quesiton1 = DbContext.Questions.Where(x => x.CategoryID == id).Count();
+            if (quesiton1 > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public IEnumerable<QuestionCategory> SearchCategories(string txtSearch)
         {
-            var listSearchCategory = from category in DbContext.QuestionCategories
-                                     where category.Name.Contains(txtSearch) || category.CreatedDate.ToString().Contains(txtSearch)
-
-                                     select category;
-
-            return listSearchCategory.ToList();
+            var listSearchCategory = DbContext.QuestionCategories.Where(x => x.Name.Contains(txtSearch)).ToList();
+            return listSearchCategory;
         }
         public int UpdateCategoryQuestion(QuestionCategory questionCategory)
         {
@@ -123,6 +115,7 @@ namespace TestingSystem.Data.Repositories
         int Delete(int id);
         QuestionCategory FindCategoryByID(int? id);
         IEnumerable<QuestionCategory> GetAllQuestionCategories();
+        bool QuestionCategoryID(int id);
 
     }
 }

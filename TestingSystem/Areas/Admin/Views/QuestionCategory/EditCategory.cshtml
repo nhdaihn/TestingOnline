@@ -1,120 +1,59 @@
 ﻿@model TestingSystem.Models.QuestionCategory
 @{
-    ViewBag.Title = "EditCategory";
+    ViewBag.Title = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-
-<h2>EditCategory</h2>
-@using (Html.BeginForm("EditCategory", "QuestionCategory", FormMethod.Post, new { id = "questionCategoryForm", area = "Admin" }))//"popupForm"
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.CategoryID)
-
-        <div class="form-group">
-            <div class="col-md-4">
-                <label>Name Category</label>
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-4">
-                <label>CreatedBy</label>
-                @Html.DropDownList("CreatedBy", null, htmlAttributes: new { @class = "form-control" })
-                @*@Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control btn", @required = "required" } })*@
-                @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-4">
-                <label>ModifiedBy</label>
-                @Html.DropDownList("ModifiedBy", null, htmlAttributes: new { @class = "form-control" })
-                @*@Html.EditorFor(model => model.ModifiedBy, new { htmlAttributes = new { @class = "form-control ", @required = "required" } })*@
-                @Html.ValidationMessageFor(model => model.ModifiedBy, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IsActive)
-                    @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+<section class="content-header">
+    <h1>
+        Edit Quetstion Category
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href=""><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Edit Quetstion Category</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Edit</h3>
+        </div><!-- /.box-header -->
+        <!-- form start -->
+        <form class="form-horizontal" novalidate role="form" action="@Url.Action("EditCategory", "QuestionCategory")" method="post">
+            @Html.AntiForgeryToken()
+            <div class="box-body">
+                @Html.HiddenFor(model => model.CategoryID)
+                @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">Category Name</label>
+                    <div class="col-sm-6">
+                        @Html.EditorFor(model => model.Name, new {htmlAttributes = new {@class = "form-control"}})
+                        @Html.ValidationMessageFor(model => model.Name, "", new {@class = "text-danger"})
+                    </div>
                 </div>
-            </div>
-        </div>
-        <input type="submit" value="Save" class="btn btn-primary" />
-        <input type="submit" value="Create and refresh" class="btn btn-primary" />
-        @Html.ActionLink("Back", "Index", "QuestionCategory", new { area = "Admin", @class = "btn btn btn-light" })
-    </div>
-}
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">IsActive</label>
+                    <div class="col-sm-6">
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="IsActive" value="@Model.IsActive.ToString()" checked=@Model.IsActive id="checkbox" onchange="checkstatus(this)"> IsActive</label>
+                        </div>
+                    </div>
+                </div>
 
-
-@section scripts
-{
-    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>*@
-    <script>
-        $(document).ready(function () {
-            $("#questionCategoryForm").validate({
-                rules: {
-                    
-                },
-                messages: {
-                   
-                },
-                errorElement: "em",
-                errorPlacement: function (error, element) {
-                    // Add the `help-block` class to the error element
-                    error.addClass("help-block");
-
-                    if (element.prop("type") === "checkbox") {
-                        error.insertAfter(element.parent("label"));
-                    } else {
-                        error.insertAfter(element);
-                    }
-                },
-                highlight: function (element, errorClass, validClass) {
-                    $(element).parents(".col-md-4").addClass("has-error").removeClass("has-success");
-
-                },
-                unhighlight: function (element, errorClass, validClass) {
-                    $(element).parents(".col-md-4").addClass("has-success").removeClass("has-error");
-
-                }
-            });
-
-            $("#isActive").change(function () {
-                if ($(this).prop("checked") === true) {
-                    $("#isActive").val("true");
-                }
-                else if ($(this).prop("checked") === false) {
-                    $("#isActive").val("false");
-                }
-            });
-        });
-    </script>
-
-
-    @if (TempData["Success"] != null)
-    {
-        <script type="text/javascript">
-            $.notify(@Html.Raw(Json.Encode(TempData["Success"])), "success");
-        </script>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <button ui-sref="products" class="btn btn-default">Cancel</button>
+                <button type="submit" class="btn btn-success pull-right">Save</button>
+            </div><!-- /.box-footer -->
+        </form>
+    </div><!-- /.box -->
+</section>
+<script language="JavaScript">
+    function checkstatus(id) {
+        if (id.checked == true)
+            id.value = true;
+        else
+            id.value = false;
     }
-
-    @Html.Partial("_MessageBoxError")
-    @if (!string.IsNullOrEmpty((string)TempData["Failure"]))
-    {
-        <script type="text/javascript">
-            // !!!??? chỗ html.raw, ko hiểu sao ko nhận ViewData
-            $("#error-msgbox-modal #error-msg").text(@Html.Raw(Json.Encode(TempData["Failure"])));
-            $("#error-msgbox-modal #error-msg1").text('');
-            $('#error-msgbox-modal').modal('show');
-        </script>
-    }
-}
-
-
-
-
+</script>

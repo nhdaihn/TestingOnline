@@ -4,41 +4,48 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add questions into exam paper</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <h4>Question List</h4>
                 <div class="tablecontainer">
-
-                    <select class="form-control" id="CategoryId" name="CategoryId">
-                        <option selected value="149">Public</option>
-                        <option value="50">Draff</option>
-                    </select>
-                    @*<form id="randomForm" method="post">*@
-                        <input type="text" id="RandomNumber" name="RandomNumber"/>
-                        <button id="random">Random question</button>
-                    @*</form>*@
-                    <br />
-                    <table id="questionTable" class="display" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" name="select_all" value="1" id="question-select-all"></th>
-                                <th>Content</th>
-                                <th>Level</th>
-                                <th>Category</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <div id="form-area" class="row">
+                        <div class="col-md-4">
+                            Question category
+                            <select class="form-control" id="CategoryId" name="CategoryId">
+                                <option selected value="149">Public</option>
+                                <option value="50">Draff</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            Number of question
+                            <input class="form-control" type="text" id="RandomNumber" name="RandomNumber" />
+                        </div>
+                        <div class="col-md-4">
+                            <button id="random" class="btn btn-primary">Random question</button>
+                        </div>
+                    </div>
+                    <div>
+                        <hr />
+                        <table id="questionTable" class="display" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" name="select_all" value="1" id="question-select-all"></th>
+                                    <th>Content</th>
+                                    <th>Category</th>
+                                    <th>Level</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
                 <br />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
@@ -81,13 +88,13 @@
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": "QuestionID", "autoWidth": true },
-                    { "data": "Content", "autoWidth": true },
-                    { "data": "Level", "autoWidth": true },
-                    { "data": "CategoryName", "autoWidth": true },
+                    { "data": "QuestionID", "width" : "3%" },
+                    { "data": "Content", "width": "65%" },
+                    { "data": "CategoryName", "width": "24%" },
+                    { "data": "Level", "width": "5%" },
                     {
-                        "data": "QuestionID", "width": "15px", "render": function (data) {
-                            return '<a class="add-question-row" data-questionid-val="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
+                        "data": "QuestionID", "width": "3%", "render": function (data) {
+                            return '<a class="add-question-row" data-questionid-val="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-plus"></span></a>';
                         },
                     }
                 ],

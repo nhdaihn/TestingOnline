@@ -15,140 +15,99 @@ namespace TestingSystem.Areas.Admin.Controllers.QuestionCategory
         {
             this.questionCategorySevice = questionCategorySevice;
         }
-        public ActionResult Index(/*string txtSearch, int? page*/)
+        public ActionResult Index()
         {
-            //int pageSize = 3;
-            //int pageNumber = (page ?? 1);
-            //var listCategory = questionCategorySevice.GetAll();
-            //if (!String.IsNullOrEmpty(txtSearch))
-            //{
-            //    var listQuestionCategory = questionCategorySevice.Search(txtSearch);
-            //    return View(listQuestionCategory.ToPagedList(pageNumber, pageSize));
 
-            //}
-            //else
-            //{
-            //    ModelState.AddModelError("", "khong tim thay ket qua " + txtSearch);
-            //}
-
-            //var listCategories = new List<TestingSystem.Models.QuestionCategory>();
-            //listCategories = questionCategorySevice.GetAll().ToList();
-            //return Json(new { data = listCategories }, JsonRequestBehavior.AllowGet);
-            //return View(listCategory);
+            var listCategories = new List<Models.QuestionCategory>();
+            listCategories = questionCategorySevice.GetAll().ToList();
+            ViewBag.ListCategories = listCategories;
             return View();
-
-
         }
-        [ActionName("GetCategories")]
+
+        [HttpPost]
+        public ActionResult Index(string KeySearch)
+        {
+            var listCategories = new List<Models.QuestionCategory>();
+            listCategories = questionCategorySevice.SearchCategories(KeySearch).ToList();
+            ViewBag.ListCategories = listCategories;
+            return View();
+        }
+        //[ActionName("GetCategories")]
         public ActionResult GetCategories( /*string txtSearch, int? page*/)
         {
             var listCategories = new List<Models.QuestionCategory>();
             listCategories = questionCategorySevice.GetAll().ToList();
-            return Json(new { data = listCategories }, JsonRequestBehavior.AllowGet);
+            ViewBag.ListCategories = listCategories;
+            return View();
         }
 
         public ActionResult AddCategory()
         {
-            setviewbagcreatedby();
-            setviewbagmodifiedby();
-
             return View();
         }
         [HttpPost]
         public ActionResult AddCategory(Models.QuestionCategory category)
         {
-            //category.CreatedBy =
-            //cate.createddate = 
             category.ModifiedBy = 1;
-            setviewbagcreatedby();
-            setviewbagmodifiedby();
+            category.CreatedBy = 1;
             try
             {
                 if (ModelState.IsValid)
                 {
                     if (category.CategoryID == 0)
                     {
-                        
                         if (questionCategorySevice.AddCategoryQuestion(category) > 0)
                         {
                             Success = "Insert question category successfully!";
-                            return RedirectToAction("Index");
+                            return RedirectToAction("AddCategory", "QuestionCategory");
                         }
                     }
                     else
                     {
-                        //category.ModifiedDate = DateTime.Now;
                         category.ModifiedBy = 1;
                         if (questionCategorySevice.UpdateCategoryQuestion(category) > 0)
                         {
                             Success = "Update exam paper successfully!";
-                            return RedirectToAction("Index");
+                            return RedirectToAction("AddCategory", "QuestionCategory");
                         }
                     }
                 }
-                Failure = "Something went wrong, please try again!";
-                return new JsonResult { Data = new { status = false } };
+                Success = "Update exam paper successfully!";
+                return RedirectToAction("AddCategory", "QuestionCategory");
             }
             catch (Exception exception)
             {
                 Failure = exception.Message;
                 return View(category);
             }
-
-            //return View();
         }
-
-        public void setviewbagcreatedby(long? selectedid = null)
-        {
-            ViewBag.createdby = new SelectList(questionCategorySevice.GetAllUser(), "userid", "username", selectedid);
-        }
-        public void setviewbagmodifiedby(long? selectedid = null)
-        {
-            ViewBag.modifiedby = new SelectList(questionCategorySevice.GetAllUser(), "userid", "username", selectedid);
-        }
+       
         public ActionResult EditCategory(int questionCategory)
         {
-            setviewbagcreatedby();
-            setviewbagmodifiedby();
             var list = questionCategorySevice.GetById(questionCategory);
-
             return View(list);
         }
         [HttpPost]
         public ActionResult EditCategory(Models.QuestionCategory questionCategory)
         {
-
-            //var a =  Questioncategory(questionCategory.id)
-
-            //a.Name = questionCategory.Name;
-            //a.isactive
-            //a..modifiledDate = date
-            //a. 
-
-
             questionCategory.ModifiedBy = 1;
-            setviewbagcreatedby();
-            setviewbagmodifiedby();
+            questionCategory.CreatedBy = 1;
             try
             {
-                if (ModelState.IsValid)
-                {
-                   
+               
+                    if (questionCategorySevice.UpdateCategoryQuestion(questionCategory) > 0)
+                    {
+                        Success = "Update question category successfully!";
+                        return RedirectToAction("Index", "QuestionCategory");
+                    }
 
-                        if (questionCategorySevice.UpdateCategoryQuestion(questionCategory) > 0)
-                        {
-                            Success = "Update question category successfully!";
-                            return RedirectToAction("Index");
-                        }
-                    
                     else
                     {
-                        //category.ModifiedDate = DateTime.Now;
                         Success = "Update question category false!";
                     }
-                }
+                
                 Failure = "Something went wrong, please try again!";
-                return new JsonResult { Data = new { status = false } };
+                return RedirectToAction("EditCategory", "QuestionCategory");
             }
             catch (Exception exception)
             {
@@ -157,14 +116,6 @@ namespace TestingSystem.Areas.Admin.Controllers.QuestionCategory
             }
         }
 
-        //public ActionResult Delete(int[] dsxoa)
-        //{
-        //    setviewbagcreatedby();
-        //    setviewbagmodifiedby();
-        //    questionCategorySevice.DeleteQuestionCategory(dsxoa);
-
-        //    return RedirectToAction("Index", "QuestionCategory");
-        //}
         public ActionResult Delete(List<int> ids)
         {
             try
@@ -174,31 +125,47 @@ namespace TestingSystem.Areas.Admin.Controllers.QuestionCategory
                     int i = 0;
                     foreach (var id in ids)
                     {
-                        if (questionCategorySevice.Delete(id) > 0)
+                        if (questionCategorySevice.QuestionCategoryID(Convert.ToInt32(id)) == false)
                         {
-                            i++;
-                            continue;
+                            Success = "No Delete";
                         }
                         else
                         {
-                            
-                            break;
+                            if (questionCategorySevice.Delete(id) > 0)
+                            {
+                                i++;
+                                continue;
+                            }
+                            else
+                            {
+
+                                break;
+                            }
                         }
 
                     }
                     if (i > 0)
                     {
-                        Success = "Delete exam paper successfully!";
-                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                        Success = "Delete Question Category Successfully!";
+                        return RedirectToAction("Index", "QuestionCategory");
+                    }
+                    else
+                    {
+                        Failure = "Can not delete Category because Category in Question";
+                        return RedirectToAction("Index", "QuestionCategory");
                     }
                 }
-                Failure = "Something went wrong, please try again!";
-                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    Failure = "Can not delete Category because Category in Question";
+                    return RedirectToAction("Index", "QuestionCategory");
+                }
+
             }
             catch (Exception exception)
             {
                 Failure = exception.Message;
-                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Index", "QuestionCategory");
             }
         }
 

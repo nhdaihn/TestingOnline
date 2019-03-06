@@ -1,16 +1,13 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Exam paper list";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <h4>Exam Paper List</h4>
 <div class="tablecontainer">
-    @*<a class="popup btn btn-primary" href="/Employee/Employee/0">Add new</a>*@
     <div class="button-area">
         <a class="group-btn" id="btn-add" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-plus"></span>   Add new</a>
-        <a class="group-btn" id="btn-export" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-save"></span>   Export file</a>
-        <a class="group-btn" id="btn-import" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-open"></span>   Import file</a>
+        <a class="group-btn" id="btn-import" href="@Url.Action("ImportExamPaper","ExamPaper")"><span class="glyphicon glyphicon-open"></span>   Import file</a>
         <a class="btn-delete-all" id="delete-all" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>   Delete all</a>
     </div>
 
@@ -21,9 +18,9 @@
                 <th>Title</th>
                 <th>Questions</th>
                 <th>Time</th>
-                <th>Created Date</th>
                 <th>Status</th>
-                <th>Is Active</th>
+                <th>CreatedDate</th>
+                <th>IsActive</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -65,17 +62,27 @@
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": "ExamPaperID", "autoWidth": true },
-                    { "data": "Title", "autoWidth": true },
-                    { "data": "NumberOfQuestion", "autoWidth": true },
-                    { "data": "Time", "autoWidth": true },
+                    { "data": "ExamPaperID", "width": "3%" },
+                    { "data": "Title", "width": "60%" },
+                    { "data": "NumberOfQuestion", "width": "8%" },
+                    { "data": "Time", "width": "8%" },
                     {
-                        "data": "CreatedDate", "autoWidth": true, "render": function (data) {
+                        "data": "Status", "width": "3%", "render": function (data) {
+                            if (data) {
+                                return '<input type="checkbox" disabled checked/>';
+                            }
+                            else {
+                                return '<input type="checkbox" disabled />';
+                            }
+                        }
+                    },
+                    {
+                        "data": "CreatedDate", "width": "6%", "render": function (data) {
                             return moment(data).format('DD/MM/YYYY');
                         }
                     },
                     {
-                        "data": "Status", "autoWidth": true, "render": function (data) {
+                        "data": "IsActive", "width": "7%", "render": function (data) {
                             if (data) {
                                 return '<input type="checkbox" disabled checked/>';
                             }
@@ -85,18 +92,7 @@
                         }
                     },
                     {
-                        "data": "IsActive", "autoWidth": true, "render": function (data) {
-                            if (data) {
-                                return '<input type="checkbox" disabled checked/>';
-                            }
-                            else {
-                                return '<input type="checkbox" disabled />';
-                            }
-                        }
-                    },
-
-                    {
-                        "data": "ExamPaperID", "width": "15px", "render": function (data) {
+                        "data": "ExamPaperID", "width": "5%", "render": function (data) {
                             return '<a class="update-row" href="/Admin/ExamPaper/ExamPaper/?examPaperId=' + data + '"><span class="glyphicon glyphicon-pencil"></span></a>   <a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
                         },
                     }
@@ -221,58 +217,6 @@
                     });
 
             }, 500);
-
-            //$('.tablecontainer').on('click', 'a.popup', function (e) {
-
-            //    e.preventDefault();
-            //    OpenPopup($(this).attr('href'));
-            //});
-
-            //function OpenPopup(pageUrl) {
-            //
-            //    var $pageContent = $('<div/>');
-            //    $pageContent.load(pageUrl, function () {
-
-            //        $('#popupForm', $pageContent).removeData('validator');
-            //        $('#popupForm', $pageContent).removeData('unobtrusivevalidation');
-            //        $.validator.unobtrusive.parse('form');
-
-            //    });
-
-            //    $dialog = $('<div class="popupWindow" style="overflow:auto"></div>')
-            //        .html($pageContent)
-            //        .dialog({
-            //            draggable: false,
-            //            autoOpen: false,
-            //            resizable: false,
-            //            model: true,
-            //            title: 'Employee',
-            //            height: 550,
-            //            width: 600,
-            //            close: function () {
-
-            //                $dialog.dialog('destroy').remove();
-            //            }
-            //        })
-
-
-            //    $('.popupWindow').on('submit', '#popupForm', function (e) {
-            //        var url = $('#popupForm')[0].action;
-            //        $.ajax({
-            //            type: "POST",
-            //            url: url,
-            //            data: $('#popupForm').serialize(),
-            //            success: function (data) {
-            //                if (data.status) {
-            //                    $dialog.dialog('close');
-            //                    employTable.ajax.reload();
-            //                }
-            //            }
-            //        });
-            //    })
-
-            //    $dialog.dialog('open');
-            //};
         });
     </script>
 }
