@@ -156,6 +156,7 @@ namespace TestingSystem.Data.Repositories
                 questionDto.IsActive = question.IsActive;
                 questionDto.Content = question.Content;
                 questionDto.Image = question.Image;
+                questionDto.QuestionID = question.QuestionID;
                 questionDto.CreatedBy = question.CreatedBy;
                 questionDto.CreatedDate = question.CreatedDate;
                 questionDto.ModifiedBy = question.ModifiedBy;
