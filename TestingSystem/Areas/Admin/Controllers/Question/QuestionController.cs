@@ -8,6 +8,7 @@ using System.Web;
 using System.IO;
 using System.Linq;
 using System;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace TestingSystem.Areas.Admin.Controllers.Question
 {
@@ -16,13 +17,18 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         private readonly IQuestionService questionService;
         private readonly IAnswerService answerService;
         private readonly IQuestionCategorySevice questionCategorySevice;
+        private readonly IExamPaperService examPaperService;
 
-        public QuestionController(IQuestionService questionService, IAnswerService answerService, IQuestionCategorySevice questionCategorySevice)
+
+        public QuestionController(IQuestionService questionService, IAnswerService answerService,
+            IQuestionCategorySevice questionCategorySevice, IExamPaperService examPaperService)
         {
             this.questionService = questionService;
             this.answerService = answerService;
             this.questionCategorySevice = questionCategorySevice;
+            this.examPaperService = examPaperService;
         }
+
         [HttpPost]
         public JsonResult AddCategory(Models.QuestionCategory category)
         {
@@ -31,6 +37,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             category.CreatedBy = 1;
             return Json(questionCategorySevice.AddCategoryQuestion(category), JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult Questions()
         {
 
@@ -50,11 +57,14 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             var listQuestionDtos = questionService.GetAllQuestionDtos();
             return Json(new { data = listQuestionDtos.OrderBy(x => x.CategoryID) }, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult Search(string input)
         {
             List<Models.QuestionCategory> listCategory = new List<Models.QuestionCategory>();
-            listCategory.Add(new Models.QuestionCategory { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
-            listCategory.Add(new Models.QuestionCategory { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
+            listCategory.Add(new Models.QuestionCategory
+            { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
+            listCategory.Add(new Models.QuestionCategory
+            { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
             List<Level> listLevels = new List<Level>();
             listLevels.Add(new Level { LevelId = 1, LevelStep = 1, Name = "Easy" });
             listLevels.Add(new Level { LevelId = 2, LevelStep = 2, Name = "Normal" });
@@ -80,6 +90,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 {
                     return PartialView("~/Areas/Admin/Views/Question/NotFound.cshtml");
                 }
+
                 {
                     return View(question);
                 }
@@ -127,12 +138,14 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                         }
 
                     }
+
                     if (i > 0)
                     {
                         Success = "Delete exam paper successfully!";
                         return Json(new { status = true }, JsonRequestBehavior.AllowGet);
                     }
                 }
+
                 Failure = "Something went wrong, please try again!";
                 return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
@@ -148,9 +161,9 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             // This is only for show by default one row for insert data to the database
             List<Answer> answers = new List<Answer>
             {
-                new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false },
-                new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false },
-            };           
+                new Answer() {AnswerID = 0, AnswerContent = "", IsCorrect = false},
+                new Answer() {AnswerID = 0, AnswerContent = "", IsCorrect = false},
+            };
             //get all category
             var listCategory = questionCategorySevice.GetAllQuestionCategories();
             //get all level
@@ -171,7 +184,8 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             question.ModifiedBy = Convert.ToInt32(Session["ModifiedBy"]);
             if (Image != null && Image.ContentLength > 0)
             {
-                string filePath = Path.Combine(Server.MapPath("~/Content/QuestionUpload/Images/"), Path.GetFileName(Image.FileName));
+                string filePath = Path.Combine(Server.MapPath("~/Content/QuestionUpload/Images/"),
+                    Path.GetFileName(Image.FileName));
                 Image.SaveAs(filePath);
                 question.Image = Image.FileName;
             }
@@ -179,6 +193,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             {
                 question.Image = null;
             }
+
             var addQuestion = questionService.AddQuestion(question);
             TranferID.ID = addQuestion;
             // Create Answer
@@ -206,33 +221,35 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         {
 
             // This is only for show by default one row for insert data to the database
-            List<Answer> answers = new List<Answer> { new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false } };
+            List<Answer> answers = new List<Answer>
+                {new Answer() {AnswerID = 0, AnswerContent = "", IsCorrect = false}};
             return View(answers);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateAnswer(List<Answer> listAnswers)
         {
-                if (ModelState.IsValid)
+            if (ModelState.IsValid)
+            {
+                foreach (var i in listAnswers)
                 {
-                    foreach (var i in listAnswers)
+                    i.QuestionID = TranferID.ID;
+                    if (i.QuestionID <= 0)
                     {
-                        i.QuestionID = TranferID.ID;
-                        if (i.QuestionID <=0)
-                        {
-                            return RedirectToAction("Create", "Question");
-                        }
-                        else
-                        {
-                            answerService.AddAnswer(i);
-                        }
+                        return RedirectToAction("Create", "Question");
                     }
-
-                    ViewBag.Message = "Data successfully saved!";
-                    ModelState.Clear();
+                    else
+                    {
+                        answerService.AddAnswer(i);
+                    }
                 }
 
-                return RedirectToAction("Questions");
+                ViewBag.Message = "Data successfully saved!";
+                ModelState.Clear();
+            }
+
+            return RedirectToAction("Questions");
         }
 
         public ActionResult Edit(int? id)
@@ -242,10 +259,10 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             var listLevels = questionService.GetAlLevels();
             //1get all Answer by Question ID
             var listAnswerByQuestionID = questionService.GetAlLevels(); // temp
-            ViewBag.listAnswerByQuestionI = listAnswerByQuestionID;//temp
+            ViewBag.listAnswerByQuestionI = listAnswerByQuestionID; //temp
             //2Count Answer
-            var countAnswer = 3;//temp
-            ViewBag.countAnswer = countAnswer;//temp
+            var countAnswer = 3; //temp
+            ViewBag.countAnswer = countAnswer; //temp
 
             //get all category
             ViewBag.listCategory = listCategory;
@@ -262,6 +279,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 {
                     return PartialView("~/Areas/Admin/Views/Question/NotFound.cshtml");
                 }
+
                 {
                     return View(question);
                 }
@@ -275,7 +293,8 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         {
             if (Image != null && Image.ContentLength > 0)
             {
-                string filePath = Path.Combine(Server.MapPath("~/Content/QuestionUpload/Images/"), Path.GetFileName(Image.FileName));
+                string filePath = Path.Combine(Server.MapPath("~/Content/QuestionUpload/Images/"),
+                    Path.GetFileName(Image.FileName));
                 Image.SaveAs(filePath);
                 question.Image = Image.FileName;
             }
@@ -284,6 +303,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 var img = questionService.GetQuetionById(question.QuestionID).Image;
                 question.Image = img;
             }
+
             questionService.UpdateQuestion(question);
             return RedirectToAction("Questions");
         }
@@ -296,12 +316,100 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId)
+        public ActionResult GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId, int examPaperId)
         {
             var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
-            questions = questionService.GetQuestionsByQuestionCategoryIdAndExamPaperId(categoryId,examPaperId).ToList();
+            questions = questionService.GetQuestionsByQuestionCategoryIdAndExamPaperId(categoryId, examPaperId)
+                .ToList();
 
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult QuestionExcelAnswer()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult QuestionExcelAnswer(HttpPostedFileBase excelfile)
+        {
+            if (excelfile == null)
+            {
+                ViewBag.ThongBao = "Vui long chon file !";
+                return View();
+            }
+            else
+            {
+                if (excelfile.FileName.EndsWith("xls") || excelfile.FileName.EndsWith("xlsx"))
+                {
+                    string path = Path.Combine(Server.MapPath("~/FileExcel/"),
+                        Guid.NewGuid().ToString() + Path.GetExtension(excelfile.FileName));
+                    excelfile.SaveAs(path);
+                    Excel.Application application = new Excel.Application
+                    {
+                        Visible = true
+                    };
+                    Excel.Workbook workbook = application.Workbooks.Open(path);
+                    Excel.Worksheet worksheet = workbook.Sheets[@"Sheet1"];
+                    Excel.Range range = worksheet.UsedRange;
+
+                    //Excel.Worksheet worksheet1 = workbook.Sheets["Sheet2"];
+                    //Excel.Range range1 = worksheet1.UsedRange;
+
+                    Models.ExamPaper examPaper = new Models.ExamPaper();
+                    examPaper.Title = ((Excel.Range)range.Cells[3, 1]).Text;
+                    examPaper.Time = int.Parse(((Excel.Range)range.Cells[4, 1]).Text);
+                    examPaper.Status = Boolean.Parse(((Excel.Range)range.Cells[6, 1]).Text);
+                    examPaper.IsActive = Boolean.Parse(((Excel.Range)range.Cells[5, 1]).Text);
+                    examPaper.CreatedBy = 1;
+                    examPaper.CreatedDate = DateTime.Now;
+                    examPaper.ModifiedBy = 1;
+                    examPaper.ModifiedDate = DateTime.Now;
+                    int result = examPaperService.Create(examPaper);
+
+                    for (int row = 11; row <= range.Rows.Count; row++)
+                    {
+                        Models.Question question = new Models.Question
+                        {
+                            Content = ((Excel.Range)range.Cells[row, 1]).Text,
+                            Level = int.Parse(((Excel.Range)range.Cells[row, 2]).Text),
+                            CategoryID = int.Parse(((Excel.Range)range.Cells[row, 3]).Text),
+                            IsActive = true,
+                            CreatedBy = 1,
+                            CreatedDate = DateTime.Now,
+                            ModifiedBy = 1,
+                            ModifiedDate = DateTime.Now
+                        };
+                        int questionId = questionService.AddQuestion(question);
+
+                        Answer answer = new Answer();
+                        int j = 5;
+                        for (int i = 4; i <= 13; i += 2)
+                        {
+                            string content = ((Excel.Range)range.Cells[row, i]).Text;
+                            if (content != "")
+                            {
+                                answer.AnswerContent = content;
+                                answer.IsCorrect = Boolean.Parse(((Excel.Range)range.Cells[row, j]).Text);
+                                answer.QuestionID = questionId;
+                                answerService.AddAnswer(answer);
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                            j+=2;
+                        }
+
+                    }
+                    return RedirectToAction("Questions");
+                }
+                else
+                {
+                    ViewBag.ThongBao = "Vui long chon dung file excel !";
+                    return View();
+                }
+            }
         }
     }
 }
