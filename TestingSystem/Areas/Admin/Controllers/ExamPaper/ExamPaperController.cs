@@ -9,6 +9,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using TestingSystem.Models;
 using Rotativa.MVC;
 using TestingSystem.DataTranferObject.Question;
+using OfficeOpenXml;
 
 namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
 {
@@ -18,15 +19,16 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
         private readonly IQuestionService questionService;
         private readonly IAnswerService answerService;
         private readonly IExamPaperQuestionService examPaperQuestionService;
+        private readonly IQuestionCategorySevice questionCategorySevice ;
 
 
-
-        public ExamPaperController(IExamPaperService examPaperService, IQuestionService questionService, IAnswerService answerService, IExamPaperQuestionService examPaperQuestionService)
+        public ExamPaperController(IExamPaperService examPaperService, IQuestionService questionService, IAnswerService answerService, IExamPaperQuestionService examPaperQuestionService,IQuestionCategorySevice questionCategorySevice)
         {
             this.examPaperService = examPaperService;
             this.questionService = questionService;
             this.answerService = answerService;
             this.examPaperQuestionService = examPaperQuestionService;
+            this.questionCategorySevice = questionCategorySevice;
         }
 
 
@@ -174,22 +176,66 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
                         Excel.Range range = worksheet.UsedRange;
 
                         Models.ExamPaper examPaper = new Models.ExamPaper();
-                        examPaper.Title = ((Excel.Range)range.Cells[3, 1]).Text;
-                        examPaper.Time = int.Parse(((Excel.Range)range.Cells[4, 1]).Text);
-                        examPaper.Status = Boolean.Parse(((Excel.Range)range.Cells[6, 1]).Text);
-                        examPaper.IsActive = Boolean.Parse(((Excel.Range)range.Cells[5, 1]).Text);
+                        examPaper.Title = ((Excel.Range)range.Cells[3, 2]).Text;
+                        examPaper.Time = int.Parse(((Excel.Range)range.Cells[4, 2]).Text);
+                        if(((Excel.Range)range.Cells[5, 2]).Text=="Public")
+                        {
+                                examPaper.Status = true;
+                        }else if(((Excel.Range)range.Cells[5, 2]).Text == "Draff")
+                        {
+                            examPaper.Status = false;
+                        }
+                        else
+                        {
+                            Failure = "Exam paper status must be select from dropdown list";
+                            return RedirectToAction("ImportExamPaper");
+                        }
+                        examPaper.IsActive = Boolean.Parse(((Excel.Range)range.Cells[6, 2]).Text);
                         examPaper.CreatedBy = 1;
                         examPaper.CreatedDate = DateTime.Now;
                         examPaper.ModifiedBy = 1;
                         examPaper.ModifiedDate = DateTime.Now;
                         int examPaperId = examPaperService.Create(examPaper);
+                        var listQuestionCategory = questionCategorySevice.GetAll();
                         for (int row = 11; row <= range.Rows.Count; row++)
                         {
+                            int level = 0;
+                            if (((Excel.Range)range.Cells[row, 2]).Text == "Hard")
+                            {
+                                level = 3;
+                            }else if(((Excel.Range)range.Cells[row, 2]).Text == "Normal")
+                            {
+                                level = 2;
+                            }
+                            else if (((Excel.Range)range.Cells[row, 2]).Text == "Easy")
+                            {
+                                level = 1;
+                            }
+                            else
+                            {
+                                Failure = "Question level must be select from dropdown list";
+                                return RedirectToAction("ImportExamPaper");
+                            }
+                            int categoryId = 0;
+                            int k = 0;
+                            foreach(var item in listQuestionCategory)
+                            {
+                                if(((Excel.Range)range.Cells[row, 3]).Text == item.Name)
+                                {
+                                    categoryId = item.CategoryID;
+                                    k++;
+                                }
+                            }
+                            if (k == 0)
+                            {
+                                Failure = "Question category must be select from dropdown list";
+                                return RedirectToAction("ImportExamPaper");
+                            }
                             Models.Question question = new Models.Question
                             {
                                 Content = ((Excel.Range)range.Cells[row, 1]).Text,
-                                Level = int.Parse(((Excel.Range)range.Cells[row, 2]).Text),
-                                CategoryID = int.Parse(((Excel.Range)range.Cells[row, 3]).Text),
+                                CategoryID = categoryId,
+                                Level = level,
                                 IsActive = true,
                                 CreatedBy = 1,
                                 CreatedDate = DateTime.Now,
@@ -197,7 +243,6 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
                                 ModifiedDate = DateTime.Now
                             };
                             int questionId = questionService.AddQuestion(question);
-                            examPaperQuestionService.InsertExamPaperQuestion(examPaperId, questionId);
 
                             Answer answer = new Answer();
                             int j = 5;
@@ -217,6 +262,7 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
                                 }
                                 j += 2;
                             }
+                            examPaperQuestionService.InsertExamPaperQuestion(examPaperId, questionId);
                         }
                     }
                     catch (Exception ex)
@@ -275,8 +321,100 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
             catch (Exception e)
             {
                 Failure = e.Message;
-                return Json(new {status = false }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public void ExamPaperTemplateFile()
+        {
+            ExcelPackage pck = new ExcelPackage();
+            ExcelWorksheet ws = pck.Workbook.Worksheets.Add("ExamPaper");
+            ws.Cells["A1"].Style.Font.Bold = true;
+            ws.Cells["A1"].Value = "Exam Paper Infomation";
+
+            ws.Cells["A3"].Style.Font.Bold = true;
+            ws.Cells["A3"].Value = "Title";
+            ws.Cells["B3"].Value = "Exam paper title";
+            ws.Cells["A4"].Style.Font.Bold = true;
+            ws.Cells["A4"].Value = "Time";
+            ws.Cells["B4"].Value = "120";
+            ws.Cells["A5"].Style.Font.Bold = true;
+            ws.Cells["A5"].Value = "Status";
+            var status = ws.DataValidations.AddListValidation("B5");
+            status.Formula.Values.Add("Public");
+            status.Formula.Values.Add("Draff");
+
+            ws.Cells["A6"].Style.Font.Bold = true;
+            ws.Cells["A6"].Value = "Is Active";
+            ws.Cells["B6"].Value = "TRUE";
+            ws.Cells["A8"].Style.Font.Bold = true;
+            ws.Cells["A8"].Value = "Question Infomation";
+            ws.Cells["D8"].Style.Font.Bold = true;
+            ws.Cells["D8"].Value = "Answer Infomation";
+            ws.Cells["A10"].Style.Font.Bold = true;
+            ws.Cells["A10"].Value = "Question Content";
+            ws.Cells["B10"].Style.Font.Bold = true;
+            ws.Cells["B10"].Value = "Level";
+            ws.Cells["C10"].Style.Font.Bold = true;
+            ws.Cells["C10"].Value = "Category";
+            ws.Cells["D10"].Style.Font.Bold = true;
+            ws.Cells["D10"].Value = "Answer1";
+            ws.Cells["E10"].Style.Font.Bold = true;
+            ws.Cells["E10"].Value = "IsCorrect Answer1";
+            ws.Cells["F10"].Style.Font.Bold = true;
+            ws.Cells["F10"].Value = "Answer2";
+            ws.Cells["G10"].Style.Font.Bold = true;
+            ws.Cells["G10"].Value = "IsCorrect Answer2";
+            ws.Cells["H10"].Style.Font.Bold = true;
+            ws.Cells["H10"].Value = "Answer3";
+            ws.Cells["I10"].Style.Font.Bold = true;
+            ws.Cells["I10"].Value = "IsCorrect Answer3";
+            ws.Cells["J10"].Style.Font.Bold = true;
+            ws.Cells["J10"].Value = "Answer4";
+            ws.Cells["K10"].Style.Font.Bold = true;
+            ws.Cells["K10"].Value = "IsCorrect Answer4";
+            ws.Cells["L10"].Style.Font.Bold = true;
+            ws.Cells["L10"].Value = "Answer5";
+            ws.Cells["M10"].Style.Font.Bold = true;
+            ws.Cells["M10"].Value = "IsCorrect Answer5";
+
+            ws.Cells["A11"].Value = "Question Content";
+            var level = ws.DataValidations.AddListValidation("B11");
+            level.Formula.Values.Add("Easy");
+            level.Formula.Values.Add("Normal");
+            level.Formula.Values.Add("Hard");
+
+            var category = ws.DataValidations.AddListValidation("C11");
+
+            ws.Cells["D11"].Value = "answer1";
+            ws.Cells["E11"].Value = "TRUE";
+            ws.Cells["F11"].Value = "answer2";
+            ws.Cells["G11"].Value = "FALSE";
+            ws.Cells["H11"].Value = "answer3";
+            ws.Cells["I11"].Value = "FALSE";
+
+            ExcelWorksheet noteSheet = pck.Workbook.Worksheets.Add("Note");
+
+            noteSheet.Cells["A1"].Style.Font.Bold = true;
+            noteSheet.Cells["A1"].Value = "(*) Note";
+            noteSheet.Cells["A2"].Value = @"To import exam paper correctly, ""Satus"", ""Level"", ""Category"" must select from dropdown list";
+            noteSheet.Cells["A3"].Value = @"For each question have maximum 5 answer, if there is no content leave It blank";
+            noteSheet.Cells["A:AZ"].AutoFitColumns();
+
+
+
+            var listQuestionCategory = questionCategorySevice.GetAll();
+            foreach(var item in listQuestionCategory)
+            {
+                category.Formula.Values.Add(item.Name);
+            }
+
+            ws.Cells["A:AZ"].AutoFitColumns();
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment: filename=" + "ExamPaperTemplate.xlsx");
+            Response.BinaryWrite(pck.GetAsByteArray());
+            Response.End();
         }
     }
 }
