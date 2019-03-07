@@ -1,28 +1,57 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using TestingSystem.Sevice;
-using System.Linq;
-using System;
-using System.IO;
-using System.Web;
-using Excel = Microsoft.Office.Interop.Excel;
-using TestingSystem.Models;
-using Rotativa.MVC;
-using TestingSystem.DataTranferObject.Question;
-using OfficeOpenXml;
-
-namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
+﻿namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
 {
+    using OfficeOpenXml;
+    using Rotativa.MVC;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+    using TestingSystem.DataTranferObject.Question;
+    using TestingSystem.Models;
+    using TestingSystem.Sevice;
+    using Excel = Microsoft.Office.Interop.Excel;
+
+    /// <summary>
+    /// Defines the <see cref="ExamPaperController" />
+    /// </summary>
     public class ExamPaperController : BaseController
     {
+        /// <summary>
+        /// Defines the examPaperService
+        /// </summary>
         private readonly IExamPaperService examPaperService;
+
+        /// <summary>
+        /// Defines the questionService
+        /// </summary>
         private readonly IQuestionService questionService;
+
+        /// <summary>
+        /// Defines the answerService
+        /// </summary>
         private readonly IAnswerService answerService;
+
+        /// <summary>
+        /// Defines the examPaperQuestionService
+        /// </summary>
         private readonly IExamPaperQuestionService examPaperQuestionService;
-        private readonly IQuestionCategorySevice questionCategorySevice ;
 
+        /// <summary>
+        /// Defines the questionCategorySevice
+        /// </summary>
+        private readonly IQuestionCategorySevice questionCategorySevice;
 
-        public ExamPaperController(IExamPaperService examPaperService, IQuestionService questionService, IAnswerService answerService, IExamPaperQuestionService examPaperQuestionService,IQuestionCategorySevice questionCategorySevice)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExamPaperController"/> class.
+        /// </summary>
+        /// <param name="examPaperService">The examPaperService<see cref="IExamPaperService"/></param>
+        /// <param name="questionService">The questionService<see cref="IQuestionService"/></param>
+        /// <param name="answerService">The answerService<see cref="IAnswerService"/></param>
+        /// <param name="examPaperQuestionService">The examPaperQuestionService<see cref="IExamPaperQuestionService"/></param>
+        /// <param name="questionCategorySevice">The questionCategorySevice<see cref="IQuestionCategorySevice"/></param>
+        public ExamPaperController(IExamPaperService examPaperService, IQuestionService questionService, IAnswerService answerService, IExamPaperQuestionService examPaperQuestionService, IQuestionCategorySevice questionCategorySevice)
         {
             this.examPaperService = examPaperService;
             this.questionService = questionService;
@@ -31,12 +60,19 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
             this.questionCategorySevice = questionCategorySevice;
         }
 
-
+        /// <summary>
+        /// The ExamPapers
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult ExamPapers()
         {
             return View();
         }
 
+        /// <summary>
+        /// The GetExamPapers
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [ActionName("GetExamPapers")]
         public ActionResult GetExamPapers()
         {
@@ -45,7 +81,11 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
             return Json(new { data = examPapers }, JsonRequestBehavior.AllowGet);
         }
 
-
+        /// <summary>
+        /// The ExamPaper
+        /// </summary>
+        /// <param name="examPaperId">The examPaperId<see cref="int?"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         [ActionName("ExamPaper")]
         public ActionResult ExamPaper(int? examPaperId)
@@ -67,6 +107,11 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
             return View(model);
         }
 
+        /// <summary>
+        /// The ExamPaper
+        /// </summary>
+        /// <param name="examPaper">The examPaper<see cref="Models.ExamPaper"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("ExamPaper")]
@@ -108,6 +153,11 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
             }
         }
 
+        /// <summary>
+        /// The Delete
+        /// </summary>
+        /// <param name="ids">The ids<see cref="List{int}"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Delete(List<int> ids)
         {
             try
@@ -145,11 +195,20 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
             }
         }
 
+        /// <summary>
+        /// The ImportExamPaper
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult ImportExamPaper()
         {
             return View();
         }
 
+        /// <summary>
+        /// The ImportExamPaper
+        /// </summary>
+        /// <param name="excelfile">The excelfile<see cref="HttpPostedFileBase"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult ImportExamPaper(HttpPostedFileBase excelfile)
         {
@@ -178,10 +237,11 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
                         Models.ExamPaper examPaper = new Models.ExamPaper();
                         examPaper.Title = ((Excel.Range)range.Cells[3, 2]).Text;
                         examPaper.Time = int.Parse(((Excel.Range)range.Cells[4, 2]).Text);
-                        if(((Excel.Range)range.Cells[5, 2]).Text=="Public")
+                        if (((Excel.Range)range.Cells[5, 2]).Text == "Public")
                         {
-                                examPaper.Status = true;
-                        }else if(((Excel.Range)range.Cells[5, 2]).Text == "Draff")
+                            examPaper.Status = true;
+                        }
+                        else if (((Excel.Range)range.Cells[5, 2]).Text == "Draff")
                         {
                             examPaper.Status = false;
                         }
@@ -203,7 +263,8 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
                             if (((Excel.Range)range.Cells[row, 2]).Text == "Hard")
                             {
                                 level = 3;
-                            }else if(((Excel.Range)range.Cells[row, 2]).Text == "Normal")
+                            }
+                            else if (((Excel.Range)range.Cells[row, 2]).Text == "Normal")
                             {
                                 level = 2;
                             }
@@ -218,9 +279,9 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
                             }
                             int categoryId = 0;
                             int k = 0;
-                            foreach(var item in listQuestionCategory)
+                            foreach (var item in listQuestionCategory)
                             {
-                                if(((Excel.Range)range.Cells[row, 3]).Text == item.Name)
+                                if (((Excel.Range)range.Cells[row, 3]).Text == item.Name)
                                 {
                                     categoryId = item.CategoryID;
                                     k++;
@@ -281,6 +342,11 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
             }
         }
 
+        /// <summary>
+        /// The ExportToPdf
+        /// </summary>
+        /// <param name="examPaperId">The examPaperId<see cref="int"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult ExportToPdf(int examPaperId)
         {
             try
@@ -304,9 +370,13 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
                 Failure = e.Message;
                 return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
-
         }
 
+        /// <summary>
+        /// The ExportToPdfView
+        /// </summary>
+        /// <param name="examPaperId">The examPaperId<see cref="int"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult ExportToPdfView(int examPaperId)
         {
             try
@@ -325,6 +395,9 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
             }
         }
 
+        /// <summary>
+        /// The ExamPaperTemplateFile
+        /// </summary>
         public void ExamPaperTemplateFile()
         {
             ExcelPackage pck = new ExcelPackage();
@@ -404,7 +477,7 @@ namespace TestingSystem.Areas.Admin.Controllers.ExamPaper
 
 
             var listQuestionCategory = questionCategorySevice.GetAll();
-            foreach(var item in listQuestionCategory)
+            foreach (var item in listQuestionCategory)
             {
                 category.Formula.Values.Add(item.Name);
             }

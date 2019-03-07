@@ -1,25 +1,49 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using TestingSystem.Sevice;
-using TestingSystem.Models;
-using TestingSystem.DataTranferObject.Question;
-using System.Net;
-using System.Web;
-using System.IO;
-using System.Linq;
-using System;
-using Excel = Microsoft.Office.Interop.Excel;
-
-namespace TestingSystem.Areas.Admin.Controllers.Question
+﻿namespace TestingSystem.Areas.Admin.Controllers.Question
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Web;
+    using System.Web.Mvc;
+    using TestingSystem.DataTranferObject.Question;
+    using TestingSystem.Models;
+    using TestingSystem.Sevice;
+    using Excel = Microsoft.Office.Interop.Excel;
+
+    /// <summary>
+    /// Defines the <see cref="QuestionController" />
+    /// </summary>
     public class QuestionController : BaseController, IDisposable
     {
+        /// <summary>
+        /// Defines the questionService
+        /// </summary>
         private readonly IQuestionService questionService;
+
+        /// <summary>
+        /// Defines the answerService
+        /// </summary>
         private readonly IAnswerService answerService;
+
+        /// <summary>
+        /// Defines the questionCategorySevice
+        /// </summary>
         private readonly IQuestionCategorySevice questionCategorySevice;
+
+        /// <summary>
+        /// Defines the examPaperService
+        /// </summary>
         private readonly IExamPaperService examPaperService;
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionController"/> class.
+        /// </summary>
+        /// <param name="questionService">The questionService<see cref="IQuestionService"/></param>
+        /// <param name="answerService">The answerService<see cref="IAnswerService"/></param>
+        /// <param name="questionCategorySevice">The questionCategorySevice<see cref="IQuestionCategorySevice"/></param>
+        /// <param name="examPaperService">The examPaperService<see cref="IExamPaperService"/></param>
         public QuestionController(IQuestionService questionService, IAnswerService answerService,
             IQuestionCategorySevice questionCategorySevice, IExamPaperService examPaperService)
         {
@@ -29,6 +53,11 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             this.examPaperService = examPaperService;
         }
 
+        /// <summary>
+        /// The AddCategory
+        /// </summary>
+        /// <param name="category">The category<see cref="Models.QuestionCategory"/></param>
+        /// <returns>The <see cref="JsonResult"/></returns>
         [HttpPost]
         public JsonResult AddCategory(Models.QuestionCategory category)
         {
@@ -40,6 +69,10 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return Json(questionCategorySevice.AddCategoryQuestion(category), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// The Questions
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Questions()
         {
             var listCategory = questionCategorySevice.GetAllQuestionCategories();
@@ -48,6 +81,11 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             ViewData["Level"] = listLevels;
             return View();
         }
+
+        /// <summary>
+        /// The GetQuestions
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [ActionName("GetQuestions")]
         public ActionResult GetQuestions()
         {
@@ -56,6 +94,11 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return Json(new { data = listQuestionDtos.OrderBy(x => x.CategoryID) }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// The Search
+        /// </summary>
+        /// <param name="input">The input<see cref="string"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Search(string input)
         {
             List<Models.QuestionCategory> listCategory = new List<Models.QuestionCategory>();
@@ -75,6 +118,11 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return View(listQuetion);
         }
 
+        /// <summary>
+        /// The Detail
+        /// </summary>
+        /// <param name="id">The id<see cref="int?"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Detail(int? id)
         {
             if (id == null)
@@ -94,9 +142,13 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                     return View(question);
                 }
             }
-
         }
 
+        /// <summary>
+        /// The GetQuestionID
+        /// </summary>
+        /// <param name="questionId">The questionId<see cref="int?"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         [ActionName("GetQuestionID")]
         public ActionResult GetQuestionID(int? questionId)
@@ -110,11 +162,13 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //ViewBag.Status = model.Status;
-            //ViewBag.IsUpdate = true;
-
         }
 
+        /// <summary>
+        /// The Delete
+        /// </summary>
+        /// <param name="ids">The ids<see cref="List{int}"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         public ActionResult Delete(List<int> ids)
         {
@@ -154,6 +208,10 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             }
         }
 
+        /// <summary>
+        /// The Create
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Create()
         {
             // This is only for show by default one row for insert data to the database
@@ -171,6 +229,13 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return View(answers);
         }
 
+        /// <summary>
+        /// The Create
+        /// </summary>
+        /// <param name="question">The question<see cref="Models.Question"/></param>
+        /// <param name="Image">The Image<see cref="HttpPostedFileBase"/></param>
+        /// <param name="listAnswers">The listAnswers<see cref="List{Answer}"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
@@ -213,10 +278,6 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             }
 
             return RedirectToAction("Questions");
-
-            //ViewBag.questionContent = question.Content;
-            //ViewBag.questionID = question.QuestionID;
-
         }
 
         //public ActionResult CreateAnswer()
@@ -251,7 +312,11 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
 
         //    return RedirectToAction("Questions");
         //}
-
+        /// <summary>
+        /// The Edit
+        /// </summary>
+        /// <param name="id">The id<see cref="int"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Edit(int id)
         {
             var listCategory = questionCategorySevice.GetAll();
@@ -262,7 +327,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             var listAnswerByQuestionID = questionService.GetAnswersByQuestionId(id);
             ViewBag.listAnswerByQuestionID = listAnswerByQuestionID;
 
-            if (id <= 0 )
+            if (id <= 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -287,6 +352,15 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             }
         }
 
+        /// <summary>
+        /// The Edit
+        /// </summary>
+        /// <param name="question">The question<see cref="Models.Question"/></param>
+        /// <param name="Image">The Image<see cref="HttpPostedFileBase"/></param>
+        /// <param name="AnswerID">The AnswerID<see cref="int[]"/></param>
+        /// <param name="AnswerContent">The AnswerContent<see cref="string[]"/></param>
+        /// <param name="IsCorrect">The IsCorrect<see cref="string[]"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
@@ -337,6 +411,11 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return RedirectToAction("Questions");
         }
 
+        /// <summary>
+        /// The GetQuestionsByExamPaperId
+        /// </summary>
+        /// <param name="examPaperId">The examPaperId<see cref="int"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult GetQuestionsByExamPaperId(int examPaperId)
         {
             var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
@@ -345,6 +424,12 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// The GetQuestionsByQuestionCategoryIdAndExamPaperId
+        /// </summary>
+        /// <param name="categoryId">The categoryId<see cref="int"/></param>
+        /// <param name="examPaperId">The examPaperId<see cref="int"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId, int examPaperId)
         {
             var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
@@ -354,11 +439,20 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// The QuestionExcelAnswer
+        /// </summary>
+        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult QuestionExcelAnswer()
         {
             return View();
         }
 
+        /// <summary>
+        /// The QuestionExcelAnswer
+        /// </summary>
+        /// <param name="excelfile">The excelfile<see cref="HttpPostedFileBase"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult QuestionExcelAnswer(HttpPostedFileBase excelfile)
         {
@@ -425,7 +519,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                             {
                                 continue;
                             }
-                            j+=2;
+                            j += 2;
                         }
 
                     }

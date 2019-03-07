@@ -1,30 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace TestingSystem.Areas.Admin.Controllers
+﻿namespace TestingSystem.Areas.Admin.Controllers
 {
+    using System.Web.Mvc;
+
+    /// <summary>
+    /// Defines the <see cref="BaseController" />
+    /// </summary>
     public class BaseController : Controller
     {
         /// <summary>
-        /// Sets the title.
+        /// Sets the Title
         /// </summary>
-        /// <value>
-        /// The title.
-        /// </value>
-        public string Title { set { ViewBag.Title = value; } }
+        public string Title
+        {
+            set { ViewBag.Title = value; }
+        }
 
         /// <summary>
-        /// Sets the success.
+        /// Sets the Success
         /// </summary>
-        /// <value>The success.</value>
-        public string Success { set { TempData["Success"] = ViewData["Success"] = value; } }
+        public string Success
+        {
+            set { TempData["Success"] = ViewData["Success"] = value; }
+        }
+
         /// <summary>
-        /// Sets the failure.
+        /// Sets the Failure
         /// </summary>
-        /// <value>The failure.</value>
-        public string Failure { set { TempData["Failure"] = ViewData["Failure"] = value; } }
+        public string Failure
+        {
+            set { TempData["Failure"] = ViewData["Failure"] = value; }
+        }
     }
 }
