@@ -227,6 +227,7 @@ a.group-btn {
     padding-right: 25px;
     padding-top: 7px;
     padding-bottom: 7px;
+    margin-left: 15px;
 }
 
     a.group-btn:hover {
@@ -297,7 +298,7 @@ div#form-area {
     padding-bottom: 5px;
 }
 
-button#random {
+a#random {
     margin-top: 20px;
 }
 
