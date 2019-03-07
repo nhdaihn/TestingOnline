@@ -3,7 +3,6 @@
 ################################################################################
 
 /.vs
-/packages
 /TestingSystem.Sevice/obj/Debug
 /TestingSystem.Models/obj/Debug
 /TestingSystem.Data/obj/Debug
