@@ -12,24 +12,20 @@
             <div class="modal-body">
                 <div class="tablecontainer">
                     <div id="form-area" class="row">
-                        <form id="randomForm">
-                            <div class="col-md-4">
-                                Question category
-                                <select class="form-control" id="CategoryId" name="CategoryId">
-                                    <option value="" selected disabled hidden>-- Choose category --</option>
-                                    <option value="154">Java Script</option>
-                                    <option value="149">SQL</option>
-                                    <option value="159">Another</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                Number of question
-                                <input class="form-control" type="number" placeholder="Number of question" id="RandomNumber" name="RandomNumber" />
-                            </div>
-                            <div class="col-md-4">
-                                <a id="random" class="btn btn-primary">Random question</a>
-                            </div>
-                        </form>
+                        <div class="col-md-4">
+                            Question category
+                            <select class="form-control" id="CategoryId" name="CategoryId">
+                                <option selected value="149">Public</option>
+                                <option value="50">Draff</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            Number of question
+                            <input class="form-control" type="text" id="RandomNumber" name="RandomNumber" />
+                        </div>
+                        <div class="col-md-4">
+                            <button id="random" class="btn btn-primary">Random question</button>
+                        </div>
                     </div>
                     <div>
                         <hr />
@@ -156,7 +152,6 @@
         });
 
         $('#random').on("click", function () {
-
             var number = $('#RandomNumber').val();
             var categoryId = $('#CategoryId').val();
             var examPaperId = $('#ExamPaperID').val();
@@ -205,11 +200,5 @@
                 }
             }
         });
-
-        document.getElementById("RandomNumber").addEventListener('input', restrictToInteger);
-
-        function restrictToInteger() {
-            this.value = this.value.replace(/[^\d]/g, '');
-        }
     });
 </script>

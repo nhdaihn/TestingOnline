@@ -1,40 +1,18 @@
-﻿namespace TestingSystem.DataTranferObject.Question
-{
-    using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-    /// <summary>
-    /// Defines the <see cref="QuestionFilterModel" />
-    /// </summary>
+namespace TestingSystem.DataTranferObject.Question
+{
     public class QuestionFilterModel
     {
-        /// <summary>
-        /// Gets or sets the QuestionID
-        /// </summary>
         public int? QuestionID { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Content
-        /// </summary>
         public string Content { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Level
-        /// </summary>
         public int? Level { get; set; }
-
-        /// <summary>
-        /// Gets or sets the CategoryID
-        /// </summary>
         public int? CategoryID { get; set; }
-
-        /// <summary>
-        /// Gets or sets the CreatedBy
-        /// </summary>
         public int? CreatedBy { get; set; }
-
-        /// <summary>
-        /// Gets or sets the CreatedDate
-        /// </summary>
         public DateTime? CreatedDate { get; set; }
     }
 }

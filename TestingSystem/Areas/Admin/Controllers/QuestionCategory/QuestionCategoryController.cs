@@ -1,35 +1,20 @@
-﻿namespace TestingSystem.Areas.Admin.Controllers.QuestionCategory
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
-    using TestingSystem.Sevice;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using TestingSystem.Sevice;
 
-    /// <summary>
-    /// Defines the <see cref="QuestionCategoryController" />
-    /// </summary>
+namespace TestingSystem.Areas.Admin.Controllers.QuestionCategory
+{
     public class QuestionCategoryController : BaseController
     {
         // GET: Admin/QuestionCategory
-        /// <summary>
-        /// Defines the questionCategorySevice
-        /// </summary>
         public readonly IQuestionCategorySevice questionCategorySevice;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionCategoryController"/> class.
-        /// </summary>
-        /// <param name="questionCategorySevice">The questionCategorySevice<see cref="IQuestionCategorySevice"/></param>
         public QuestionCategoryController(IQuestionCategorySevice questionCategorySevice)
         {
             this.questionCategorySevice = questionCategorySevice;
         }
-
-        /// <summary>
-        /// The Index
-        /// </summary>
-        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Index()
         {
 
@@ -39,11 +24,6 @@
             return View();
         }
 
-        /// <summary>
-        /// The Index
-        /// </summary>
-        /// <param name="KeySearch">The KeySearch<see cref="string"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult Index(string KeySearch)
         {
@@ -52,12 +32,7 @@
             ViewBag.ListCategories = listCategories;
             return View();
         }
-
         //[ActionName("GetCategories")]
-        /// <summary>
-        /// The GetCategories
-        /// </summary>
-        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult GetCategories( /*string txtSearch, int? page*/)
         {
             var listCategories = new List<Models.QuestionCategory>();
@@ -66,20 +41,10 @@
             return View();
         }
 
-        /// <summary>
-        /// The AddCategory
-        /// </summary>
-        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult AddCategory()
         {
             return View();
         }
-
-        /// <summary>
-        /// The AddCategory
-        /// </summary>
-        /// <param name="category">The category<see cref="Models.QuestionCategory"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult AddCategory(Models.QuestionCategory category)
         {
@@ -116,23 +81,12 @@
                 return View(category);
             }
         }
-
-        /// <summary>
-        /// The EditCategory
-        /// </summary>
-        /// <param name="questionCategory">The questionCategory<see cref="int"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
+       
         public ActionResult EditCategory(int questionCategory)
         {
             var list = questionCategorySevice.GetById(questionCategory);
             return View(list);
         }
-
-        /// <summary>
-        /// The EditCategory
-        /// </summary>
-        /// <param name="questionCategory">The questionCategory<see cref="Models.QuestionCategory"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult EditCategory(Models.QuestionCategory questionCategory)
         {
@@ -140,18 +94,18 @@
             questionCategory.CreatedBy = 1;
             try
             {
+               
+                    if (questionCategorySevice.UpdateCategoryQuestion(questionCategory) > 0)
+                    {
+                        Success = "Update question category successfully!";
+                        return RedirectToAction("Index", "QuestionCategory");
+                    }
 
-                if (questionCategorySevice.UpdateCategoryQuestion(questionCategory) > 0)
-                {
-                    Success = "Update question category successfully!";
-                    return RedirectToAction("Index", "QuestionCategory");
-                }
-
-                else
-                {
-                    Success = "Update question category false!";
-                }
-
+                    else
+                    {
+                        Success = "Update question category false!";
+                    }
+                
                 Failure = "Something went wrong, please try again!";
                 return RedirectToAction("EditCategory", "QuestionCategory");
             }
@@ -162,11 +116,6 @@
             }
         }
 
-        /// <summary>
-        /// The Delete
-        /// </summary>
-        /// <param name="ids">The ids<see cref="List{int}"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Delete(List<int> ids)
         {
             try
@@ -219,5 +168,7 @@
                 return RedirectToAction("Index", "QuestionCategory");
             }
         }
+
+
     }
 }

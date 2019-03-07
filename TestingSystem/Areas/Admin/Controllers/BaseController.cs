@@ -1,34 +1,30 @@
-﻿namespace TestingSystem.Areas.Admin.Controllers
-{
-    using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
-    /// <summary>
-    /// Defines the <see cref="BaseController" />
-    /// </summary>
+namespace TestingSystem.Areas.Admin.Controllers
+{
     public class BaseController : Controller
     {
         /// <summary>
-        /// Sets the Title
+        /// Sets the title.
         /// </summary>
-        public string Title
-        {
-            set { ViewBag.Title = value; }
-        }
+        /// <value>
+        /// The title.
+        /// </value>
+        public string Title { set { ViewBag.Title = value; } }
 
         /// <summary>
-        /// Sets the Success
+        /// Sets the success.
         /// </summary>
-        public string Success
-        {
-            set { TempData["Success"] = ViewData["Success"] = value; }
-        }
-
+        /// <value>The success.</value>
+        public string Success { set { TempData["Success"] = ViewData["Success"] = value; } }
         /// <summary>
-        /// Sets the Failure
+        /// Sets the failure.
         /// </summary>
-        public string Failure
-        {
-            set { TempData["Failure"] = ViewData["Failure"] = value; }
-        }
+        /// <value>The failure.</value>
+        public string Failure { set { TempData["Failure"] = ViewData["Failure"] = value; } }
     }
 }

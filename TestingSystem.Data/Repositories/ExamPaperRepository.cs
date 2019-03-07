@@ -1,78 +1,28 @@
-﻿namespace TestingSystem.Data.Repositories
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using TestingSystem.Data.Infrastructure;
+using TestingSystem.Models;
+using TestingSystem.DataTranferObject;
+namespace TestingSystem.Data.Repositories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using TestingSystem.Data.Infrastructure;
-    using TestingSystem.DataTranferObject;
-    using TestingSystem.Models;
 
-    /// <summary>
-    /// Defines the <see cref="IExamPaperRepository" />
-    /// </summary>
     public interface IExamPaperRepository : IRepository<ExamPaper>
     {
-        /// <summary>
-        /// The Filter
-        /// </summary>
-        /// <param name="examPaperFilterModel">The examPaperFilterModel<see cref="ExamPaperFilterModel"/></param>
-        /// <returns>The <see cref="IQueryable{ExamPaper}"/></returns>
         IQueryable<ExamPaper> Filter(ExamPaperFilterModel examPaperFilterModel);
-
-        /// <summary>
-        /// The Search
-        /// </summary>
-        /// <param name="keySearch">The keySearch<see cref="string"/></param>
-        /// <returns>The <see cref="List{ExamPaper}"/></returns>
         List<ExamPaper> Search(string keySearch);
-
-        /// <summary>
-        /// The Create
-        /// </summary>
-        /// <param name="examPaper">The examPaper<see cref="ExamPaper"/></param>
-        /// <returns>The <see cref="int"/></returns>
         int Create(ExamPaper examPaper);
-
-        /// <summary>
-        /// The Edit
-        /// </summary>
-        /// <param name="examPaper">The examPaper<see cref="ExamPaper"/></param>
-        /// <returns>The <see cref="int"/></returns>
         int Edit(ExamPaper examPaper);
-
-        /// <summary>
-        /// The FindById
-        /// </summary>
-        /// <param name="id">The id<see cref="int"/></param>
-        /// <returns>The <see cref="ExamPaper"/></returns>
         ExamPaper FindById(int id);
-
-        /// <summary>
-        /// The Delete
-        /// </summary>
-        /// <param name="id">The id<see cref="int"/></param>
-        /// <returns>The <see cref="int"/></returns>
         int Delete(int id);
     }
 
-    /// <summary>
-    /// Defines the <see cref="ExamPaperRepository" />
-    /// </summary>
     public class ExamPaperRepository : RepositoryBase<ExamPaper>, IExamPaperRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExamPaperRepository"/> class.
-        /// </summary>
-        /// <param name="dbFactory">The dbFactory<see cref="IDbFactory"/></param>
         public ExamPaperRepository(IDbFactory dbFactory) : base(dbFactory)
         {
         }
 
-        /// <summary>
-        /// The Create
-        /// </summary>
-        /// <param name="examPaper">The examPaper<see cref="ExamPaper"/></param>
-        /// <returns>The <see cref="int"/></returns>
         public int Create(ExamPaper examPaper)
         {
             try
@@ -95,11 +45,6 @@
             }
         }
 
-        /// <summary>
-        /// The Edit
-        /// </summary>
-        /// <param name="examPaper">The examPaper<see cref="ExamPaper"/></param>
-        /// <returns>The <see cref="int"/></returns>
         public int Edit(ExamPaper examPaper)
         {
             try
@@ -123,11 +68,6 @@
             }
         }
 
-        /// <summary>
-        /// The Delete
-        /// </summary>
-        /// <param name="id">The id<see cref="int"/></param>
-        /// <returns>The <see cref="int"/></returns>
         public int Delete(int id)
         {
             try
@@ -148,11 +88,6 @@
             }
         }
 
-        /// <summary>
-        /// The Filter
-        /// </summary>
-        /// <param name="examPaperFilterModel">The examPaperFilterModel<see cref="ExamPaperFilterModel"/></param>
-        /// <returns>The <see cref="IQueryable{ExamPaper}"/></returns>
         public IQueryable<ExamPaper> Filter(ExamPaperFilterModel examPaperFilterModel)
         {
             try
@@ -194,11 +129,6 @@
             }
         }
 
-        /// <summary>
-        /// The Search
-        /// </summary>
-        /// <param name="keySearch">The keySearch<see cref="string"/></param>
-        /// <returns>The <see cref="List{ExamPaper}"/></returns>
         public List<ExamPaper> Search(string keySearch)
         {
             try
@@ -215,11 +145,6 @@
             }
         }
 
-        /// <summary>
-        /// The FindById
-        /// </summary>
-        /// <param name="id">The id<see cref="int"/></param>
-        /// <returns>The <see cref="ExamPaper"/></returns>
         ExamPaper IExamPaperRepository.FindById(int id)
         {
 
@@ -235,5 +160,7 @@
                 throw;
             }
         }
+
+
     }
 }

@@ -21,7 +21,7 @@ namespace TestingSystem
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             //
-            DatabaseSetup.Initialize();
+            //DatabaseSetup.Initialize();
             // Autofac and Automapper configurations
             Bootstrapper.Run();
         }

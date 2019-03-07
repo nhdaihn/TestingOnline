@@ -318,15 +318,6 @@
             }, 500);
 
             $('#btn-add-question').click(function () {
-                $.ajax({
-                    url: "/Admin/ExamPaper/GetCategory/",
-                    type: "GET",
-                    data: {
-
-                    },
-                    dataType: "json"
-
-                });
                 $('#basicExampleModal').modal('show');
             });
 

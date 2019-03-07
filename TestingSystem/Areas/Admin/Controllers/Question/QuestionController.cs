@@ -1,49 +1,25 @@
-﻿namespace TestingSystem.Areas.Admin.Controllers.Question
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Web;
-    using System.Web.Mvc;
-    using TestingSystem.DataTranferObject.Question;
-    using TestingSystem.Models;
-    using TestingSystem.Sevice;
-    using Excel = Microsoft.Office.Interop.Excel;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
+using TestingSystem.Sevice;
+using TestingSystem.Models;
+using TestingSystem.DataTranferObject.Question;
+using System.Net;
+using System.Web;
+using System.IO;
+using System.Linq;
+using System;
+using Excel = Microsoft.Office.Interop.Excel;
 
-    /// <summary>
-    /// Defines the <see cref="QuestionController" />
-    /// </summary>
+namespace TestingSystem.Areas.Admin.Controllers.Question
+{
     public class QuestionController : BaseController, IDisposable
     {
-        /// <summary>
-        /// Defines the questionService
-        /// </summary>
         private readonly IQuestionService questionService;
-
-        /// <summary>
-        /// Defines the answerService
-        /// </summary>
         private readonly IAnswerService answerService;
-
-        /// <summary>
-        /// Defines the questionCategorySevice
-        /// </summary>
         private readonly IQuestionCategorySevice questionCategorySevice;
-
-        /// <summary>
-        /// Defines the examPaperService
-        /// </summary>
         private readonly IExamPaperService examPaperService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionController"/> class.
-        /// </summary>
-        /// <param name="questionService">The questionService<see cref="IQuestionService"/></param>
-        /// <param name="answerService">The answerService<see cref="IAnswerService"/></param>
-        /// <param name="questionCategorySevice">The questionCategorySevice<see cref="IQuestionCategorySevice"/></param>
-        /// <param name="examPaperService">The examPaperService<see cref="IExamPaperService"/></param>
+
         public QuestionController(IQuestionService questionService, IAnswerService answerService,
             IQuestionCategorySevice questionCategorySevice, IExamPaperService examPaperService)
         {
@@ -53,11 +29,6 @@
             this.examPaperService = examPaperService;
         }
 
-        /// <summary>
-        /// The AddCategory
-        /// </summary>
-        /// <param name="category">The category<see cref="Models.QuestionCategory"/></param>
-        /// <returns>The <see cref="JsonResult"/></returns>
         [HttpPost]
         public JsonResult AddCategory(Models.QuestionCategory category)
         {
@@ -69,10 +40,6 @@
             return Json(questionCategorySevice.AddCategoryQuestion(category), JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// The Questions
-        /// </summary>
-        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Questions()
         {
             var listCategory = questionCategorySevice.GetAllQuestionCategories();
@@ -81,24 +48,40 @@
             ViewData["Level"] = listLevels;
             return View();
         }
+        public ActionResult Index(QuestionFilterModel searchModel)
+        {
+            var listCategory = questionCategorySevice.GetAllQuestionCategories();
+            var listLevels = questionService.GetAlLevels();
+            ViewData["Category"] = listCategory;
+            ViewData["Level"] = listLevels;
 
-        /// <summary>
-        /// The GetQuestions
-        /// </summary>
-        /// <returns>The <see cref="ActionResult"/></returns>
+            var listQuestionDtos = questionService.GetAllQuestionDtos(searchModel);
+            return View(listQuestionDtos);
+        }
+        //[HttpPost]
+        //public ActionResult Index(QuestionFilterModel searchModel)
+        //{
+        //    var listCategory = questionCategorySevice.GetAllQuestionCategories();
+        //    var listLevels = questionService.GetAlLevels();
+        //    ViewData["Category"] = listCategory;
+        //    ViewData["Level"] = listLevels;
+
+        //    var listQuestionDtos = questionService.GetAllQuestionDtos(searchModel);
+        //    //searchModel.Level = null;
+        //    //searchModel.CategoryID = null;
+        //    //searchModel.CreatedDate = null;
+        //    //searchModel.CreatedBy = null;
+
+        //    return View(listQuestionDtos);
+        //}
         [ActionName("GetQuestions")]
-        public ActionResult GetQuestions()
+        public ActionResult GetQuestions(QuestionFilterModel searchModel)
         {
             // đổi thành filter.
-            var listQuestionDtos = questionService.GetAllQuestionDtos();
+            var listQuestionDtos = questionService.GetAllQuestionDtos(searchModel);
             return Json(new { data = listQuestionDtos.OrderBy(x => x.CategoryID) }, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// The Search
-        /// </summary>
-        /// <param name="input">The input<see cref="string"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Search(string input)
         {
             List<Models.QuestionCategory> listCategory = new List<Models.QuestionCategory>();
@@ -118,12 +101,7 @@
             return View(listQuetion);
         }
 
-        /// <summary>
-        /// The Detail
-        /// </summary>
-        /// <param name="id">The id<see cref="int?"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
-        public ActionResult Detail(int? id)
+        public ActionResult Detail(int? id, QuestionFilterModel searchModel)
         {
             if (id == null)
             {
@@ -132,7 +110,7 @@
             else
             {
                 ViewBag.listAnswerByQuestion = answerService.GetAnswersByQuestionID(id);
-                var question = questionService.GetQuestionInQuestionDTO(id);
+                var question = questionService.GetQuestionInQuestionDTO(id, searchModel);
                 if (question == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -142,13 +120,9 @@
                     return View(question);
                 }
             }
+
         }
 
-        /// <summary>
-        /// The GetQuestionID
-        /// </summary>
-        /// <param name="questionId">The questionId<see cref="int?"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpGet]
         [ActionName("GetQuestionID")]
         public ActionResult GetQuestionID(int? questionId)
@@ -162,14 +136,11 @@
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            //ViewBag.Status = model.Status;
+            //ViewBag.IsUpdate = true;
+
         }
 
-        /// <summary>
-        /// The Delete
-        /// </summary>
-        /// <param name="ids">The ids<see cref="List{int}"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
-        [HttpGet]
         public ActionResult Delete(List<int> ids)
         {
             try
@@ -186,32 +157,25 @@
                         }
                         else
                         {
-                            //!!!!!!!!!!! break nhưng mà những cái record trc đó vẫn đã bị xóa
                             break;
                         }
                     }
-
                     if (i > 0)
                     {
                         Success = "Delete exam paper successfully!";
-                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                        return RedirectToAction("Index", "Question");
                     }
                 }
-
                 Failure = "Something went wrong, please try again!";
-                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Index", "Question");
             }
             catch (System.Exception exception)
             {
                 Failure = exception.Message;
-                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Index", "Question");
             }
         }
 
-        /// <summary>
-        /// The Create
-        /// </summary>
-        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Create()
         {
             // This is only for show by default one row for insert data to the database
@@ -229,13 +193,6 @@
             return View(answers);
         }
 
-        /// <summary>
-        /// The Create
-        /// </summary>
-        /// <param name="question">The question<see cref="Models.Question"/></param>
-        /// <param name="Image">The Image<see cref="HttpPostedFileBase"/></param>
-        /// <param name="listAnswers">The listAnswers<see cref="List{Answer}"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
@@ -277,46 +234,12 @@
                 }
             }
 
-            return RedirectToAction("Questions");
+            return RedirectToAction("Index");
+
+            //ViewBag.questionContent = question.Content;
+            //ViewBag.questionID = question.QuestionID;
+
         }
-
-        //public ActionResult CreateAnswer()
-        //{
-
-        //    // This is only for show by default one row for insert data to the database
-        //    List<Answer> answers = new List<Answer> { new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false } };
-        //    return View(answers);
-        //}
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult CreateAnswer(List<Answer> listAnswers)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        foreach (var i in listAnswers)
-        //        {
-        //            i.QuestionID = TranferID.ID;
-        //            if (i.QuestionID <= 0)
-        //            {
-        //                return RedirectToAction("Create", "Question");
-        //            }
-        //            else
-        //            {
-        //                answerService.AddAnswer(i);
-        //            }
-        //        }
-
-        //        ViewBag.Message = "Data successfully saved!";
-        //        ModelState.Clear();
-        //    }
-
-        //    return RedirectToAction("Questions");
-        //}
-        /// <summary>
-        /// The Edit
-        /// </summary>
-        /// <param name="id">The id<see cref="int"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Edit(int id)
         {
             var listCategory = questionCategorySevice.GetAll();
@@ -352,15 +275,6 @@
             }
         }
 
-        /// <summary>
-        /// The Edit
-        /// </summary>
-        /// <param name="question">The question<see cref="Models.Question"/></param>
-        /// <param name="Image">The Image<see cref="HttpPostedFileBase"/></param>
-        /// <param name="AnswerID">The AnswerID<see cref="int[]"/></param>
-        /// <param name="AnswerContent">The AnswerContent<see cref="string[]"/></param>
-        /// <param name="IsCorrect">The IsCorrect<see cref="string[]"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
@@ -411,11 +325,6 @@
             return RedirectToAction("Questions");
         }
 
-        /// <summary>
-        /// The GetQuestionsByExamPaperId
-        /// </summary>
-        /// <param name="examPaperId">The examPaperId<see cref="int"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult GetQuestionsByExamPaperId(int examPaperId)
         {
             var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
@@ -424,12 +333,6 @@
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// The GetQuestionsByQuestionCategoryIdAndExamPaperId
-        /// </summary>
-        /// <param name="categoryId">The categoryId<see cref="int"/></param>
-        /// <param name="examPaperId">The examPaperId<see cref="int"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId, int examPaperId)
         {
             var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
@@ -439,20 +342,11 @@
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// The QuestionExcelAnswer
-        /// </summary>
-        /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult QuestionExcelAnswer()
         {
             return View();
         }
 
-        /// <summary>
-        /// The QuestionExcelAnswer
-        /// </summary>
-        /// <param name="excelfile">The excelfile<see cref="HttpPostedFileBase"/></param>
-        /// <returns>The <see cref="ActionResult"/></returns>
         [HttpPost]
         public ActionResult QuestionExcelAnswer(HttpPostedFileBase excelfile)
         {
