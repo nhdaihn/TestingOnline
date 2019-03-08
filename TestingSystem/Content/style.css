@@ -281,12 +281,12 @@ input[type="search"] {
 }
 
 
-div.content-wrapper{
+div.content-wrapper {
     padding: 20px;
 }
 
 
-body{
+body {
     padding-top: 0px !important;
 }
 
@@ -309,7 +309,7 @@ div.modal-header {
 }
 
 h5.modal-title {
-    font-size: 18px !important; 
+    font-size: 18px !important;
 }
 
 .modal-header .close {
